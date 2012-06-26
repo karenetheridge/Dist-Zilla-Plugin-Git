@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::CommitBuild;
 # ABSTRACT: checkin build results on separate branch
 
-use Git::Wrapper;
+use Git::Wrapper 0.021;
 use IPC::Open3;
 use IPC::System::Simple; # required for Fatalised/autodying system
 use File::chdir;
@@ -108,24 +108,8 @@ sub _commit_build {
 
     ### @parents
 
-    my @commit;
-    {
-        # Git::Wrapper doesn't read from STDIN, which is 
-        # needed for commit-tree, so we have to everything
-        # ourselves
-        #
-        my ($fh, $filename) = File::Temp::tempfile();
-        $fh->autoflush(1);
-        print $fh _format_message( $message, $self );
-
-        my @args=('git', 'commit-tree', $tree, map { ( -p => $_ ) } @parents);
-        push @args,'<'.$filename;
-        my $cmdline=join(' ',@args);
-        @commit=qx/$cmdline/;
-
-        chomp(@commit);
-
-    }
+    my $message = _format_message( $message, $self );
+    my @commit = $src->commit_tree( { -STDIN => $message }, $tree, map { ( '-p' => $_) } @parents );
 
     ### @commit
     $src->update_ref( 'refs/heads/' . $target_branch, $commit[0] );
@@ -156,18 +140,7 @@ sub _create_tree {
 
     ### @entries
 
-    my $sha = do {
-        use autodie 'system';
-        my $cmd = join '\n', @entries, q{};
-        $cmd  = qq{echo -en "$cmd" | git mktree};
-
-        #### $cmd
-        my $sha = `$cmd`;
-        chomp $sha;
-
-        ### tree created at: $sha
-        $sha;
-    };
+    my ($sha) = $repo->mktree({ -STDIN => join('\n', @entries, q{}) });
 
     return $sha;
 }
