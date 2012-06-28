@@ -108,8 +108,8 @@ sub _commit_build {
 
     ### @parents
 
-    my $message = _format_message( $message, $self );
-    my @commit = $src->commit_tree( { -STDIN => $message }, $tree, map { ( '-p' => $_) } @parents );
+    my $this_message = _format_message( $message, $self );
+    my @commit = $src->commit_tree( { -STDIN => $this_message }, $tree, map { ( '-p' => $_) } @parents );
 
     ### @commit
     $src->update_ref( 'refs/heads/' . $target_branch, $commit[0] );
