@@ -3,6 +3,7 @@ package Dist::Zilla::Plugin::Git::GatherDir;
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
+use List::MoreUtils 'uniq';
 with 'Dist::Zilla::Role::Git::Repo';
 extends 'Dist::Zilla::Plugin::GatherDir';
 
@@ -89,7 +90,7 @@ override gather_files => sub {
   my $git = Git::Wrapper->new($root);
 
   my @files;
-  FILE: for my $filename ($git->ls_files) {
+  FILE: for my $filename (uniq $git->ls_files) {
 
     my $file = file($filename)->relative($root);
 
