@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+1.121800  2012-06-28 04:03:06 Europe/Paris
  - Require a newer Git::Wrapper for better portability
 
 1.121770  2012-06-25 16:47:30 Europe/Paris
