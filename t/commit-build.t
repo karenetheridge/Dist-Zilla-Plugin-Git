@@ -8,7 +8,7 @@ use Dist::Zilla::Tester;
 use File::Temp qw{ tempdir };
 use Git::Wrapper;
 use Path::Class;
-use Test::More   tests => 4;
+use Test::More   tests => 6;
 use Cwd qw(cwd);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
@@ -33,6 +33,8 @@ $zilla->build;
 ok( $git->rev_parse('-q', '--verify', 'refs/heads/build/master'), 'source repo has the "build/master" branch')
     or diag $git->branch;
 is( scalar $git->log('build/master'), 1, 'one commit on the build/master branch')
+    or diag $git->branch;
+is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
 
 chdir $cwd;
@@ -77,6 +79,8 @@ $git3->commit('-a', '-m', 'commit on master');
 $zilla3->build;
 is( scalar $git3->log('build/master'), 2, 'two commits on the build/master branch')
     or diag $git3->branch;
+is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
+    or diag $git->branch;
 
 sub append_to_file {
     my ($file, @lines) = @_;

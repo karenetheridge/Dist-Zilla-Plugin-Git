@@ -140,7 +140,7 @@ sub _create_tree {
 
     ### @entries
 
-    my ($sha) = $repo->mktree({ -STDIN => join('\n', @entries, q{}) });
+    my ($sha) = $repo->mktree({ -STDIN => join("\n", @entries, q{}) });
 
     return $sha;
 }
