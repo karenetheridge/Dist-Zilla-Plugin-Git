@@ -37,6 +37,7 @@ use Git::Wrapper;
 use File::Find::Rule;
 use File::HomeDir;
 use File::Spec;
+use List::AllUtils qw(uniq);
 use Path::Class;
 
 use namespace::autoclean;
@@ -89,7 +90,7 @@ override gather_files => sub {
   my $git = Git::Wrapper->new($root);
 
   my @files;
-  FILE: for my $filename ($git->ls_files) {
+  FILE: for my $filename (uniq $git->ls_files) {
 
     my $file = file($filename)->relative($root);
 
