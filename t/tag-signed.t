@@ -15,7 +15,7 @@ use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
 use File::Temp qw{ tempdir };
-use File::Path qw{ make_path };
+use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
 use Git::Wrapper;
 use Path::Class;
 use File::Which qw{ which };

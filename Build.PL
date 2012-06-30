@@ -12,7 +12,7 @@ my %module_build_args = (
     "File::Copy" => 0,
     "File::Copy::Recursive" => 0,
     "File::Find" => 0,
-    "File::Path" => 0,
+    "File::Path" => "2.07",
     "File::Which" => 0,
     "File::pushd" => 0,
     "Module::Build" => "0.3601",
@@ -28,7 +28,7 @@ my %module_build_args = (
     "Jerome Quelin"
   ],
   "dist_name" => "Dist-Zilla-Plugin-Git",
-  "dist_version" => "1.121811",
+  "dist_version" => "1.121820",
   "license" => "perl",
   "module_name" => "Dist::Zilla::Plugin::Git",
   "recommends" => {},
