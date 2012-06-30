@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - require File::Path 2.07 to get make_path (thanks for failing reports, CPAN
+   Testers!)
 
 1.121811  2012-06-29 17:25:42 Europe/Paris
  - fix an interpolation error that broke CommitBuild
