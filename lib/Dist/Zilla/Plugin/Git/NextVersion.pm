@@ -30,8 +30,6 @@ has _previous_versions => (
     handles => {
 
         has_previous_versions => 'count',
-        previous_versions     => 'elements',
-        earliest_version      => [ get =>  0 ],
         last_version          => [ get => -1 ],
     },
 );
@@ -44,16 +42,42 @@ sub _build__previous_versions {
   my $git  = Git::Wrapper->new( $self->repo_root );
   my $regexp = $self->version_regexp;
 
-  my @tags = $git->tag;
-  @tags = map { /$regexp/ ? $1 : () } @tags;
+  # build [ $tag, $version ] list in reverse version order,
+  # for all tags matching the specified version regexp
+  my @tags_and_versions =
+    sort { version->parse($b->[1]) <=> version->parse($a->[1]) }
+    map {
+      /$regexp/ && eval { version->parse($1) }
+          ? [ $_ => $1 ]
+          : ()
+    } $git->tag;
 
-  # find tagged versions; sort least to greatest
-  my @versions =
-    sort { version->parse($a) <=> version->parse($b) }
-    grep { eval { version->parse($_) }  }
-    @tags;
+  # all ancestor commits (full SHA) of current HEAD
+  my @all_commits = map { $_->id } $git->log({'simplify-by-decoration'=>1});
 
-  return [ @versions ];
+  # since we only care about the most recent (suitable) tag, we only check
+  # against our ancestor commit list for the first such tag
+  my $best;
+  foreach my $tag_and_version(@tags_and_versions)
+  {
+    my $sha = $self->_sha_from_tag($tag_and_version->[0]);
+
+    $best = $tag_and_version and last
+        if grep { $_ =~ /^$sha/ } @all_commits;
+  }
+
+  return [] if not $best;
+  return [ $best->[1] ];
+}
+
+sub _sha_from_tag
+{
+  my ($self, $tag) = @_;
+
+  my $git  = Git::Wrapper->new( $self->repo_root );
+  my ($tag_verbose) = $git->describe({tags => 1, long => 1}, $tag);
+  my ($_tag, $revisions, $sha) = ($tag_verbose =~ m/^(.+)-([^-]+)-g([^-]+)$/);
+  return $sha;
 }
 
 # -- role implementation

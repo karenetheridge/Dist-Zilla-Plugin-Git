@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - when searching tags for the most recent version, [Git::NextVersion]
+   now only considers tags that are ancestors of the current HEAD
+   (fixes RT#76703) (Karen Etheridge)
 
 1.121820  2012-06-30 05:36:52 Europe/Paris
  - require File::Path 2.07 to get make_path (thanks for failing reports, CPAN
