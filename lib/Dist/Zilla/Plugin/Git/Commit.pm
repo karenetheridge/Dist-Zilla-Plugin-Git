@@ -29,8 +29,8 @@ use String::Formatter method_stringf => {
 };
 
 with 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::Git::DirtyFiles';
 
 # -- attributes
 
@@ -68,7 +68,7 @@ sub after_release {
     }
 
     # if nothing to commit, we're done!
-    return unless @output;    
+    return unless @output;
 
     # write commit message in a temp file
     my ($fh, $filename) = tempfile( getcwd . '/DZP-git.XXXX', UNLINK => 1 );

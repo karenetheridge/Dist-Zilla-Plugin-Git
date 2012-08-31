@@ -9,8 +9,8 @@ use Git::Wrapper;
 use Moose;
 
 with 'Dist::Zilla::Role::BeforeRelease';
-with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::Git::DirtyFiles';
 
 
 # -- public methods
