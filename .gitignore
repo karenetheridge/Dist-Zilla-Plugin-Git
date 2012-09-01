@@ -1,5 +1,6 @@
 # avoid dist::zilla generated and utility files
 .build
+tmp/
 
 # avoid archives of this distribution
 Dist-Zilla-Plugin-Git-*
