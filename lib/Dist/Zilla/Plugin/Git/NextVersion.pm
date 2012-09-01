@@ -34,6 +34,13 @@ has _previous_versions => (
     },
 );
 
+# TODO:
+# - control this behaviour with a config variable?
+#   "ancestor_commits_only"
+#
+# - check if the selected tag version already exists - if so, bail with a
+# fatal error saying to use V.
+
 sub _build__previous_versions {
   my ($self) = @_;
 
@@ -64,7 +71,20 @@ sub _build__previous_versions {
 
     $best = $tag_and_version and last
         if grep { $_ =~ /^$sha/ } @all_commits;
+
+
+  # while we still have the tag corresponding to the selected 
+  # ... check if the next version (calculated later) will collide with a
+  # tag we already have. if so, fatal error and suggest the user resolve it
+  # with V+.
   }
+
+    my $nextversion = Version::Next::next_version($best->[1]);
+    my $match = grep { "$nextversion" eq $_->[0] } @tags_and_versions;
+    if ($match)
+    {
+        fatal("most recent tag found '"$best->[0]" which would make the next version $best->[1], but this conflicts with the existing tag $match->[0]! Please explicitly provide a version with V=.");
+    }
 
   return [] if not $best;
   return [ $best->[1] ];

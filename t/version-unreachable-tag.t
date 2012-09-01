@@ -99,3 +99,9 @@ $git->tag("v0.01");
     is( $zilla->version, '0.03', 'next release in bar branch would be 0.03' );
 }
 
+
+# XXX TODO: now test a conflicting tag and version. should give an exception!
+
+use Test::Fatal;
+
+
