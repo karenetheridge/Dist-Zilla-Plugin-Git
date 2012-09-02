@@ -1,5 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+1.122460  2012-09-02 02:35:25 Europe/Paris
+ - fix rt#78898 - allow_dirty should not be a regex (christopher madsen)
+   This was an unintended side-effect of the fix for gh#19 in 1.113220
+   add tests to check.t so it doesn't recur
+
 1.121820  2012-06-30 05:36:52 Europe/Paris
  - require File::Path 2.07 to get make_path (thanks for failing reports, CPAN
    Testers!)

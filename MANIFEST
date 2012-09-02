@@ -6,7 +6,6 @@ META.json
 META.yml
 README
 corpus/check/Changes
-corpus/check/dist.ini
 corpus/check/foobar
 corpus/commit-build-custom/Changes
 corpus/commit-build-custom/dist.ini

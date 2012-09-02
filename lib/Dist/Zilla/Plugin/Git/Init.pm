@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::Init;
 {
-  $Dist::Zilla::Plugin::Git::Init::VERSION = '1.121820';
+  $Dist::Zilla::Plugin::Git::Init::VERSION = '1.122460';
 }
 # ABSTRACT: initialize git repository on dzil new
 
@@ -79,6 +79,7 @@ sub after_mint {
 
 1;
 
+__END__
 
 =pod
 
@@ -88,7 +89,7 @@ Dist::Zilla::Plugin::Git::Init - initialize git repository on dzil new
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 SYNOPSIS
 
@@ -154,7 +155,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

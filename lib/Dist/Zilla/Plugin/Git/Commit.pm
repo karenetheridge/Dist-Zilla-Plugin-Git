@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::Commit;
 {
-  $Dist::Zilla::Plugin::Git::Commit::VERSION = '1.121820';
+  $Dist::Zilla::Plugin::Git::Commit::VERSION = '1.122460';
 }
 # ABSTRACT: commit dirty files
 
@@ -40,8 +40,8 @@ use String::Formatter method_stringf => {
 };
 
 with 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::Git::DirtyFiles';
 
 # -- attributes
 
@@ -79,7 +79,7 @@ sub after_release {
     }
 
     # if nothing to commit, we're done!
-    return unless @output;    
+    return unless @output;
 
     # write commit message in a temp file
     my ($fh, $filename) = tempfile( getcwd . '/DZP-git.XXXX', UNLINK => 1 );
@@ -122,6 +122,7 @@ sub _get_changes {
 
 1;
 
+__END__
 
 =pod
 
@@ -131,7 +132,7 @@ Dist::Zilla::Plugin::Git::Commit - commit dirty files
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 SYNOPSIS
 
@@ -226,7 +227,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

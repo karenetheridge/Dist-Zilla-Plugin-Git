@@ -8,7 +8,7 @@
 #
 package Dist::Zilla::Plugin::Git::GatherDir;
 {
-  $Dist::Zilla::Plugin::Git::GatherDir::VERSION = '1.121820';
+  $Dist::Zilla::Plugin::Git::GatherDir::VERSION = '1.122460';
 }
 # ABSTRACT: gather all tracked files in a Git working directory
 use Moose;
@@ -76,8 +76,8 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
-
 __END__
+
 =pod
 
 =head1 NAME
@@ -86,7 +86,7 @@ Dist::Zilla::Plugin::Git::GatherDir - gather all tracked files in a Git working 
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 DESCRIPTION
 
@@ -165,4 +165,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

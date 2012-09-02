@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Role::Git::DirtyFiles;
 {
-  $Dist::Zilla::Role::Git::DirtyFiles::VERSION = '1.121820';
+  $Dist::Zilla::Role::Git::DirtyFiles::VERSION = '1.122460';
 }
 # ABSTRACT: provide the allow_dirty & changelog attributes
 
@@ -21,7 +21,12 @@ use Moose::Autobox;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ ArrayRef Str };
 
+use namespace::autoclean;
 use List::Util 'first';
+use Path::Class;
+use Try::Tiny;
+
+requires qw(log_fatal repo_root zilla);
 
 # -- attributes
 
@@ -51,23 +56,41 @@ sub list_dirty_files
 {
   my ($self, $git, $listAllowed) = @_;
 
-  my @allowed = map { qr/${_}$/ } $self->allow_dirty->flatten;
+  my $git_root  = $self->repo_root;
+  my @filenames = $self->allow_dirty->flatten;
 
-  return grep { 
-      my $file = $_; 
-      if ( first { $file =~ $_ } @allowed ) { 
-          $listAllowed 
-      } else { 
-          !$listAllowed 
-      } 
-  } $git->ls_files( { modified=>1, deleted=>1 } );
+  if ($git_root ne '.') {
+    # Interpret allow_dirty relative to the dzil root
+    my $dzil_root = $self->zilla->root->absolute->resolve;
+    $git_root     = dir($git_root)
+                      ->absolute($dzil_root)
+                      ->resolve;
+
+    $self->log_fatal("Dzil root $dzil_root is not inside Git root $git_root")
+        unless $git_root->subsumes($dzil_root);
+
+    for my $fn (@filenames) {
+      try {
+        $fn = file($fn)
+                ->absolute($dzil_root)
+                ->resolve            # process ..
+                ->relative($git_root)
+                ->as_foreign('Unix') # Git always uses Unix-style paths
+                ->stringify;
+      };
+    }
+  } # end if git root ne dzil root
+
+  my %allowed = map { $_ => 1 } @filenames;
+
+  return grep { $allowed{$_} ? $listAllowed : !$listAllowed }
+      $git->ls_files( { modified=>1, deleted=>1 } );
 } # end list_dirty_files
 
 
-no Moose::Role;
-no MooseX::Has::Sugar;
 1;
 
+__END__
 
 =pod
 
@@ -77,7 +100,7 @@ Dist::Zilla::Role::Git::DirtyFiles - provide the allow_dirty & changelog attribu
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 DESCRIPTION
 
@@ -91,6 +114,9 @@ dirty in the local git checkout.
 A list of files that are allowed to be dirty in the git checkout.
 Defaults to C<dist.ini> and the changelog (as defined per the
 C<changelog> attribute.
+
+If your C<repo_root> is not the default (C<.>), then these filenames
+are relative to Dist::Zilla's root directory, not the Git root directory.
 
 =head2 changelog
 
@@ -123,7 +149,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

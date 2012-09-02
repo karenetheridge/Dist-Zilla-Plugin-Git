@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::Push;
 {
-  $Dist::Zilla::Plugin::Git::Push::VERSION = '1.121820';
+  $Dist::Zilla::Plugin::Git::Push::VERSION = '1.122460';
 }
 # ABSTRACT: push current branch
 
@@ -51,6 +51,7 @@ sub after_release {
 
 1;
 
+__END__
 
 =pod
 
@@ -60,7 +61,7 @@ Dist::Zilla::Plugin::Git::Push - push current branch
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 SYNOPSIS
 
@@ -101,7 +102,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-

@@ -12,13 +12,14 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git;
 {
-  $Dist::Zilla::Plugin::Git::VERSION = '1.121820';
+  $Dist::Zilla::Plugin::Git::VERSION = '1.122460';
 }
 # ABSTRACT: update your git repository after release
 
 use Dist::Zilla 2.100880;    # Need mvp_multivalue_args in Plugin role
 1;
 
+__END__
 
 =pod
 
@@ -28,7 +29,7 @@ Dist::Zilla::Plugin::Git - update your git repository after release
 
 =head1 VERSION
 
-version 1.121820
+version 1.122460
 
 =head1 DESCRIPTION
 
@@ -101,8 +102,3 @@ This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
-
-__END__
-
-
