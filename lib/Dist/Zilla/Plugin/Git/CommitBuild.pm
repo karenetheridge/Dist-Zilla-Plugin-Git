@@ -14,7 +14,7 @@ use File::Temp;
 use Moose;
 use namespace::autoclean;
 use MooseX::AttributeShortcuts;
-use Path::Class;
+use Path::Class 0.22;           # dir->basename
 use MooseX::Types::Path::Class ':all';
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
