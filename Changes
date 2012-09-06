@@ -5,6 +5,7 @@ Revision history for Dist::Zilla::Plugin::Git
    (christopher madsen)
  - fix tests to use "git add -f" instead of "git add --force" for
    compatibility with older versions of Git (christopher madsen)
+ - add 000-report-git-version.t for debugging (christopher madsen)
 
 1.122460  2012-09-02 02:35:25 Europe/Paris
  - fix rt#78898 - allow_dirty should not be a regex (christopher madsen)
