@@ -4,6 +4,7 @@ use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Class qw(Dir File);
 with 'Dist::Zilla::Role::Git::Repo';
+use Dist::Zilla::Plugin::GatherDir 4.200016 (); # exclude_match
 extends 'Dist::Zilla::Plugin::GatherDir';
 
 =head1 DESCRIPTION

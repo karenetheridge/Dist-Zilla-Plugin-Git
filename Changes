@@ -3,6 +3,8 @@ Revision history for Dist::Zilla::Plugin::Git
 {{$NEXT}}
  - Git::CommitBuild requires Path::Class 0.22 to get dir->basename
    (christopher madsen)
+ - Git::GatherDir requires Dist::Zilla 4.200016 to get
+   exclude_filename and exclude_match in GatherDir (christopher madsen)
  - fix tests to use "git add -f" instead of "git add --force" for
    compatibility with older versions of Git (christopher madsen)
  - add 000-report-git-version.t for debugging (christopher madsen)
