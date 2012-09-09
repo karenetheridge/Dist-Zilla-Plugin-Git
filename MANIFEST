@@ -2,6 +2,7 @@ Build.PL
 Changes
 LICENSE
 MANIFEST
+MANIFEST.SKIP
 META.json
 META.yml
 README
@@ -50,6 +51,7 @@ lib/Dist/Zilla/PluginBundle/Git.pm
 lib/Dist/Zilla/Role/Git/DirtyFiles.pm
 lib/Dist/Zilla/Role/Git/Repo.pm
 t/00-compile.t
+t/000-report-git-version.t
 t/000-report-versions-tiny.t
 t/check.t
 t/commit-build-custom.t

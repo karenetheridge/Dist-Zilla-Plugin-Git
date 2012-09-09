@@ -57,7 +57,8 @@ for my $test (
 
   # create initial .gitignore
   # we cannot ship it in the dist, since PruneCruft plugin would trim it
-  $git->add( { force => 1 }, qw(lib tracked .tracked) );
+  #   Don't use --force, because only -f works before git 1.5.6
+  $git->add( -f => qw(lib tracked .tracked) );
   $git->commit( { message=>'ignore file for git' } );
 
   $tzil->build;

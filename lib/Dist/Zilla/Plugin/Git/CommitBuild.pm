@@ -12,7 +12,7 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::CommitBuild;
 {
-  $Dist::Zilla::Plugin::Git::CommitBuild::VERSION = '1.122460';
+  $Dist::Zilla::Plugin::Git::CommitBuild::VERSION = '1.122530';
 }
 # ABSTRACT: checkin build results on separate branch
 
@@ -25,7 +25,7 @@ use File::Temp;
 use Moose;
 use namespace::autoclean;
 use MooseX::AttributeShortcuts;
-use Path::Class;
+use Path::Class 0.22;           # dir->basename
 use MooseX::Types::Path::Class ':all';
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
@@ -168,7 +168,7 @@ Dist::Zilla::Plugin::Git::CommitBuild - checkin build results on separate branch
 
 =head1 VERSION
 
-version 1.122460
+version 1.122530
 
 =head1 SYNOPSIS
 

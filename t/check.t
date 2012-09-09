@@ -50,7 +50,8 @@ sub new_tzil
   $git->config( 'user.email' => 'dzp-git@test' );
 
   # create initial commit
-  $git->add( { force => 1 }, '.gitignore');
+  #   Don't use --force, because only -f works before git 1.5.6
+  $git->add( -f => '.gitignore');
   $git->commit( { message=>'ignore file for git' } );
 } # end new_tzil
 

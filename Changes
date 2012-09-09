@@ -1,5 +1,14 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+1.122530  2012-09-09 03:56:01 Europe/Paris
+ - Git::CommitBuild requires Path::Class 0.22 to get dir->basename
+   (christopher madsen)
+ - Git::GatherDir requires Dist::Zilla 4.200016 to get
+   exclude_filename and exclude_match in GatherDir (christopher madsen)
+ - fix tests to use "git add -f" instead of "git add --force" for
+   compatibility with older versions of Git (christopher madsen)
+ - add 000-report-git-version.t for debugging (christopher madsen)
+
 1.122460  2012-09-02 02:35:25 Europe/Paris
  - fix rt#78898 - allow_dirty should not be a regex (christopher madsen)
    This was an unintended side-effect of the fix for gh#19 in 1.113220
