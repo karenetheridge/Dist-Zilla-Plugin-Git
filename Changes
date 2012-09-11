@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - Dist::Zilla::Role::Git::Repo now provides the git method
 
 1.122530  2012-09-09 03:56:01 Europe/Paris
  - Git::CommitBuild requires Path::Class 0.22 to get dir->basename

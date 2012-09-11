@@ -5,7 +5,6 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Check;
 # ABSTRACT: check your git repository before releasing
 
-use Git::Wrapper;
 use Moose;
 
 with 'Dist::Zilla::Role::BeforeRelease';
@@ -18,7 +17,7 @@ with 'Dist::Zilla::Role::Git::DirtyFiles';
 sub before_release {
     my $self = shift;
 
-    my $git = Git::Wrapper->new( $self->repo_root );
+    my $git = $self->git;
     my @output;
 
     # fetch current branch

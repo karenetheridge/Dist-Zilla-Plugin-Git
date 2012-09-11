@@ -5,7 +5,6 @@ package Dist::Zilla::Plugin::Git::NextVersion;
 # ABSTRACT: provide a version number by bumping the last git release tag
 
 use Dist::Zilla 4 ();
-use Git::Wrapper;
 use Version::Next ();
 use version 0.80 ();
 
@@ -41,10 +40,9 @@ sub _build__previous_versions {
 
   local $/ = "\n"; # Force record separator to be single newline
 
-  my $git  = Git::Wrapper->new( $self->repo_root );
   my $regexp = $self->version_regexp;
 
-  my @tags = $git->tag;
+  my @tags = $self->git->tag;
   @tags = map { /$regexp/ ? $1 : () } @tags;
 
   # find tagged versions; sort least to greatest

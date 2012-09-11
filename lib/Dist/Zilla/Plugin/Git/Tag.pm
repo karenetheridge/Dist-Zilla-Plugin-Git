@@ -5,7 +5,6 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Tag;
 # ABSTRACT: tag the new version
 
-use Git::Wrapper;
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
@@ -59,17 +58,14 @@ sub _build_tag
 sub before_release {
     my $self = shift;
 
-    my $git  = Git::Wrapper->new( $self->repo_root );
-
     # Make sure a tag with the new version doesn't exist yet:
     my $tag = $self->tag;
     $self->log_fatal("tag $tag already exists")
-        if $git->tag('-l', $tag );
+        if $self->git->tag('-l', $tag );
 }
 
 sub after_release {
     my $self = shift;
-    my $git  = Git::Wrapper->new( $self->repo_root );
 
     my @opts;
     push @opts, ( '-m' => _format_tag($self->tag_message, $self) )
@@ -81,7 +77,7 @@ sub after_release {
 
     # create a tag with the new version
     my $tag = $self->tag;
-    $git->tag( @opts, $tag, @branch );
+    $self->git->tag( @opts, $tag, @branch );
     $self->log("Tagged $tag");
 }
 

@@ -6,7 +6,6 @@ package Dist::Zilla::Plugin::Git::Commit;
 # ABSTRACT: commit dirty files
 
 use File::Temp           qw{ tempfile };
-use Git::Wrapper;
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
@@ -45,7 +44,7 @@ sub mvp_multivalue_args { qw( add_files_in ) }
 sub after_release {
     my $self = shift;
 
-    my $git  = Git::Wrapper->new( $self->repo_root );
+    my $git  = $self->git;
     my @output;
 
     # check if there are dirty files that need to be committed.
