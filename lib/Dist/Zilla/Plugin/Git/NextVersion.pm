@@ -11,6 +11,7 @@ use version 0.80 ();
 use Moose;
 use namespace::autoclean 0.09;
 use MooseX::AttributeShortcuts;
+use Try::Tiny;
 
 with 'Dist::Zilla::Role::VersionProvider';
 with 'Dist::Zilla::Role::Git::Repo';
@@ -21,37 +22,49 @@ has version_regexp  => ( is => 'ro', isa=>'Str', default => '^v(.+)$' );
 
 has first_version  => ( is => 'ro', isa=>'Str', default => '0.001' );
 
-has _previous_versions => (
+has version_by_branch  => ( is => 'ro', isa=>'Bool', default => 0 );
 
-    traits  => ['Array'],
-    is      => 'lazy',
-    isa     => 'ArrayRef[Str]',
-    handles => {
+sub _max_version_from_tags {
+  my ($regexp, $tags) = @_;
 
-        has_previous_versions => 'count',
-        previous_versions     => 'elements',
-        earliest_version      => [ get =>  0 ],
-        last_version          => [ get => -1 ],
-    },
-);
+  my @versions = sort map {
+    /$regexp/ ? try { version->parse($1) } : ()
+  } @$tags;
 
-sub _build__previous_versions {
+  return $versions[-1]->stringify if @versions;
+
+  return undef;
+} # end _max_version_from_tags
+
+sub _last_version {
   my ($self) = @_;
+
+  my $last_ver;
+  my $by_branch = $self->version_by_branch;
+  my $git       = $self->git;
+  my $regexp    = $self->version_regexp;
+  $regexp       = qr/$regexp/;
 
   local $/ = "\n"; # Force record separator to be single newline
 
-  my $regexp = $self->version_regexp;
+  if ($by_branch) {
+    # Note: git < 1.6.1 doesn't understand --simplify-by-decoration or %d
+    my @tags;
+    for ($git->RUN(qw(log --simplify-by-decoration --pretty=format:%d))) {
+      /^\s*\((.+)\)/ or next;
+      push @tags, split /,\s*/, $1;
+    } # end for lines from git log
+    $last_ver = _max_version_from_tags($regexp, \@tags);
+    return $last_ver if defined $last_ver;
+  } # end if version_by_branch
 
-  my @tags = $self->git->tag;
-  @tags = map { /$regexp/ ? $1 : () } @tags;
+  # Consider versions from all branches:
+  $last_ver = _max_version_from_tags($regexp, [ $git->tag ]);
 
-  # find tagged versions; sort least to greatest
-  my @versions =
-    sort { version->parse($a) <=> version->parse($b) }
-    grep { eval { version->parse($_) }  }
-    @tags;
+  $self->log("WARNING: Unable to find version on current branch")
+      if defined($last_ver) and $by_branch;
 
-  return [ @versions ];
+  return $last_ver;
 }
 
 # -- role implementation
@@ -62,10 +75,11 @@ sub provide_version {
   # override (or maybe needed to initialize)
   return $ENV{V} if exists $ENV{V};
 
-  return $self->first_version
-    unless $self->has_previous_versions;
+  my $last_ver = $self->_last_version;
 
-  my $last_ver = $self->last_version;
+  return $self->first_version
+    unless defined $last_ver;
+
   my $new_ver  = Version::Next::next_version($last_ver);
   $self->log("Bumping version from $last_ver to $new_ver");
 
@@ -87,6 +101,7 @@ In your F<dist.ini>:
 
     [Git::NextVersion]
     first_version = 0.001       ; this is the default
+    version_by_branch = 0       ; this is the default
     version_regexp  = ^v(.+)$   ; this is the default
 
 =head1 DESCRIPTION
@@ -103,6 +118,16 @@ The plugin accepts the following options:
 
 C<first_version> - if the repository has no tags at all, this version
 is used as the first version for the distribution.  It defaults to "0.001".
+
+=item *
+
+C<version_by_branch> - if true, consider only tags on the current
+branch when looking for the previous version.  If you have a
+maintenance branch for stable releases and a developement branch for
+trial releases, you should set this to 1.  (You'll also need git
+version 1.6.1 or later.)  The default is to look at all tags, because
+finding the tags reachable from a branch is a more expensive operation
+than simply listing all tags.
 
 =item *
 

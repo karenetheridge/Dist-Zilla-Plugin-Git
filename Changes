@@ -1,7 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
- - Dist::Zilla::Role::Git::Repo now provides the git method
+ - fix rt#76703 - add version_by_branch option to Git::NextVersion
+   (christopher madsen)
+ - Dist::Zilla::Role::Git::Repo now provides the git method (christopher madsen)
 
 1.122530  2012-09-09 03:56:01 Europe/Paris
  - Git::CommitBuild requires Path::Class 0.22 to get dir->basename
