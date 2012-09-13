@@ -6,12 +6,11 @@ use Git::Wrapper;
 use Path::Class;
 use File::Temp  qw{ tempdir };
 use File::pushd qw/pushd tempd/;
-use File::Copy::Recursive qw/dircopy/;
 
 use Test::More 0.88 tests => 8;
 
 # we chdir around so make @INC absolute
-BEGIN { 
+BEGIN {
   @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
 }
 

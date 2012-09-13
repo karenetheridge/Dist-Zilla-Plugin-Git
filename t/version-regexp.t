@@ -4,14 +4,13 @@ use warnings;
 use Dist::Zilla::Tester;
 use Git::Wrapper;
 use Path::Class;
-use File::Copy::Recursive qw{ dircopy };
 use File::Temp            qw{ tempdir };
 use File::pushd           qw{ pushd tempd };
 
 use Test::More 0.88 tests => 6;
 
 # we chdir around so make @INC absolute
-BEGIN { 
+BEGIN {
   @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
 }
 
