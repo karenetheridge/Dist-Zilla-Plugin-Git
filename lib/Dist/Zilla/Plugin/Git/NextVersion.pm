@@ -48,13 +48,15 @@ sub _last_version {
   local $/ = "\n"; # Force record separator to be single newline
 
   if ($by_branch) {
-    # Note: git < 1.6.1 doesn't understand --simplify-by-decoration or %d
-    my @tags;
-    for ($git->RUN(qw(log --simplify-by-decoration --pretty=format:%d))) {
-      /^\s*\((.+)\)/ or next;
-      push @tags, split /,\s*/, $1;
-    } # end for lines from git log
-    $last_ver = _max_version_from_tags($regexp, \@tags);
+    try {
+      # Note: git < 1.6.1 doesn't understand --simplify-by-decoration or %d
+      my @tags;
+      for ($git->rev_list(qw(--simplify-by-decoration --pretty=%d HEAD))) {
+        /^\s*\((.+)\)/ or next;
+        push @tags, split /,\s*/, $1;
+      } # end for lines from git log
+      $last_ver = _max_version_from_tags($regexp, \@tags);
+    };
     return $last_ver if defined $last_ver;
   } # end if version_by_branch
 
