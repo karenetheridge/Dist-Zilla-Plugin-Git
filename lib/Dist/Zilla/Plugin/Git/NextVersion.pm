@@ -11,8 +11,12 @@ use version 0.80 ();
 use Moose;
 use namespace::autoclean 0.09;
 use MooseX::AttributeShortcuts;
+use Path::Class qw(file);
 use Try::Tiny;
 
+use constant _cache_fn => '.gitnxtver_cache';
+
+with 'Dist::Zilla::Role::FilePruner';
 with 'Dist::Zilla::Role::VersionProvider';
 with 'Dist::Zilla::Role::Git::Repo';
 
@@ -48,6 +52,12 @@ sub _last_version {
   local $/ = "\n"; # Force record separator to be single newline
 
   if ($by_branch) {
+    my $head;
+    my $cachefile = file(_cache_fn);
+    if (-f $cachefile) {
+      ($head) = $git->rev_parse('HEAD');
+      return $1 if $cachefile->slurp =~ /^\Q$head\E (.+)/;
+    }
     try {
       # Note: git < 1.6.1 doesn't understand --simplify-by-decoration or %d
       my @tags;
@@ -57,7 +67,11 @@ sub _last_version {
       } # end for lines from git log
       $last_ver = _max_version_from_tags($regexp, \@tags);
     };
-    return $last_ver if defined $last_ver;
+    if (defined $last_ver) {
+      ($head) = $git->rev_parse('HEAD') unless $head;
+      print { $cachefile->openw } "$head $last_ver\n";
+      return $last_ver;
+    }
   } # end if version_by_branch
 
   # Consider versions from all branches:
@@ -88,6 +102,17 @@ sub provide_version {
   return "$new_ver";
 }
 
+sub prune_files {
+  my $self = shift;
+
+  my $files = $self->zilla->files;
+
+  # Ensure we don't distribute .gitnxtver_cache:
+  @$files = grep { $_->name ne _cache_fn } @$files;
+
+  return;
+} # end prune_files
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
@@ -96,6 +121,7 @@ __END__
 
 =for Pod::Coverage
     provide_version
+    prune_files
 
 =head1 SYNOPSIS
 
@@ -145,6 +171,13 @@ This is useful if you need to bump to a specific version.  For example, if
 the last tag is 0.005 and you want to jump to 1.000 you can set V = 1.000.
 
   $ V=1.000 dzil release
+
+Because tracing history takes time, if you use the
+C<version_by_branch> option, Git::NextVersion will create a
+F<.gitnxtver_cache> file in your repository to track the highest
+version number that is an ancestor of the HEAD revision.  You should
+add F<.gitnxtver_cache> to your F<.gitignore> file.  It will
+automatically be pruned from the distribution.
 
 =cut
 
