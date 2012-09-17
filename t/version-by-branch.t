@@ -63,7 +63,7 @@ append_file(Changes => "Just getting started");
   if ( version->parse( $version ) < version->parse('1.6.1') ) {
     plan skip_all => "git 1.6.1 or later required, you have $version";
   } else {
-    plan tests => 14;
+    plan tests => 28;
   }
 
   $git->config( 'user.name'  => 'dzp-git test' );
@@ -74,33 +74,62 @@ append_file(Changes => "Just getting started");
 ## shortcut for new tester object
 
 my $zilla;
+my $cache = '.gitnxtver_cache';
 
 sub _new_zilla {
-  $zilla = Builder->from_config({ dist_root => $git_dir });
+  my ($rev, $tag) = @_;
+
+  my %test_config;
+
+  if ($rev) {
+    my ($sha) = $git->rev_parse($rev);
+    $test_config{add_files}{"source/$cache"} = "$sha $tag\n";
+  }
+
+  $zilla = Builder->from_config({ dist_root => $git_dir }, \%test_config);
 }
 
 sub _zilla_version {
-  _new_zilla;
+  _new_zilla(@_);
   # Need to be in the right directory:
   my $pushd = pushd($zilla->root);
   my $version = $zilla->version;
   return $version;
 }
 
+# Check the contents (or absence) of .gitnxtver_cache:
+sub head_last_ver
+{
+  my ($last_ver) = @_;
+
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
+
+  if (defined $last_ver) {
+    my ($head) = $git->rev_parse('HEAD');
+
+    is($zilla->slurp_file("source/$cache"), "$head $last_ver\n",
+       "cache file contains $last_ver");
+  } else {
+    ok( !-f $zilla->root->file($cache), "no cache file created");
+  }
+} # end head_last_ver
 
 # with no tags and no initialization, should get default
 is( _zilla_version, "0.001", "works with no commits" );
+head_last_ver(undef);
 
 $git->add(".");
 $git->commit({ message => 'import' });
 
 # with no tags and no initialization, should get default
 is( _zilla_version, "0.001", "default is 0.001" );
+head_last_ver(undef);
 
 # initialize it using V=
 {
     local $ENV{V} = "1.23";
     is( _zilla_version, "1.23", "initialized with \$ENV{V}" );
+    head_last_ver(undef);
 }
 
 # add a tag that doesn't match the regex
@@ -108,6 +137,7 @@ $git->tag("revert-me-later");
 ok( (grep { /revert-me-later/ } $git->tag), "wrote revert-me-later tag" );
 
 is( _zilla_version, "0.001", "default is 0.001" );
+head_last_ver(undef);
 
 # tag 1.2.3
 append_file(Changes => "1.2.3 now\n");
@@ -116,6 +146,7 @@ $git->tag("v1.2.3");
 ok( (grep { /v1\.2\.3/ } $git->tag), "wrote v1.2.3 tag" );
 
 is( _zilla_version, "1.2.4", "initialized from last tag" );
+head_last_ver("1.2.3");
 
 # make a dev branch
 $git->checkout(qw(-b dev));
@@ -127,11 +158,13 @@ $git->tag("v1.3.0");
 ok( (grep { /v1\.3\.0/ } $git->tag), "wrote v1.3.0 tag" );
 
 is( _zilla_version, "1.3.1", "initialized from 1.3.0 tag" );
+head_last_ver("1.3.0");
 
 # go back to master branch
 $git->checkout(qw(master));
 
 is( _zilla_version, "1.2.4", "initialized from 1.2.3 tag on master" );
+head_last_ver("1.2.3");
 
 # tag stable 1.2.4
 append_file(Changes => "1.2.4 stable release\n");
@@ -140,6 +173,7 @@ $git->tag("v1.2.4");
 ok( (grep { /v1\.2\.4/ } $git->tag), "wrote v1.2.4 tag" );
 
 is( _zilla_version, "1.2.5", "initialized from 1.2.4 tag" );
+head_last_ver("1.2.4");
 
 # go back to dev branch
 $git->checkout(qw(dev));
@@ -148,6 +182,7 @@ append_file(Changes => "1.3.1 in progress\n");
 $git->commit({ message => 'committing 1.3.1 change'});
 
 is( _zilla_version, "1.3.1", "using dev branch 1.3.0 tag" );
+head_last_ver("1.3.0");
 
 # go back to master branch
 $git->checkout(qw(master));
@@ -156,6 +191,16 @@ append_file(Changes => "1.2.5 still in progress\n");
 $git->commit({ message => 'committing 1.2.5 change'});
 
 is( _zilla_version, "1.2.5", "using master branch 1.2.4 tag" );
+head_last_ver("1.2.4");
+
+# see if it reads the cache
+is( _zilla_version(qw(HEAD 1.2.6)), "1.2.7", "using (fake) cached 1.2.6 tag" );
+head_last_ver("1.2.6");
+
+# see if it ignores a stale cache
+is( _zilla_version(qw(HEAD^ 1.2.6)), "1.2.5",
+    "ignoring stale cached 1.2.6 tag" );
+head_last_ver("1.2.4");
 
 # $base_dir_pushed->preserve;  print "Files in $git_dir\n";
 
