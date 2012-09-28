@@ -14,6 +14,16 @@ BEGIN {
   @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
 }
 
+# Check for Git 1.6.1 or later:
+{
+  my ($version) = Git::Wrapper->new('.')->version =~ m[^( \d+ \. \d[.\d]+ )]x;
+  if ( version->parse( $version ) < version->parse('1.6.1') ) {
+    plan skip_all => "git 1.6.1 or later required, you have $version";
+  } else {
+    plan tests => 28;
+  }
+}
+
 # Make a new directory so we don't affect the source repo:
 
 my $base_dir_pushed = tempd;
@@ -58,13 +68,6 @@ append_file(Changes => "Just getting started");
   system "git init --quiet" and die "Can't initialize repo";
 
   $git = Git::Wrapper->new($git_dir);
-
-  my ($version) = $git->version =~ m[^( \d+ \. \d[.\d]+ )]x;
-  if ( version->parse( $version ) < version->parse('1.6.1') ) {
-    plan skip_all => "git 1.6.1 or later required, you have $version";
-  } else {
-    plan tests => 28;
-  }
 
   $git->config( 'user.name'  => 'dzp-git test' );
   $git->config( 'user.email' => 'dzp-git@test' );
