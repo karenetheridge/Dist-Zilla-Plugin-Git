@@ -61,6 +61,15 @@ both for files and for directories relative to the C<root>.
 
 In almost all cases, the default value (false) is correct.
 
+=attr include_untracked
+
+By default, files not tracked by Git will not be gathered.  If this is
+set to a true value, then untracked files not covered by a Git ignore
+pattern (i.e. those reported by C<git ls-files -o --exclude-standard>)
+are also gathered (and you'll probably want to use
+L<Git::Check|Dist::Zilla::Plugin::Git::Check> to ensure all files are
+checked in before a release).
+
 =attr follow_symlinks
 
 By default, directories that are symlinks will not be followed. Note on the
@@ -80,6 +89,11 @@ multiple times to specify multiple patterns to exclude.
 
 =cut
 
+has include_untracked => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
 
 override gather_files => sub {
   my ($self) = @_;
@@ -90,8 +104,11 @@ override gather_files => sub {
 
   my $git = Git::Wrapper->new($root);
 
+  my @opts;
+  @opts = qw(-co --exclude-standard) if $self->include_untracked;
+
   my @files;
-  FILE: for my $filename (uniq $git->ls_files) {
+  FILE: for my $filename (uniq $git->ls_files(@opts)) {
 
     my $file = file($filename)->relative($root);
 
