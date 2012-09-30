@@ -4,6 +4,7 @@ Revision history for Dist::Zilla::Plugin::Git
  - fix rt#76703 - add version_by_branch option to Git::NextVersion
    (christopher madsen)
  - add include_untracked option to Git::GatherDir (christopher madsen)
+ - add untracked_files option to Git::Check (christopher madsen)
  - Dist::Zilla::Role::Git::Repo now provides the git method (christopher madsen)
 
 1.122530  2012-09-09 03:56:01 Europe/Paris
