@@ -8,6 +8,7 @@ use File::pushd qw(pushd tempd);
 use version 0.80 ();
 
 use Test::More 0.88;            # done_testing
+use Test::Exception;
 
 # we chdir around so make @INC absolute
 BEGIN {
@@ -20,7 +21,7 @@ BEGIN {
   if ( version->parse( $version ) < version->parse('1.6.1') ) {
     plan skip_all => "git 1.6.1 or later required, you have $version";
   } else {
-    plan tests => 28;
+    plan tests => 31;
   }
 }
 
@@ -59,6 +60,7 @@ append_file('dist.ini' => dist_ini(
     copyright_year    2009
   )},
   [ 'Git::NextVersion', { version_by_branch => 1 } ],
+  'FakeRelease',
 ));
 
 append_file(Changes => "Just getting started");
@@ -204,6 +206,13 @@ head_last_ver("1.2.6");
 is( _zilla_version(qw(HEAD^ 1.2.6)), "1.2.5",
     "ignoring stale cached 1.2.6 tag" );
 head_last_ver("1.2.4");
+
+# see if it catches a duplicate version
+_new_zilla(qw(HEAD 1.2.3));
+lives_ok { $zilla->build } "builds with duplicate version";
+is( $zilla->version, "1.2.4", "version is duplicate" );
+throws_ok { $zilla->release } qr/version 1\.2\.4 has already been tagged/,
+    "don't release duplicate version";
 
 # $base_dir_pushed->preserve;  print "Files in $git_dir\n";
 
