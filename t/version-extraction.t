@@ -21,9 +21,10 @@ sub t
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
 
-  is(Dist::Zilla::Plugin::Git::NextVersion::_max_version_from_tags(
-       $regexp, \@_
-     ), $expect, $name);
+  is(Dist::Zilla::Plugin::Git::NextVersion::_max_version(
+       Dist::Zilla::Plugin::Git::NextVersion::_versions_from_tags(
+         $regexp, \@_
+     )), $expect, $name);
 } # end t
 
 #---------------------------------------------------------------------

@@ -10,35 +10,51 @@ use version 0.80 ();
 
 use Moose;
 use namespace::autoclean 0.09;
-use MooseX::AttributeShortcuts;
 use Path::Class qw(file);
 use Try::Tiny;
+use Moose::Util::TypeConstraints;
 
 use constant _cache_fn => '.gitnxtver_cache';
 
+with 'Dist::Zilla::Role::BeforeRelease';
+with 'Dist::Zilla::Role::AfterRelease';
 with 'Dist::Zilla::Role::FilePruner';
 with 'Dist::Zilla::Role::VersionProvider';
 with 'Dist::Zilla::Role::Git::Repo';
 
 # -- attributes
 
-has version_regexp  => ( is => 'ro', isa=>'Str', default => '^v(.+)$' );
+subtype 'CoercedRegexp', as 'RegexpRef';
+coerce 'CoercedRegexp', from 'Str', via { qr/$_/ };
+
+has version_regexp  => ( is => 'ro', isa=>'CoercedRegexp', coerce => 1,
+                         default => sub { qr/^v(.+)$/ } );
 
 has first_version  => ( is => 'ro', isa=>'Str', default => '0.001' );
 
 has version_by_branch  => ( is => 'ro', isa=>'Bool', default => 0 );
 
-sub _max_version_from_tags {
+sub _versions_from_tags {
   my ($regexp, $tags) = @_;
 
-  my @versions = sort map {
-    /$regexp/ ? try { version->parse($1) } : ()
-  } @$tags;
+  return [ sort map { /$regexp/ ? try { version->parse($1) } : () } @$tags ];
+} # end _versions_from_tags
 
-  return $versions[-1]->stringify if @versions;
+has _all_versions => (
+  is => 'ro',  isa=>'ArrayRef',  init_arg => undef,  lazy => 1,
+  default => sub {
+    my $self = shift;
+    _versions_from_tags($self->version_regexp, [ $self->git->tag ]);
+  }
+);
+
+sub _max_version {
+  my $versions = shift;  # arrayref of versions sorted in ascending order
+
+  return $versions->[-1]->stringify if @$versions;
 
   return undef;
-} # end _max_version_from_tags
+} # end _max_version
 
 sub _last_version {
   my ($self) = @_;
@@ -46,8 +62,6 @@ sub _last_version {
   my $last_ver;
   my $by_branch = $self->version_by_branch;
   my $git       = $self->git;
-  my $regexp    = $self->version_regexp;
-  $regexp       = qr/$regexp/;
 
   local $/ = "\n"; # Force record separator to be single newline
 
@@ -65,7 +79,8 @@ sub _last_version {
         /^\s*\((.+)\)/ or next;
         push @tags, split /,\s*/, $1;
       } # end for lines from git log
-      $last_ver = _max_version_from_tags($regexp, \@tags);
+      $last_ver = _max_version(_versions_from_tags($self->version_regexp,
+                                                   \@tags));
     };
     if (defined $last_ver) {
       ($head) = $git->rev_parse('HEAD') unless $head;
@@ -75,7 +90,7 @@ sub _last_version {
   } # end if version_by_branch
 
   # Consider versions from all branches:
-  $last_ver = _max_version_from_tags($regexp, [ $git->tag ]);
+  $last_ver = _max_version($self->_all_versions);
 
   $self->log("WARNING: Unable to find version on current branch")
       if defined($last_ver) and $by_branch;
@@ -84,6 +99,23 @@ sub _last_version {
 }
 
 # -- role implementation
+
+sub before_release {
+  my $self = shift;
+
+  # Make sure we're not duplicating a version:
+  my $version = version->parse( $self->zilla->version );
+
+  $self->log_fatal("version $version has already been tagged")
+      if grep { $_ == $version } @{ $self->_all_versions };
+}
+
+sub after_release {
+  my $self = shift;
+
+  # Remove the cache file, just in case:
+  $self->zilla->root->file(_cache_fn)->remove;
+}
 
 sub provide_version {
   my ($self) = @_;
@@ -122,6 +154,8 @@ __END__
 =for Pod::Coverage
     provide_version
     prune_files
+    before_release
+    after_release
 
 =head1 SYNOPSIS
 
