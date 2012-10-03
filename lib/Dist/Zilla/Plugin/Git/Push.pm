@@ -12,11 +12,10 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::Push;
 {
-  $Dist::Zilla::Plugin::Git::Push::VERSION = '1.122530';
+  $Dist::Zilla::Plugin::Git::Push::VERSION = '1.122770';
 }
 # ABSTRACT: push current branch
 
-use Git::Wrapper;
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ ArrayRef Str };
@@ -38,10 +37,10 @@ has push_to => (
 
 sub after_release {
     my $self = shift;
-    my $git  = Git::Wrapper->new( $self->repo_root );
+    my $git  = $self->git;
 
     # push everything on remote branch
-    for my $remote ( @{ $self->push_to } ) { 
+    for my $remote ( @{ $self->push_to } ) {
       $self->log("pushing to $remote");
       my @remote = split(/\s+/,$remote);
       $self->log_debug($_) for $git->push( @remote );
@@ -61,7 +60,7 @@ Dist::Zilla::Plugin::Git::Push - push current branch
 
 =head1 VERSION
 
-version 1.122530
+version 1.122770
 
 =head1 SYNOPSIS
 
@@ -80,7 +79,7 @@ The plugin accepts the following options:
 
 =over 4
 
-=item * 
+=item *
 
 push_to - the name of the a remote to push to. The default is F<origin>.
 This may be specified multiple times to push to multiple repositories.

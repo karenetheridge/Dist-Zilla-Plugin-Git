@@ -71,5 +71,7 @@ t/release-pod-syntax.t
 t/repo-dir.t
 t/tag-signed.t
 t/tag.t
+t/version-by-branch.t
 t/version-default.t
+t/version-extraction.t
 t/version-regexp.t

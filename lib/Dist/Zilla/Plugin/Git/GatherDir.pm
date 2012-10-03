@@ -8,7 +8,7 @@
 #
 package Dist::Zilla::Plugin::Git::GatherDir;
 {
-  $Dist::Zilla::Plugin::Git::GatherDir::VERSION = '1.122530';
+  $Dist::Zilla::Plugin::Git::GatherDir::VERSION = '1.122770';
 }
 # ABSTRACT: gather all tracked files in a Git working directory
 use Moose;
@@ -29,6 +29,11 @@ use Path::Class;
 use namespace::autoclean;
 
 
+has include_untracked => (
+  is  => 'ro',
+  isa => 'Bool',
+  default => 0,
+);
 
 override gather_files => sub {
   my ($self) = @_;
@@ -39,8 +44,11 @@ override gather_files => sub {
 
   my $git = Git::Wrapper->new($root);
 
+  my @opts;
+  @opts = qw(-co --exclude-standard) if $self->include_untracked;
+
   my @files;
-  FILE: for my $filename (uniq $git->ls_files) {
+  FILE: for my $filename (uniq $git->ls_files(@opts)) {
 
     my $file = file($filename)->relative($root);
 
@@ -87,7 +95,7 @@ Dist::Zilla::Plugin::Git::GatherDir - gather all tracked files in a Git working 
 
 =head1 VERSION
 
-version 1.122530
+version 1.122770
 
 =head1 DESCRIPTION
 
@@ -133,6 +141,15 @@ By default, files will not be included if they begin with a dot.  This goes
 both for files and for directories relative to the C<root>.
 
 In almost all cases, the default value (false) is correct.
+
+=head2 include_untracked
+
+By default, files not tracked by Git will not be gathered.  If this is
+set to a true value, then untracked files not covered by a Git ignore
+pattern (i.e. those reported by C<git ls-files -o --exclude-standard>)
+are also gathered (and you'll probably want to use
+L<Git::Check|Dist::Zilla::Plugin::Git::Check> to ensure all files are
+checked in before a release).
 
 =head2 follow_symlinks
 

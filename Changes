@@ -1,5 +1,14 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+1.122770  2012-10-03 04:28:36 Europe/Paris
+ - fix rt#76703 - add version_by_branch option to Git::NextVersion
+   (christopher madsen)
+ - Git::NextVersion now aborts release if version is duplicated
+   (christopher madsen)
+ - add include_untracked option to Git::GatherDir (christopher madsen)
+ - add untracked_files option to Git::Check (christopher madsen)
+ - Dist::Zilla::Role::Git::Repo now provides the git method (christopher madsen)
+
 1.122530  2012-09-09 03:56:01 Europe/Paris
  - Git::CommitBuild requires Path::Class 0.22 to get dir->basename
    (christopher madsen)

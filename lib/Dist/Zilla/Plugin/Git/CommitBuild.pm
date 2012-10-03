@@ -12,11 +12,11 @@ use warnings;
 
 package Dist::Zilla::Plugin::Git::CommitBuild;
 {
-  $Dist::Zilla::Plugin::Git::CommitBuild::VERSION = '1.122530';
+  $Dist::Zilla::Plugin::Git::CommitBuild::VERSION = '1.122770';
 }
 # ABSTRACT: checkin build results on separate branch
 
-use Git::Wrapper 0.021;
+use Git::Wrapper 0.021 ();      # need -STDIN
 use IPC::Open3;
 use IPC::System::Simple; # required for Fatalised/autodying system
 use File::chdir;
@@ -42,9 +42,9 @@ use String::Formatter (
 	method_stringf => {
 		-as   => '_format_message',
 		codes => {
-			b => sub { (shift->_git->name_rev( '--name-only', 'HEAD' ))[0] },
-			h => sub { (shift->_git->rev_parse( '--short',    'HEAD' ))[0] },
-			H => sub { (shift->_git->rev_parse('HEAD'))[0] },
+			b => sub { (shift->git->name_rev( '--name-only', 'HEAD' ))[0] },
+			h => sub { (shift->git->rev_parse( '--short',    'HEAD' ))[0] },
+			H => sub { (shift->git->rev_parse('HEAD'))[0] },
 		    t => sub { shift->zilla->is_trial ? '-TRIAL' : '' },
 		    v => sub { shift->zilla->version },
 		}
@@ -64,7 +64,6 @@ has release_branch  => ( ro, isa => Str, required => 0 );
 has message => ( ro, isa => Str, default => 'Build results of %h (on %b)', required => 1 );
 has release_message => ( ro, isa => Str, lazy => 1, builder => '_build_release_message' );
 has build_root => ( rw, coerce => 1, isa => Dir );
-has _git => (rw, weak_ref => 1);
 
 # -- attribute builders
 
@@ -94,8 +93,7 @@ sub _commit_build {
     return unless $branch;
 
     my $tmp_dir = File::Temp->newdir( CLEANUP => 1) ;
-    my $src     = Git::Wrapper->new( $self->repo_root );
-    $self->_git($src);
+    my $src     = $self->git;
 
     my $target_branch = _format_branch( $branch, $src );
     my $dir           = $self->build_root;
@@ -168,7 +166,7 @@ Dist::Zilla::Plugin::Git::CommitBuild - checkin build results on separate branch
 
 =head1 VERSION
 
-version 1.122530
+version 1.122770
 
 =head1 SYNOPSIS
 
