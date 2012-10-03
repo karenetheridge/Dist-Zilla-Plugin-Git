@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+1.122770  2012-10-03 04:28:36 Europe/Paris
  - fix rt#76703 - add version_by_branch option to Git::NextVersion
    (christopher madsen)
  - Git::NextVersion now aborts release if version is duplicated
