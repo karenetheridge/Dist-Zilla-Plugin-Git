@@ -168,9 +168,17 @@ In your F<dist.ini>:
 
 =head1 DESCRIPTION
 
-This does the L<Dist::Zilla::Role::VersionProvider> role.  It finds the last
-version number from your git tags, increments it using L<Version::Next>, and
-uses the result as the C<version> parameter for your distribution.
+This does the L<VersionProvider|Dist::Zilla::Role::VersionProvider> role.
+It finds the last version number from your Git tags, increments it
+using L<Version::Next>, and uses the result as the C<version> parameter
+for your distribution.
+
+In addition, when making a release, it ensures that the version being
+released has not already been tagged.  (The
+L<Git::Tag|Dist::Zilla::Plugin::Git::Tag> plugin has a similar check,
+but Git::Tag only checks for an exact match on the tag.  Since
+Git::NextVersion knows how to extract version numbers from tags, it
+can find duplicates that Git::Tag would miss.)
 
 The plugin accepts the following options:
 
@@ -195,7 +203,8 @@ than simply listing all tags.
 
 C<version_regexp> - regular expression that matches a tag containing
 a version.  It must capture the version into $1.  Defaults to ^v(.+)$
-which matches the default C<tag_format> from L<Dist::Zilla::Plugin::Git::Tag>.
+which matches the default C<tag_format> from the
+L<Git::Tag|Dist::Zilla::Plugin::Git::Tag> plugin.
 If you change C<tag_format>, you B<must> set a corresponsing C<version_regexp>.
 
 =back

@@ -3,6 +3,8 @@ Revision history for Dist::Zilla::Plugin::Git
 {{$NEXT}}
  - fix rt#76703 - add version_by_branch option to Git::NextVersion
    (christopher madsen)
+ - Git::NextVersion now aborts release if version is duplicated
+   (christopher madsen)
  - add include_untracked option to Git::GatherDir (christopher madsen)
  - add untracked_files option to Git::Check (christopher madsen)
  - Dist::Zilla::Role::Git::Repo now provides the git method (christopher madsen)
