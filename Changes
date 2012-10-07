@@ -1,6 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - Despite the version number, this is *not* a major release, just a new
+   numbering scheme.  Git::NextVersion now generates the version number.
+ - fix tests to work on windows (christopher madsen)
+ - add t::Util to consolidate common test functions (christopher madsen)
 
 1.122770  2012-10-03 04:28:36 Europe/Paris
  - fix rt#76703 - add version_by_branch option to Git::NextVersion
