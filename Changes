@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.000     2012-10-07 06:33:29 Europe/Paris
  - Despite the version number, this is *not* a major release, just a new
    numbering scheme.  Git::NextVersion now generates the version number.
  - fix tests to work on windows (christopher madsen)
