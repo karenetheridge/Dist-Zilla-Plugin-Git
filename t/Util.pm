@@ -17,7 +17,7 @@ package t::Util;
 # ABSTRACT: Utilities for testing Dist-Zilla-Plugin-Git
 #---------------------------------------------------------------------
 
-use 5.008;
+use 5.010;
 use strict;
 use warnings;
 
@@ -34,10 +34,11 @@ our ($base_dir, $base_dir_pushed, $dist_dir, $git_dir, $git, $zilla);
 use Exporter ();
 our @ISA    = qw(Exporter);
 our @EXPORT = qw($base_dir $git_dir $git $zilla
-                 append_and_add init_test keep_tempdir
+                 append_and_add append_to_file init_test keep_tempdir
                  new_zilla_from_repo
-                 skip_unless_git_version slurp_text_file);
-our @EXPORT_OK = qw(zilla_version);
+                 skip_unless_git_version slurp_text_file
+                 zilla_log_is);
+our @EXPORT_OK = qw($dist_dir zilla_version);
 
 # we chdir around so make @INC absolute
 BEGIN {
@@ -47,13 +48,23 @@ BEGIN {
 #=====================================================================
 sub append_and_add
 {
-  my ($fn, $data) = @_;
+  my $fn = $_[0];
 
-  my $out = $git_dir->file($fn)->open('>>:raw:utf8') or die;
-  print $out $data;
+  &append_to_file;
 
   $git->add($fn);
 } # end append_and_add
+
+#---------------------------------------------------------------------
+sub append_to_file {
+  my $file = shift;
+
+  my $fh = $git_dir->file($file)->open('>>:raw:utf8')
+      or die "can't open $file: $!";
+
+  print $fh @_;
+  close $fh;
+}
 
 #---------------------------------------------------------------------
 sub init_test
@@ -131,6 +142,24 @@ sub slurp_text_file
     <$fh>;
   };
 } # end slurp_text_file
+
+#---------------------------------------------------------------------
+sub zilla_log_is
+{
+  my ($matching, $expected, $name) = @_;
+
+  $name //= "log messages for $matching";
+
+  $matching = qr /^\Q[$matching]\E/ unless ref $matching;
+
+  my $got = join("\n", grep { /$matching/ } @{ $zilla->log_messages });
+  $got =~ s/\s*\z/\n/;
+
+  local $Test::Builder::Level = $Test::Builder::Level + 1;
+  is( $got, $expected, $name);
+
+  $zilla->clear_log_events;
+}
 
 #---------------------------------------------------------------------
 sub zilla_version
