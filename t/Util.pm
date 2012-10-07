@@ -94,7 +94,7 @@ sub init_test
     while (my ($name, $content) = each %$files) {
       my $fn = $git_dir->file($name);
       $fn->dir->mkpath;
-      open my $fh, '>:raw:utf8', $fn;
+      open my $fh, '>:raw:utf8', $fn or die "Can't open $fn: $!";
       print { $fh } $content;
       close $fh;
     }
@@ -140,8 +140,12 @@ sub slurp_text_file
 
   return scalar do {
     local $/;
-    open my $fh, '<:utf8:crlf', $zilla->tempdir->file($filename);
-    <$fh>;
+    if (open my $fh, '<:utf8', $zilla->tempdir->file($filename)) {
+      <$fh>;
+    } else {
+      diag("Unable to open $filename: $!");
+      undef;
+    }
   };
 } # end slurp_text_file
 

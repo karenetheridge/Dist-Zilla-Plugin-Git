@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix tests to work on Perl 5.12 and older (christopher madsen)
 
 2.000     2012-10-07 06:33:29 Europe/Paris
  - Despite the version number, this is *not* a major release, just a new
