@@ -81,6 +81,8 @@ sub init_test
   mkdir($ENV{HOME} = $base_dir->subdir('home')->stringify)
       or die "Failed to create $ENV{HOME}: $!";
 
+  delete $ENV{V}; # In case we're being released with a manual version
+
   # Create the test repo:
   $git_dir = $base_dir->subdir('repo');
   $git_dir->mkpath;
