@@ -193,7 +193,7 @@ is used as the first version for the distribution.  It defaults to "0.001".
 
 C<version_by_branch> - if true, consider only tags on the current
 branch when looking for the previous version.  If you have a
-maintenance branch for stable releases and a developement branch for
+maintenance branch for stable releases and a development branch for
 trial releases, you should set this to 1.  (You'll also need git
 version 1.6.1 or later.)  The default is to look at all tags, because
 finding the tags reachable from a branch is a more expensive operation
