@@ -25,13 +25,13 @@ use String::Formatter (
 	method_stringf => {
 		-as   => '_format_branch',
 		codes => {
-			b => sub { (shift->name_rev( '--name-only', 'HEAD' ))[0] },
+			b => sub { shift->source_branch },
 		},
 	},
 	method_stringf => {
 		-as   => '_format_message',
 		codes => {
-			b => sub { (shift->git->name_rev( '--name-only', 'HEAD' ))[0] },
+			b => sub { shift->source_branch },
 			h => sub { (shift->git->rev_parse( '--short',    'HEAD' ))[0] },
 			H => sub { (shift->git->rev_parse('HEAD'))[0] },
 		    t => sub { shift->zilla->is_trial ? '-TRIAL' : '' },
@@ -53,6 +53,14 @@ has release_branch  => ( ro, isa => Str, required => 0 );
 has message => ( ro, isa => Str, default => 'Build results of %h (on %b)', required => 1 );
 has release_message => ( ro, isa => Str, lazy => 1, builder => '_build_release_message' );
 has build_root => ( rw, coerce => 1, isa => Dir );
+
+has source_branch => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => sub {
+        ($_[0]->git->name_rev( '--name-only', 'HEAD' ))[0];
+    },
+);
 
 # -- attribute builders
 
@@ -84,7 +92,7 @@ sub _commit_build {
     my $tmp_dir = File::Temp->newdir( CLEANUP => 1) ;
     my $src     = $self->git;
 
-    my $target_branch = _format_branch( $branch, $src );
+    my $target_branch = _format_branch( $branch, $self );
     my $dir           = $self->build_root;
 
     # returns the sha1 of the created tree object
@@ -100,9 +108,9 @@ sub _commit_build {
         return;
     }
 
-    my @parents = grep {
+    my @parents = ( $self->source_branch, grep {
         eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) }
-    } $target_branch;
+    } $target_branch );
 
     ### @parents
 
