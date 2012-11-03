@@ -57,6 +57,7 @@ has build_root => ( rw, coerce => 1, isa => Dir );
 has source_branch => (
     is      => 'ro',
     isa     => 'Str',
+    lazy    => 1,
     default => sub {
         ($_[0]->git->name_rev( '--name-only', 'HEAD' ))[0];
     },
