@@ -21,6 +21,9 @@ sub t
 
   local $Test::Builder::Level = $Test::Builder::Level + 1;
 
+  # This prevents RT#81061 from recurring (thanks, Matthew Horsfall):
+  local $1;    # ensure version.pm exhibits its buggy behavior with $1
+
   is(Dist::Zilla::Plugin::Git::NextVersion::_max_version(
        Dist::Zilla::Plugin::Git::NextVersion::_versions_from_tags(
          $regexp, \@_

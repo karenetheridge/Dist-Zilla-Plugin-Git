@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - change version-extraction.t to catch the bug in rt#81061
+   (christopher madsen with help from matthew horsfall)
 
 2.002     2012-11-09 20:59:37 Europe/Paris
  - fix rt#81061 - Git::NextVersion parsing all versions as 0 (christopher madsen)
