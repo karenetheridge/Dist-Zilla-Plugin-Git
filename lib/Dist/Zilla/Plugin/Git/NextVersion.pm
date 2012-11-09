@@ -37,7 +37,10 @@ has version_by_branch  => ( is => 'ro', isa=>'Bool', default => 0 );
 sub _versions_from_tags {
   my ($regexp, $tags) = @_;
 
-  return [ sort map { /$regexp/ ? try { version->parse($1) } : () } @$tags ];
+  # WARNING: The quotes in "$1" are necessary, because version doesn't
+  # call get magic properly.  Unfortunately, I haven't been able to
+  # reproduce this in a test.
+  return [ sort map { /$regexp/ ? try { version->parse("$1") } : () } @$tags ];
 } # end _versions_from_tags
 
 has _all_versions => (
