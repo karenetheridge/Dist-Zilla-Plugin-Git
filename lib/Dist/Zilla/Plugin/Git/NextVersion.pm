@@ -44,7 +44,11 @@ has _all_versions => (
   is => 'ro',  isa=>'ArrayRef',  init_arg => undef,  lazy => 1,
   default => sub {
     my $self = shift;
-    _versions_from_tags($self->version_regexp, [ $self->git->tag ]);
+    my $v = _versions_from_tags($self->version_regexp, [ $self->git->tag ]);
+    if ($self->logger->get_debug) {
+      $self->log_debug("Found version $_") for @$v;
+    }
+    $v;
   }
 );
 
@@ -79,8 +83,11 @@ sub _last_version {
         /^\s*\((.+)\)/ or next;
         push @tags, split /,\s*/, $1;
       } # end for lines from git log
-      $last_ver = _max_version(_versions_from_tags($self->version_regexp,
-                                                   \@tags));
+      my $versions = _versions_from_tags($self->version_regexp, \@tags);
+      if ($self->logger->get_debug) {
+        $self->log_debug("Found version $_ on branch") for @$versions;
+      }
+      $last_ver = _max_version($versions);
     };
     if (defined $last_ver) {
       ($head) = $git->rev_parse('HEAD') unless $head;
