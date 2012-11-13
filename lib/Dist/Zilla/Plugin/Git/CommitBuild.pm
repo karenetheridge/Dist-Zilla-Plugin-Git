@@ -63,6 +63,12 @@ has source_branch => (
     },
 );
 
+has source_branch_parenthood => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
+
 # -- attribute builders
 
 sub _build_release_message { return shift->message; }
@@ -109,9 +115,12 @@ sub _commit_build {
         return;
     }
 
-    my @parents = ( $self->source_branch, grep {
-        eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) }
-    } $target_branch );
+    my @parents = (
+        ( $self->source_branch ) x $self->source_branch_parenthood,
+        grep {
+            eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) }
+        } $target_branch
+    );
 
     ### @parents
 
@@ -217,6 +226,10 @@ This option supports five formatting codes:
 =item * release_message - L<String::Formatter> string for what
 commit message to use when committing the results of the release.
 Defaults to the same as C<message>.
+
+=item * source_branch_parenthood - If set to I<true>, commits on a build branch
+will have two parents: the previous build commit, and the commit of the
+source branch having generated the build. Defaults to I<false>.
 
 =back
 
