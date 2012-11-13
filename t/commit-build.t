@@ -32,7 +32,7 @@ $git->commit( { message => 'initial commit' } );
 $zilla->build;
 ok( $git->rev_parse('-q', '--verify', 'refs/heads/build/master'), 'source repo has the "build/master" branch')
     or diag $git->branch;
-is( scalar $git->log('build/master'), 2, 'two commits on the build/master branch')
+is( scalar $git->log('build/master'), 1, 'one commit on the build/master branch')
     or diag $git->branch;
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
@@ -57,7 +57,6 @@ append_to_file('dist.ini', "\n");
 $git2->commit('-a', '-m', 'commit on topic branch');
 $zilla2->build;
 
-
 ok( $git2->rev_parse('-q', '--verify', 'refs/heads/build/topic/1'), 'source repo has the "build/topic/1" branch') or diag $git2->branch;
 
 chdir $cwd;
@@ -78,7 +77,7 @@ $git3->reset('--hard','origin/master');
 append_to_file('dist.ini', "\n\n");
 $git3->commit('-a', '-m', 'commit on master');
 $zilla3->build;
-is( scalar $git3->log('build/master'), 4, 'four commits on the build/master branch')
+is( scalar $git3->log('build/master'), 2, 'two commits on the build/master branch')
     or diag $git3->branch;
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
