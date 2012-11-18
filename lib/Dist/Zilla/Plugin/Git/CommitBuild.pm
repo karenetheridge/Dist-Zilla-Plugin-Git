@@ -58,6 +58,7 @@ has _source_branch => (
     is      => 'ro',
     isa     => 'Str',
     lazy    => 1,
+    init_arg=> undef,
     default => sub {
         ($_[0]->git->name_rev( '--name-only', 'HEAD' ))[0];
     },
@@ -176,6 +177,7 @@ In your F<dist.ini>:
 	; these are the defaults
     branch = build/%b
     message = Build results of %h (on %b)
+    multiple_inheritance = 0
 
 =head1 DESCRIPTION
 
@@ -225,11 +227,16 @@ This option supports five formatting codes:
 
 =item * release_message - L<String::Formatter> string for what
 commit message to use when committing the results of the release.
+
 Defaults to the same as C<message>.
 
-=item * multiple_inheritance - Defaults to I<false>. If set to I<true>, commits on a build branch
-will have two parents: the previous build commit, and the commit of the
-source branch having generated the build.
+=item * multiple_inheritance - Indicates whether the commit containing
+the build results should have the source commit as a parent.
+
+If false (the default), the build branch will be completely separate
+from the regular code branches.  If set to a true value, commits on a
+build branch will have two parents: the previous build commit and the
+source commit from which the build was generated.
 
 =back
 

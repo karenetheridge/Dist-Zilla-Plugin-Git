@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - add multiple_inheritance option to Git::CommitBuild (yanick champoux)
  - change version-extraction.t to catch the bug in rt#81061
    (christopher madsen with help from matthew horsfall)
 
