@@ -9,6 +9,7 @@ use File::Temp qw{ tempdir };
 use Git::Wrapper;
 use Path::Class;
 use Test::More   tests => 8;
+use Try::Tiny qw(try);
 use Cwd qw(cwd);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
@@ -39,8 +40,8 @@ is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the 
 
 my @log = $git->log('build/master');
 
-like $log[1]->message => qr/initial commit/, 'master is a parent';
-like $log[0]->message => qr/Build results of \w+ \(on master\)/, 'build commit';
+like try {$log[1]->message} => qr/initial commit/, 'master is a parent';
+like try {$log[0]->message} => qr/Build results of \w+ \(on master\)/, 'build commit';
 
 chdir $cwd;
 
