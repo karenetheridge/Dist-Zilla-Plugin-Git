@@ -25,13 +25,13 @@ use String::Formatter (
 	method_stringf => {
 		-as   => '_format_branch',
 		codes => {
-			b => sub { shift->source_branch },
+			b => sub { shift->_source_branch },
 		},
 	},
 	method_stringf => {
 		-as   => '_format_message',
 		codes => {
-			b => sub { shift->source_branch },
+			b => sub { shift->_source_branch },
 			h => sub { (shift->git->rev_parse( '--short',    'HEAD' ))[0] },
 			H => sub { (shift->git->rev_parse('HEAD'))[0] },
 		    t => sub { shift->zilla->is_trial ? '-TRIAL' : '' },
@@ -54,7 +54,7 @@ has message => ( ro, isa => Str, default => 'Build results of %h (on %b)', requi
 has release_message => ( ro, isa => Str, lazy => 1, builder => '_build_release_message' );
 has build_root => ( rw, coerce => 1, isa => Dir );
 
-has source_branch => (
+has _source_branch => (
     is      => 'ro',
     isa     => 'Str',
     lazy    => 1,
@@ -63,7 +63,7 @@ has source_branch => (
     },
 );
 
-has source_branch_parenthood => (
+has multiple_inheritance => (
     is      => 'ro',
     isa     => 'Bool',
     default => 0,
@@ -116,7 +116,7 @@ sub _commit_build {
     }
 
     my @parents = (
-        ( $self->source_branch ) x $self->source_branch_parenthood,
+        ( $self->_source_branch ) x $self->multiple_inheritance,
         grep {
             eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) }
         } $target_branch
@@ -227,9 +227,9 @@ This option supports five formatting codes:
 commit message to use when committing the results of the release.
 Defaults to the same as C<message>.
 
-=item * source_branch_parenthood - If set to I<true>, commits on a build branch
+=item * multiple_inheritance - Defaults to I<false>. If set to I<true>, commits on a build branch
 will have two parents: the previous build commit, and the commit of the
-source branch having generated the build. Defaults to I<false>.
+source branch having generated the build.
 
 =back
 
