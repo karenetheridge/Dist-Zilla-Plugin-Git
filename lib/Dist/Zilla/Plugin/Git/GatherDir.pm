@@ -105,7 +105,7 @@ override gather_files => sub {
   my $git = Git::Wrapper->new($root);
 
   my @opts;
-  @opts = qw(-co --exclude-standard) if $self->include_untracked;
+  @opts = qw(--cached --others --exclude-standard) if $self->include_untracked;
 
   my @files;
   FILE: for my $filename (uniq $git->ls_files(@opts)) {

@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix include_untracked option of Git::GatherDir to work with Git 1.5.4.3
+   (christopher madsen)
 
 2.003     2012-11-19 01:30:29 Europe/Paris
  - add multiple_inheritance option to Git::CommitBuild (yanick champoux)
