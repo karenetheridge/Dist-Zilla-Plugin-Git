@@ -5,7 +5,9 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Commit;
 # ABSTRACT: commit dirty files
 
+use namespace::autoclean;
 use File::Temp           qw{ tempfile };
+use List::Util           qw{ first };
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
@@ -100,17 +102,24 @@ sub _get_changes {
     my $self = shift;
 
     # parse changelog to find commit message
-    my $changelog = Dist::Zilla::File::OnDisk->new( { name => $self->changelog } );
+    my $cl_name   = $self->changelog;
+    my $changelog = first { $_->name eq $cl_name } @{ $self->zilla->files };
+    unless ($changelog) {
+      $self->log("WARNING: Unable to find $cl_name");
+      return '';
+    }
     my $newver    = $self->zilla->version;
-    my @content   =
-        grep { /^$newver(?:\s+|$)/ ... /^\S/ } # from newver to un-indented
-        split /\n/, $changelog->content;
-    shift @content; # drop the version line
-    # drop unindented last line and trailing blank lines
-    pop @content while ( @content && $content[-1] =~ /^(?:\S|\s*$)/ );
+    $changelog->content =~ /
+      ^\Q$newver\E(?![_.]*[0-9]).*\n # from line beginning with version number
+      ( (?: (?> .* ) (?:\n|\z) )*? ) # capture as few lines as possible
+      (?: (?> \s* ) ^\S | \z )       # until non-indented line or EOF
+    /xm or do {
+      $self->log("WARNING: Unable to find $newver in $cl_name");
+      return '';
+    };
 
     # return commit message
-    return join("\n", @content, ''); # add a final \n
+    return "$1";                # dispel magic, just to be safe
 } # end _get_changes
 
 

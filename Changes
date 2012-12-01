@@ -1,6 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - improve Git::Commit's parsing of the Changes file (christopher madsen)
+   It can now find the current version even if followed by a -TRIAL indicator.
+   Also, it now reads the Changes file that was shipped with the dist,
+   not the one currently on disk.
  - fix include_untracked option of Git::GatherDir to work with Git 1.5.4.3
    (christopher madsen)
 
@@ -10,7 +14,8 @@ Revision history for Dist::Zilla::Plugin::Git
    (christopher madsen with help from matthew horsfall)
 
 2.002     2012-11-09 20:59:37 Europe/Paris
- - fix rt#81061 - Git::NextVersion parsing all versions as 0 (christopher madsen)
+ - fix rt#81061 - Git::NextVersion parsing all versions as 0
+   (christopher madsen)
  - add debug-level logging to Git::NextVersion (christopher madsen)
 
 2.001     2012-10-07 23:03:42 Europe/Paris
