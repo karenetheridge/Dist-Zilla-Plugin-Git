@@ -150,6 +150,11 @@ committing changelog and F<dist.ini>. The commit message will be taken
 from the changelog for this release.  It will include lines between
 the current version and timestamp and the next non-indented line.
 
+B<Warning:> If you are using Git::Commit in conjunction with the
+L<NextRelease|Dist::Zilla::Plugin::NextRelease> plugin,
+C<[NextRelease]> must come before C<[Git::Commit]> (or C<[@Git]>) in
+your F<dist.ini> or plugin bundle.  Otherwise, Git::Commit will commit
+the F<Changes> file before NextRelease has updated it.
 
 The plugin accepts the following options:
 
