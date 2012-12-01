@@ -118,8 +118,13 @@ sub _get_changes {
       return '';
     };
 
+    (my $changes = $1) =~ s/^\s*\n//; # Remove leading blank lines
+
+    $self->log("WARNING: No changes listed under $newver in $cl_name")
+        unless length $changes;
+
     # return commit message
-    return "$1";                # dispel magic, just to be safe
+    return $changes;
 } # end _get_changes
 
 

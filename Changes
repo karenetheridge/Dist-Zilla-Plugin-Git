@@ -2,8 +2,9 @@ Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
  - improve Git::Commit's parsing of the Changes file (christopher madsen)
-   It can now find the current version even if followed by a -TRIAL indicator.
-   Also, it now reads the Changes file that was shipped with the dist,
+   Blank lines following the version line are no longer included in the commit
+   message.  It can now find the current version even if followed by a -TRIAL
+   indicator.  It now reads the Changes file that was shipped with the dist,
    not the one currently on disk.
  - fix include_untracked option of Git::GatherDir to work with Git 1.5.4.3
    (christopher madsen)
