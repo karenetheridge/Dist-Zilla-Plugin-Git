@@ -8,7 +8,7 @@ use warnings;
 
 use Test::More 0.88;            # want done_testing
 
-plan tests => 16;
+plan tests => 20;
 
 use Dist::Zilla::File::InMemory ();
 use Dist::Zilla::Plugin::Git::Commit ();
@@ -200,6 +200,47 @@ EOT
 
   is($plugin->get_commit_message, "v1.01\n\n", '1.01 with no changes');
   is_log($plugin, ['WARNING: No changes listed under 1.01 in Changes']);
+}
+
+#---------------------------------------------------------------------
+{
+  my $plugin = new_plugin('1.01', <<'EOT');
+This is the changelog for Foobar
+
+1.01  2012-12-01
+
+  Some unspecified changes with extra blank line
+
+
+1.00  2012-11-30
+
+  Some previous changes
+EOT
+
+  is($plugin->get_commit_message, <<'EOM', '1.01 with extra blank line');
+v1.01
+
+  Some unspecified changes with extra blank line
+EOM
+
+  is_log($plugin, []);
+}
+
+#---------------------------------------------------------------------
+{
+  my $plugin = new_plugin('1.00', <<'EOT');
+1.00  2012-11-30
+
+  Some unspecified changes
+EOT
+
+  is($plugin->get_commit_message, <<'EOM', '1.00 at BOF');
+v1.00
+
+  Some unspecified changes
+EOM
+
+  is_log($plugin, []);
 }
 
 #---------------------------------------------------------------------
