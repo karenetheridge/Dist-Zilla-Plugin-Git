@@ -24,13 +24,13 @@ with 'Dist::Zilla::Role::Git::Repo';
 
 # -- attributes
 
-use constant CoercedRegexp => do {
+use constant _CoercedRegexp => do {
     my $tc = subtype as 'RegexpRef';
     coerce $tc, from 'Str', via { qr/$_/ };
     $tc;
 };
 
-has version_regexp  => ( is => 'ro', isa=> CoercedRegexp, coerce => 1,
+has version_regexp  => ( is => 'ro', isa=> _CoercedRegexp, coerce => 1,
                          default => sub { qr/^v(.+)$/ } );
 
 has first_version  => ( is => 'ro', isa=>'Str', default => '0.001' );
