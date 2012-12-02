@@ -9,13 +9,13 @@ use Moose;
 use namespace::autoclean 0.09;
 use Moose::Util::TypeConstraints qw(enum);
 
-enum('DieWarnIgnore', [qw[ die warn ignore ]]);
+use constant DieWarnIgnore => do { enum [qw[ die warn ignore ]] };
 
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
 
-has untracked_files => ( is=>'ro', isa=>'DieWarnIgnore', default => 'die' );
+has untracked_files => ( is=>'ro', isa => DieWarnIgnore, default => 'die' );
 
 # -- public methods
 
