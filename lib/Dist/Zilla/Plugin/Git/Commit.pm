@@ -148,7 +148,8 @@ In your F<dist.ini>:
 Once the release is done, this plugin will record this fact in git by
 committing changelog and F<dist.ini>. The commit message will be taken
 from the changelog for this release.  It will include lines between
-the current version and timestamp and the next non-indented line.
+the current version and timestamp and the next non-indented line,
+except that blank lines at the beginning or end are removed.
 
 B<Warning:> If you are using Git::Commit in conjunction with the
 L<NextRelease|Dist::Zilla::Plugin::NextRelease> plugin,
@@ -189,6 +190,9 @@ You can use the following codes in commit_msg:
 =item C<%c>
 
 The list of changes in the just-released version (read from C<changelog>).
+It will include lines between the current version and timestamp and
+the next non-indented line, except that blank lines at the beginning
+or end are removed.  It normally ends in a newline.
 
 =item C<%{dd-MMM-yyyy}d>
 
