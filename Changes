@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.005     2012-12-08 22:03:15 Europe/Paris
  - avoid creating named type constraints (chris weyl & christopher madsen)
 
 2.004     2012-12-01 19:58:59 Europe/Paris
