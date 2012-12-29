@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.006     2012-12-29 23:17:39 Europe/Paris
  - document that the include_untracked option of Git::GatherDir
    requires Git 1.5.4, but has certain issues before Git 1.6.5.2.
    Adjust tests to skip when necessary. (christopher madsen)
