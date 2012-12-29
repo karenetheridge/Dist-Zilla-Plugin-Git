@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - set push.default matching in test config (christopher madsen)
+   Otherwise Git for Windows 1.8.0 hangs in push-multi.t
+   (thanks to christian walde for reporting the issue)
 
 2.005     2012-12-08 22:03:15 Europe/Paris
  - avoid creating named type constraints (chris weyl & christopher madsen)

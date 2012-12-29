@@ -105,6 +105,7 @@ sub init_test
 
   $git = Git::Wrapper->new($git_dir);
 
+  $git->config( 'push.default' => 'matching' ); # compatibility with Git 1.8
   $git->config( 'user.name'  => 'dzp-git test' );
   $git->config( 'user.email' => 'dzp-git@test' );
 } # end init_test
