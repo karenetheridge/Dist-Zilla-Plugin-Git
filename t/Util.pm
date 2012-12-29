@@ -124,14 +124,21 @@ sub new_zilla_from_repo
 } # end zilla_from_repo
 
 #---------------------------------------------------------------------
+our $git_version;
+
 sub skip_unless_git_version
 {
   my $need_version = shift;
 
-  my ($version) = Git::Wrapper->new('.')->version =~ m[^( \d+ \. \d[.\d]+ )]x;
-  if ( version->parse( $version ) < version->parse($need_version) ) {
-    plan skip_all => "git $need_version or later required, you have $version";
-  }
+  $git_version = version->parse(
+    Git::Wrapper->new('.')->version =~ m[^( \d+ \. \d[.\d]+ )]x
+  ) unless defined $git_version;
+
+  if ( $git_version < version->parse($need_version) ) {
+    my $why = "git $need_version or later required, you have $git_version";
+    if (my $tests = shift) { skip $why, $tests     } # skip some
+    else                   { plan skip_all => $why } # skip all
+  } # end if we don't have the required version
 } # end skip_unless_git_version
 
 #---------------------------------------------------------------------

@@ -70,6 +70,14 @@ are also gathered (and you'll probably want to use
 L<Git::Check|Dist::Zilla::Plugin::Git::Check> to ensure all files are
 checked in before a release).
 
+C<include_untracked> requires at least Git 1.5.4, but you should
+probably not use it if your Git is older than 1.6.5.2.  Versions
+before that would not list files matched by your F<.gitignore>, even
+if they were already being tracked by Git (which means they will not
+be gathered, even though they should be).  Whether that is a problem
+depends on the contents of your exclude files (including the global
+one, if any).
+
 =attr follow_symlinks
 
 By default, directories that are symlinks will not be followed. Note on the

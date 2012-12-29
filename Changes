@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - document that the include_untracked option of Git::GatherDir
+   requires Git 1.5.4, but has certain issues before Git 1.6.5.2.
+   Adjust tests to skip when necessary. (christopher madsen)
  - set push.default matching in test config (christopher madsen)
    Otherwise Git for Windows 1.8.0 hangs in push-multi.t
    (thanks to christian walde for reporting the issue)
