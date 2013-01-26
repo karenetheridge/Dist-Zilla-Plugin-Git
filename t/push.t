@@ -6,13 +6,14 @@ use warnings;
 use Git::Wrapper;
 use Path::Class;
 use Test::More 0.88;            # done_testing
+use Test::Fatal qw(exception);
 
 use t::Util;
 
 # rt#56485 - skip test to avoid failures for old git versions
 skip_unless_git_version('1.7.0');
 
-plan tests => 4;
+plan tests => 6;
 
 init_test(corpus => 'push');
 
@@ -46,5 +47,19 @@ like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit pushed' 
 my @tags = $git->tag;
 is( scalar(@tags), 1, 'one tag pushed' );
 is( $tags[0], 'v1.23', 'new tag created after new version' );
+
+# try a release with a bogus remote
+append_to_file('dist.ini', <<'END dist.ini');
+push_to = origin
+push_to = bogus
+END dist.ini
+
+new_zilla_from_repo;
+my $exception = exception { $zilla->release };
+like($exception, qr/^\Q[Git::Push] These remotes do not exist: bogus\E/,
+     'Caught bogus remote');
+
+zilla_log_is('Git::Push', <<'');
+[Git::Push] These remotes do not exist: bogus
 
 done_testing;
