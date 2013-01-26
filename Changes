@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.007     2013-01-26 18:51:24 Europe/Paris
  - fix rt#82873 - Git::Push should check the remote exists
    New remotes_must_exist option defaults to true. (christopher madsen)
  - switch from Test::Exception to Test::Fatal (christopher madsen)
