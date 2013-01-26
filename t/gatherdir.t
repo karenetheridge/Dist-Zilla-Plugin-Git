@@ -10,7 +10,6 @@ use File::Temp qw{ tempdir };
 use Git::Wrapper;
 use Path::Class;
 use Test::More      tests => 4;
-use Test::Exception;
 
 use t::Util;
 

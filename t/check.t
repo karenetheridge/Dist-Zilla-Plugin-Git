@@ -9,7 +9,9 @@ use File::Temp qw{ tempdir };
 use File::pushd qw{ pushd };
 use Git::Wrapper;
 use Test::More 0.88 tests => 42; # done_testing
-use Test::Exception;
+use Test::Fatal qw( lives_ok );
+
+use t::Util qw( throws_ok );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 $ENV{HOME} = tempdir( CLEANUP => 1 );

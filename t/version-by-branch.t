@@ -6,9 +6,9 @@ use Path::Class;
 use File::pushd qw(pushd);
 
 use Test::More 0.88;            # done_testing
-use Test::Exception;
+use Test::Fatal qw( lives_ok );
 
-use t::Util qw(:DEFAULT zilla_version);
+use t::Util qw(:DEFAULT throws_ok zilla_version);
 
 skip_unless_git_version('1.6.1'); # need --simplify-by-decoration
 
