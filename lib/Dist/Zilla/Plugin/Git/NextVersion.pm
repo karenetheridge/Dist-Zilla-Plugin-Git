@@ -5,7 +5,6 @@ package Dist::Zilla::Plugin::Git::NextVersion;
 # ABSTRACT: provide a version number by bumping the last git release tag
 
 use Dist::Zilla 4 ();
-use Version::Next ();
 use version 0.80 ();
 
 use Moose;
@@ -140,6 +139,7 @@ sub provide_version {
   return $self->first_version
     unless defined $last_ver;
 
+  require Version::Next;
   my $new_ver  = Version::Next::next_version($last_ver);
   $self->log("Bumping version from $last_ver to $new_ver");
 

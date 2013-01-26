@@ -3,7 +3,6 @@ package Dist::Zilla::Role::Git::Repo;
 # ABSTRACT: Provide repository information for Git plugins
 
 use Moose::Role;
-use Git::Wrapper ();
 
 has 'repo_root'   => ( is => 'ro', isa => 'Str', default => '.' );
 
@@ -23,7 +22,10 @@ my %cached_wrapper;
 sub git {
   my $root = shift->repo_root;
 
-  $cached_wrapper{$root} ||= Git::Wrapper->new( $root );
+  $cached_wrapper{$root} ||= do {
+    require Git::Wrapper;
+    Git::Wrapper->new( $root );
+  };
 }
 
 1;

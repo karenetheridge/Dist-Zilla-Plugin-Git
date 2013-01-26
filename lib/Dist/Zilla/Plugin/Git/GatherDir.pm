@@ -34,9 +34,6 @@ files into a subdir of your dist, you might write:
 
 =cut
 
-use Git::Wrapper;
-use File::Find::Rule;
-use File::HomeDir;
 use File::Spec;
 use List::AllUtils qw(uniq);
 use Path::Class;
@@ -106,8 +103,10 @@ has include_untracked => (
 override gather_files => sub {
   my ($self) = @_;
 
+  require Git::Wrapper;
+
   my $root = "" . $self->root;
-  $root =~ s{^~([\\/])}{File::HomeDir->my_home . $1}e;
+  $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir->my_home . $1}e;
   $root = Path::Class::dir($root);
 
   my $git = Git::Wrapper->new($root);
