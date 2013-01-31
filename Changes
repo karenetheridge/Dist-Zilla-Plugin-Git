@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.008     2013-01-31 04:06:00 Europe/Paris
  - fix bug introduced in Git::Push 2.007 that broke remotes with
    additional parameters (christopher madsen)
 
