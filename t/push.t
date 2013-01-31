@@ -13,7 +13,7 @@ use t::Util;
 # rt#56485 - skip test to avoid failures for old git versions
 skip_unless_git_version('1.7.0');
 
-plan tests => 6;
+plan tests => 7;
 
 init_test(corpus => 'push');
 
@@ -51,7 +51,7 @@ is( $tags[0], 'v1.23', 'new tag created after new version' );
 # try a release with a bogus remote
 append_to_file('dist.ini', <<'END dist.ini');
 push_to = origin
-push_to = bogus
+push_to = bogus unmodified
 END dist.ini
 
 new_zilla_from_repo;
@@ -61,5 +61,9 @@ like($exception, qr/^\Q[Git::Push] These remotes do not exist: bogus\E/,
 
 zilla_log_is('Git::Push', <<'');
 [Git::Push] These remotes do not exist: bogus
+
+is_deeply($zilla->plugin_named('Git::Push')->push_to,
+          [ 'origin', 'bogus unmodified' ],
+          "push_to is not modified");
 
 done_testing;

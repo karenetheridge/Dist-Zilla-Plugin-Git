@@ -38,8 +38,8 @@ sub before_release {
     my @bad_remotes;
 
     # Make sure the remotes we'll be pushing to exist
-    for my $remote ( @{ $self->push_to } ) {
-      $remote =~ s/\s.*//s;     # Discard branch (if specified)
+    for my $remote_spec ( @{ $self->push_to } ) {
+      (my $remote = $remote_spec) =~ s/\s.*//s; # Discard branch (if specified)
       if ($remote =~ m![:/]!) {
         # Appears to be a URL or path, don't check it
         $self->log("Will push to $remote (not checked)");

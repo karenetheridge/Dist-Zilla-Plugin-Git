@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix bug introduced in Git::Push 2.007 that broke remotes with
+   additional parameters (christopher madsen)
 
 2.007     2013-01-26 18:51:24 Europe/Paris
  - fix rt#82873 - Git::Push should check the remote exists
