@@ -8,7 +8,7 @@ use Test::DZil qw{ Builder simple_ini };
 use File::Temp qw{ tempdir };
 use File::pushd qw{ pushd };
 use Git::Wrapper;
-use Test::More 0.88 tests => 42; # done_testing
+use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal qw( lives_ok );
 
 use t::Util qw( throws_ok );
@@ -160,6 +160,50 @@ $git->checkout( 'dist.ini' );
 lives_ok { $zilla->release } 'Changes and dist.ini are unmodified';
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
+
+#---------------------------------------------------------------------
+# Test with some files allowed by regex:
+
+new_tzil(allow_dirty => '', allow_dirty_match => 'a');
+
+# untracked files
+throws_ok { $zilla->release } qr/untracked files/,
+    'untracked files with allow_dirty_match = "a"';
+our_messages_are(<<'', 'lists untracked files');
+[Git::Check] branch master has some untracked files:
+[Git::Check] 	Changes
+[Git::Check] 	dist.ini
+[Git::Check] 	foobar
+
+# index not clean
+$git->add( qw{ dist.ini Changes foobar } );
+throws_ok { $zilla->release } qr/some changes staged/,
+    'index not clean with allow_dirty_match = "a"';
+our_messages_are(<<'', 'lists staged files');
+[Git::Check] branch master has some changes staged for commit:
+[Git::Check] 	A	Changes
+[Git::Check] 	A	dist.ini
+[Git::Check] 	A	foobar
+
+$git->commit( { message => 'initial commit' } );
+
+# modified files
+append_to_file('Changes',  "\n");
+append_to_file('dist.ini', "\n");
+append_to_file('foobar', "\n");
+throws_ok { $zilla->release } qr/uncommitted files/,
+    'uncommitted files with allow_dirty_match = "a"';
+our_messages_are(<<'', 'lists uncommitted files');
+[Git::Check] branch master has some uncommitted files:
+[Git::Check] 	dist.ini
+
+$git->checkout( 'dist.ini' );
+
+# files matching /a/ can be modified
+lives_ok { $zilla->release } 'Changes foobar can be modified';
+our_messages_are(<<'', 'reports master in clean state');
+[Git::Check] branch master is in a clean state
+
 
 #---------------------------------------------------------------------
 # Test with untracked_files = warn:
