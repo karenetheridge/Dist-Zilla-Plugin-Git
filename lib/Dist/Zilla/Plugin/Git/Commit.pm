@@ -167,6 +167,9 @@ The plugin accepts the following options:
 modified.  This option may appear multiple times.  The default
 list is F<dist.ini> and the changelog file given by C<changelog>.
 
+=item * allow_dirty_match - works the same as allow_dirty, but
+matching as a regular expression instead of an exact filename.
+
 =item * add_files_in - a path that will have its new files checked in.
 This option may appear multiple times. This is used to add files
 generated during build-time to the repository, for example. The default

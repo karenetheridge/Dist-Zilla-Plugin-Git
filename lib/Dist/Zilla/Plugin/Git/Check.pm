@@ -123,6 +123,9 @@ modifications.  This option may appear multiple times.  The default
 list is F<dist.ini> and the changelog file given by C<changelog>.  You
 can use C<allow_dirty => to prohibit all local modifications.
 
+=item * allow_dirty_match - works the same as allow_dirty, but
+matching as a regular expression instead of an exact filename.
+
 =item * untracked_files - indicates what to do if there are untracked
 files.  Must be either C<die> (the default), C<warn>, or C<ignore>.
 C<warn> lists the untracked files, while C<ignore> only prints the
