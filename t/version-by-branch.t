@@ -6,7 +6,7 @@ use Path::Class;
 use File::pushd qw(pushd);
 
 use Test::More 0.88;            # done_testing
-use Test::Fatal qw( lives_ok );
+use Test::Fatal 0.006 qw( lives_ok );
 
 use t::Util qw(:DEFAULT throws_ok zilla_version);
 

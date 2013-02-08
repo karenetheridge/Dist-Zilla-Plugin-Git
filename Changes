@@ -3,6 +3,8 @@ Revision history for Dist::Zilla::Plugin::Git
 {{$NEXT}}
  - change version-by-branch.t to use HEAD~1 instead of HEAD^
    Should fix test failure on Windows. (christopher madsen)
+ - Test::Fatal 0.006 or better has been required since 2.007,
+   but that wasn't explicit (christopher madsen, reported by jonathan leto)
 
 2.008     2013-01-31 04:06:00 Europe/Paris
  - fix bug introduced in Git::Push 2.007 that broke remotes with
