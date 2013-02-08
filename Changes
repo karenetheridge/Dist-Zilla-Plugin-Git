@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.009     2013-02-08 06:03:33 Europe/Paris
+ - add allow_dirty_match option to Git::Check and Git::Commit (graham knop)
  - change version-by-branch.t to use HEAD~1 instead of HEAD^
    Should fix test failure on Windows. (christopher madsen)
  - Test::Fatal 0.006 or better has been required since 2.007,
