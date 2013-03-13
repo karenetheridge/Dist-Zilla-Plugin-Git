@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
@@ -19,6 +20,10 @@ which('gpg')
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 $ENV{HOME} = $ENV{GNUPGHOME} = tempdir( CLEANUP => 1 );
+
+my $cwd = cwd();
+END { chdir $cwd }
+
 delete $ENV{GIT_COMMITTER_NAME};
 delete $ENV{GIT_COMMITTER_EMAIL};
 cp 'corpus/dzp-git.pub', "$ENV{GNUPGHOME}/pubring.gpg";
