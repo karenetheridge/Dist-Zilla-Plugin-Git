@@ -96,12 +96,19 @@ sub _commit_build {
     my ( $self, undef, $branch, $message ) = @_;
 
     return unless $branch;
-
     my $tmp_dir = File::Temp->newdir( CLEANUP => 1) ;
+    my $dir     = Path::Class::Dir->new( $tmp_dir->dirname );
     my $src     = $self->git;
 
     my $target_branch = _format_branch( $branch, $self );
-    my $dir           = $self->build_root;
+
+    for my $file ( @{ $self->zilla->files } ) {
+        my ( $name, $content ) = ( $file->name, $file->content );
+        my ( $outfile ) = $dir->file( $name );
+        $outfile->parent->mkpath();
+        my $fd = $outfile->openw;
+        $fd->print( $content );
+    }
 
     # returns the sha1 of the created tree object
     my $tree = $self->_create_tree($src, $dir);
