@@ -2,6 +2,12 @@ Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
 
+2.010     2013-03-16 16:34:22 Europe/Paris
+ - fix rt#83891 - Git::CommitBuild commits non-build files
+   Git::CommitBuild now writes a fresh copy of the built tree to commit,
+   instead of using one that may have been modified by other plugins
+   (kent fredric & christopher madsen)
+
 2.009     2013-02-08 06:03:33 Europe/Paris
  - add allow_dirty_match option to Git::Check and Git::Commit (graham knop)
  - change version-by-branch.t to use HEAD~1 instead of HEAD^
