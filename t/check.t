@@ -10,11 +10,7 @@ use File::pushd qw{ pushd };
 use Git::Wrapper;
 use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
-use Cwd qw(cwd);
 use t::Util qw( throws_ok );
-
-my $cwd = cwd();
-END { chdir $cwd };
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 $ENV{HOME} = tempdir( CLEANUP => 1 );

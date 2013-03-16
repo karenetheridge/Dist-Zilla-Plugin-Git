@@ -21,6 +21,7 @@ use 5.010;
 use strict;
 use warnings;
 
+use Cwd qw(cwd);
 use File::Copy::Recursive qw(dircopy);
 use File::pushd qw(pushd tempd);
 use Git::Wrapper ();
@@ -40,10 +41,17 @@ our @EXPORT = qw($base_dir $git_dir $git $zilla
                  zilla_log_is);
 our @EXPORT_OK = qw($dist_dir throws_ok zilla_version);
 
-# we chdir around so make @INC absolute
+my $original_cwd;
+
 BEGIN {
+  # Change back to the original directory when shutting down,
+  # to avoid problems with cleaning up tmpdirs.
+  $original_cwd = cwd();
+  # we chdir around so make @INC absolute
   @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
 }
+
+END { chdir $original_cwd }
 
 #=====================================================================
 sub append_and_add
