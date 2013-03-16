@@ -107,7 +107,10 @@ sub _commit_build {
         my ( $outfile ) = $dir->file( $name );
         $outfile->parent->mkpath();
         my $fd = $outfile->openw;
+        $fd->binmode( ":raw" );
         $fd->print( $content );
+        $fd->close or die "error closing $outfile: $!";;
+        chmod $file->mode, "$outfile" or die "couldn't chmod $outfile: $!";
     }
 
     # returns the sha1 of the created tree object
