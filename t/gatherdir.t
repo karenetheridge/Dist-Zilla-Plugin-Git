@@ -67,7 +67,7 @@ for my $test (
       system "git init" and die "error initializing git repo";
     }
 
-    my $git = Git::Wrapper->new( $tzil->tempdir->subdir('source') );
+    my $git = Git::Wrapper->new( $tzil->tempdir->subdir('source')->stringify );
     $git->config( 'user.name'  => 'dzp-git test' );
     $git->config( 'user.email' => 'dzp-git@test' );
 

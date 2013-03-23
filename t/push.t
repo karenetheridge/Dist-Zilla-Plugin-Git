@@ -22,8 +22,8 @@ $git->commit( { message => 'initial commit' } );
 
 # create a clone, and use it to set up origin
 my $clone = $base_dir->subdir('clone');
-$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, $git_dir, $clone );
-$git->remote('add', 'origin', $clone);
+$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone" );
+$git->remote('add', 'origin', "$clone");
 $git->config('branch.master.remote', 'origin');
 $git->config('branch.master.merge', 'refs/heads/master');
 
@@ -39,7 +39,7 @@ zilla_log_is('Git::Push', <<'');
 [Git::Push] pushing to origin
 
 # check if everything was pushed
-$git = Git::Wrapper->new( $clone );
+$git = Git::Wrapper->new( "$clone" );
 my ($log) = $git->log( 'HEAD' );
 like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit pushed' );
 

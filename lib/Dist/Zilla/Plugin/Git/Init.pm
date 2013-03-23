@@ -47,7 +47,7 @@ sub mvp_aliases { return { config => 'config_entries', remote => 'remotes' } }
 sub after_mint {
     my $self = shift;
     my ($opts) = @_;
-    my $git = Git::Wrapper->new($opts->{mint_root});
+    my $git = Git::Wrapper->new("$opts->{mint_root}");
     $self->log("Initializing a new git repository in " . $opts->{mint_root});
     $git->init;
 
@@ -57,7 +57,7 @@ sub after_mint {
       $git->config($option, $value);
     }
 
-    $git->add($opts->{mint_root});
+    $git->add("$opts->{mint_root}");
     $git->commit({message => _format_string($self->commit_message, $self)});
     foreach my $remoteSpec (@{ $self->remotes }) {
       my ($remote, $url) = split ' ', _format_string($remoteSpec, $self), 2;

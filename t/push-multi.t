@@ -22,10 +22,10 @@ $git->commit( { message => 'initial commit' } );
 # create a clone, and use it to set up origin
 my $clone1 = $base_dir->subdir('clone1');
 my $clone2 = $base_dir->subdir('clone2');
-$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, $git_dir, $clone1 );
-$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, $git_dir, $clone2 );
-$git->remote('add', 'origin', $clone1);
-$git->remote('add', 'another', $clone2);
+$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone1" );
+$git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone2" );
+$git->remote('add', 'origin', "$clone1");
+$git->remote('add', 'another', "$clone2");
 $git->config('branch.master.remote', 'origin');
 $git->config('branch.master.merge', 'refs/heads/master');
 
@@ -43,7 +43,7 @@ zilla_log_is('Git::Push', <<'');
 
 for my $c ( $clone1, $clone2 ) {
   # check if everything was pushed
-  my $git = Git::Wrapper->new( $c );
+  my $git = Git::Wrapper->new( "$c" );
   my $cName = $c->basename;
   my ($log) = $git->log( 'HEAD' );
   like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/,

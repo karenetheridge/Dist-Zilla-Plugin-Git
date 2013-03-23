@@ -109,7 +109,7 @@ override gather_files => sub {
   $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir->my_home . $1}e;
   $root = Path::Class::dir($root);
 
-  my $git = Git::Wrapper->new($root);
+  my $git = Git::Wrapper->new("$root");
 
   my @opts;
   @opts = qw(--cached --others --exclude-standard) if $self->include_untracked;

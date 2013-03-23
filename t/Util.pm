@@ -60,7 +60,7 @@ sub append_and_add
 
   &append_to_file;
 
-  $git->add($fn);
+  $git->add("$fn");
 } # end append_and_add
 
 #---------------------------------------------------------------------
@@ -111,7 +111,7 @@ sub init_test
   my $pushd = pushd($git_dir);
   system "git init --quiet" and die "Can't initialize repo";
 
-  $git = Git::Wrapper->new($git_dir);
+  $git = Git::Wrapper->new("$git_dir");
 
   $git->config( 'push.default' => 'matching' ); # compatibility with Git 1.8
   $git->config( 'user.name'  => 'dzp-git test' );
