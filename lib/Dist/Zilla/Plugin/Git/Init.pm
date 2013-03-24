@@ -29,6 +29,12 @@ has commit_message => (
     default => 'initial commit',
 );
 
+has commit => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 1,
+);
+
 has remotes => (
   is   => 'ro',
   isa  => 'ArrayRef[Str]',
@@ -58,7 +64,8 @@ sub after_mint {
     }
 
     $git->add("$opts->{mint_root}");
-    $git->commit({message => _format_string($self->commit_message, $self)});
+    $git->commit({message => _format_string($self->commit_message, $self)})
+      if $self->commit;
     foreach my $remoteSpec (@{ $self->remotes }) {
       my ($remote, $url) = split ' ', _format_string($remoteSpec, $self), 2;
       $self->log_debug("Adding remote $remote as $url");
@@ -96,6 +103,9 @@ The plugin accepts the following options:
 
 =item * commit_message - the commit message to use when checking in
 the newly-minted dist. Defaults to C<initial commit>.
+
+=item * commit - if set to false, just add files in the current directory
+but don't actually make a commit. Defaults to true.
 
 =item * config - a config setting to make in the repository.  No
 config entries are made by default.  A setting is specified as
