@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.012     2013-03-27 00:41:08 Europe/Paris
  - add commit option to Git::Init (tatsuhiko miyagawa)
 
 2.011     2013-03-23 16:19:52 Europe/Paris
