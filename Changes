@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - add commit option to Git::Init (tatsuhiko miyagawa)
 
 2.011     2013-03-23 16:19:52 Europe/Paris
  - fix compatibility with Git::Wrapper 0.028_96 (Don't pass Path::Class

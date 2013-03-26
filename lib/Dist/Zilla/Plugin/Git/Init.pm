@@ -86,6 +86,7 @@ In your F<profile.ini>:
 
     [Git::Init]
     commit_message = initial commit  ; this is the default
+    commit = 1                       ; this is the default
     remote = origin git@github.com:USERNAME/%{lc}N.git ; no default
     config = user.email USERID@cpan.org  ; there is no default
 
@@ -104,8 +105,9 @@ The plugin accepts the following options:
 =item * commit_message - the commit message to use when checking in
 the newly-minted dist. Defaults to C<initial commit>.
 
-=item * commit - if set to false, just add files in the current directory
-but don't actually make a commit. Defaults to true.
+=item * commit - if true (the default), commit the newly-minted dist.
+If set to a false value, add the files to the Git index but don't
+actually make a commit.
 
 =item * config - a config setting to make in the repository.  No
 config entries are made by default.  A setting is specified as
