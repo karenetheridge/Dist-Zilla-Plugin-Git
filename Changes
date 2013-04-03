@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - mention Git::GatherDir in Git (christopher madsen, reported by kevin dawson)
 
 2.012     2013-03-27 00:41:08 Europe/Paris
  - add commit option to Git::Init (tatsuhiko miyagawa)
