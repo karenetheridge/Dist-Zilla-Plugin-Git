@@ -77,9 +77,19 @@ one, if any).
 
 =attr follow_symlinks
 
-By default, directories that are symlinks will not be followed. Note on the
-other hand that in all followed directories, files which are symlinks are
-always gathered.
+Git::GatherDir does not honor GatherDir's
+L<follow_symlinks|Dist::Zilla::Plugin::GatherDir/follow_symlinks>
+option.  While the attribute exists (because Git::GatherDir is a
+subclass), setting it has no effect.
+
+Directories that are symlinks will not be gathered.  Instead, you'll
+get a message saying C<WARNING: %s is symlink to directory, skipping it>.
+To suppress the warning, add that directory to C<exclude_filename> or
+C<exclude_match>.  To gather the files in the symlinked directory, use
+a second instance of GatherDir or Git::GatherDir with appropriate
+C<root> and C<prefix> options.
+
+Files which are symlinks are always gathered.
 
 =attr exclude_filename
 
@@ -131,6 +141,11 @@ override gather_files => sub {
     $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
       for ($self->exclude_filename->flatten);
     next if $file =~ $exclude_regex;
+
+    if (-d $file) {
+      $self->log("WARNING: $file is symlink to directory, skipping it");
+      next;
+    }
 
     push @files, $self->_file_from_filename($filename);
   }

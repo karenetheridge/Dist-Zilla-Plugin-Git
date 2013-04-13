@@ -1,6 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix rt#84491 - Git::GatherDir does not handle symlinks
+   Symlinks to directories used to make it crash with a cryptic error.
+   It now skips them with a warning, and this is documented.
+   (christopher madsen, reported by karen etheridge)
  - mention Git::GatherDir in Git (christopher madsen, reported by kevin dawson)
 
 2.012     2013-03-27 00:41:08 Europe/Paris
