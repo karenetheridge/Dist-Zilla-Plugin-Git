@@ -1,6 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix rt#86251 - version-by-branch.t fails with Git 1.8.3
+   The output of "git rev-list" changed slightly, and this broke
+   Git::NextVersion when using version_by_branch=1.
+   (christopher madsen, reported by zak elep)
 
 2.013     2013-04-13 20:25:39 Europe/Paris
  - fix rt#84491 - Git::GatherDir does not handle symlinks

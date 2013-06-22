@@ -87,6 +87,7 @@ sub _last_version {
         /^\s*\((.+)\)/ or next;
         push @tags, split /,\s*/, $1;
       } # end for lines from git log
+      s/^tag:\s+// for @tags;   # Git 1.8.3 says "tag: X" instead of "X"
       my $versions = _versions_from_tags($self->version_regexp, \@tags);
       if ($self->logger->get_debug) {
         $self->log_debug("Found version $_ on branch") for @$versions;
