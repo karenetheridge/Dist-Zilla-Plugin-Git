@@ -1,0 +1,64 @@
+# NAME
+
+Dist::Zilla::Plugin::Git - update your git repository after release
+
+# VERSION
+
+version 2.014
+
+# DESCRIPTION
+
+This set of plugins for [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla) can do interesting things for
+module authors using Git ([http://git-scm.com](http://git-scm.com)) to track their work. The
+following plugins are provided in this distribution:
+
+- [Dist::Zilla::Plugin::Git::Check](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::Check)
+- [Dist::Zilla::Plugin::Git::Commit](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::Commit)
+- [Dist::Zilla::Plugin::Git::CommitBuild](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::CommitBuild)
+- [Dist::Zilla::Plugin::Git::GatherDir](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::GatherDir)
+- [Dist::Zilla::Plugin::Git::Init](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::Init)
+- [Dist::Zilla::Plugin::Git::NextVersion](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::NextVersion)
+- [Dist::Zilla::Plugin::Git::Push](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::Push)
+- [Dist::Zilla::Plugin::Git::Tag](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::Git::Tag)
+
+A [Dist::Zilla::PluginBundle::Git](http://search.cpan.org/perldoc?Dist::Zilla::PluginBundle::Git) bundle is also provided for your
+convenience, check its documentation to see which plugins it will load.
+
+# SEE ALSO
+
+You can look for information on this module at:
+
+- Search CPAN
+
+[http://search.cpan.org/dist/Dist-Zilla-Plugin-Git](http://search.cpan.org/dist/Dist-Zilla-Plugin-Git)
+
+- See open / report bugs
+
+[http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-Git](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Dist-Zilla-Plugin-Git)
+
+- Mailing-list (same as [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla))
+
+[http://www.listbox.com/subscribe/?list\_id=139292](http://www.listbox.com/subscribe/?list\_id=139292)
+
+- Git repository
+
+[http://github.com/jquelin/dist-zilla-plugin-git](http://github.com/jquelin/dist-zilla-plugin-git)
+
+- AnnoCPAN: Annotated CPAN documentation
+
+[http://annocpan.org/dist/Dist-Zilla-Plugin-Git](http://annocpan.org/dist/Dist-Zilla-Plugin-Git)
+
+- CPAN Ratings
+
+[http://cpanratings.perl.org/d/Dist-Zilla-Plugin-Git](http://cpanratings.perl.org/d/Dist-Zilla-Plugin-Git)
+
+# AUTHOR
+
+Jerome Quelin
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2009 by Jerome Quelin.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
