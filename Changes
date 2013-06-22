@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.014     2013-06-22 17:50:26 Europe/Paris
  - fix rt#86251 - version-by-branch.t fails with Git 1.8.3
    The output of "git rev-list" changed slightly, and this broke
    Git::NextVersion when using version_by_branch=1.
