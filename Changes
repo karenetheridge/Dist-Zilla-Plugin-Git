@@ -2,6 +2,7 @@ Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
  - bail out of Build.PL unless git 1.5.4 or later is found (christopher madsen)
+ - prevent warnings about chdir(undef) in tests (christopher madsen)
 
 2.014     2013-06-22 17:50:26 Europe/Paris
  - fix rt#86251 - version-by-branch.t fails with Git 1.8.3

@@ -51,7 +51,7 @@ BEGIN {
   @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
 }
 
-END { chdir $original_cwd }
+END { chdir $original_cwd if $original_cwd }
 
 #=====================================================================
 sub append_and_add

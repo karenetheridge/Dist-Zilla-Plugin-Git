@@ -15,7 +15,7 @@ use Cwd qw(cwd);
 $ENV{HOME} = tempdir( CLEANUP => 1 );
 
 my $cwd = cwd();
-END { chdir $cwd }
+END { chdir $cwd if $cwd }
 my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => dir('corpus/commit-build-custom')->absolute,
 });

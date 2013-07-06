@@ -14,7 +14,7 @@ use Test::More   tests => 4;
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 $ENV{HOME} = tempdir( CLEANUP => 1 );
 my $cwd = cwd();
-END { chdir $cwd }
+END { chdir $cwd if $cwd }
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => dir('corpus/tag')->absolute,

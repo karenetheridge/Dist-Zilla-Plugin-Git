@@ -18,7 +18,7 @@ $ENV{HOME} = tempdir( CLEANUP => 1 );
 my $corpus_dir = dir('corpus/commit-build-src-as-parent')->absolute;
 
 my $cwd = cwd();
-END { chdir $cwd };
+END { chdir $cwd if $cwd };
 my $zilla = Dist::Zilla::Tester->from_config({ dist_root => $corpus_dir, });
 
 # build fake repository

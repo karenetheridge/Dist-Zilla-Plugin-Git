@@ -22,7 +22,7 @@ which('gpg')
 $ENV{HOME} = $ENV{GNUPGHOME} = tempdir( CLEANUP => 1 );
 
 my $cwd = cwd();
-END { chdir $cwd }
+END { chdir $cwd if $cwd }
 
 delete $ENV{GIT_COMMITTER_NAME};
 delete $ENV{GIT_COMMITTER_EMAIL};
