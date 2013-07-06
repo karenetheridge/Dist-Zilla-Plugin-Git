@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::Git - update your git repository after release
 
 # VERSION
 
-version 2.014
+version 2.015
 
 # DESCRIPTION
 
@@ -23,6 +23,9 @@ following plugins are provided in this distribution:
 
 A [Dist::Zilla::PluginBundle::Git](http://search.cpan.org/perldoc?Dist::Zilla::PluginBundle::Git) bundle is also provided for your
 convenience, check its documentation to see which plugins it will load.
+
+You need Git 1.5.4 or later to use these plugins.  Some plugins
+require a more recent version of Git for certain features.
 
 # SEE ALSO
 

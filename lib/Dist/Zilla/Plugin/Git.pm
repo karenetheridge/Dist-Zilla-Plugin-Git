@@ -39,6 +39,8 @@ following plugins are provided in this distribution:
 A L<Dist::Zilla::PluginBundle::Git> bundle is also provided for your
 convenience, check its documentation to see which plugins it will load.
 
+You need Git 1.5.4 or later to use these plugins.  Some plugins
+require a more recent version of Git for certain features.
 
 
 =head1 SEE ALSO
