@@ -124,9 +124,14 @@ override gather_files => sub {
   my @opts;
   @opts = qw(--cached --others --exclude-standard) if $self->include_untracked;
 
+  my $exclude_regex = qr/\000/;
+  $exclude_regex = qr/$exclude_regex|$_/
+    for ($self->exclude_match->flatten);
+
+  my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
+
   my @files;
   FILE: for my $filename (uniq $git->ls_files(@opts)) {
-
     my $file = file($filename)->relative($root);
 
     unless ($self->include_dotfiles) {
@@ -134,13 +139,8 @@ override gather_files => sub {
       next FILE if grep { /^\.[^.]/ } $file->dir->dir_list;
     }
 
-    my $exclude_regex = qr/\000/;
-    $exclude_regex = qr/$exclude_regex|$_/
-      for ($self->exclude_match->flatten);
-    # \b\Q$_\E\b should also handle the `eq` check
-    $exclude_regex = qr/$exclude_regex|\b\Q$_\E\b/
-      for ($self->exclude_filename->flatten);
     next if $file =~ $exclude_regex;
+    next if $is_excluded{ $file };
 
     if (-d $file) {
       $self->log("WARNING: $file is symlink to directory, skipping it");
