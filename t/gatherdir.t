@@ -71,11 +71,11 @@ for my $test (
     $git->config( 'user.name'  => 'dzp-git test' );
     $git->config( 'user.email' => 'dzp-git@test' );
 
-    # check in dotfiles
+    # check in tracked files
     # we cannot ship it in the dist, since PruneCruft plugin would trim it
     #   Don't use --force, because only -f works before git 1.5.6
     $git->add( -f => qw(lib tracked .tracked .gitignore) );
-    $git->commit( { message=>'ignore file for git' } );
+    $git->commit( { message=>'files known to git' } );
 
     $tzil->build;
 
