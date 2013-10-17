@@ -218,7 +218,7 @@ C<version_regexp> - regular expression that matches a tag containing
 a version.  It must capture the version into $1.  Defaults to ^v(.+)$
 which matches the default C<tag_format> from the
 L<Git::Tag|Dist::Zilla::Plugin::Git::Tag> plugin.
-If you change C<tag_format>, you B<must> set a corresponsing C<version_regexp>.
+If you change C<tag_format>, you B<must> set a corresponding C<version_regexp>.
 
 =back
 
