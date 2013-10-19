@@ -1,7 +1,11 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
- - fix exclude_filename to not match partial paths (Karen Etheridge)
+
+2.016     2013-10-19 18:27:32 Europe/Paris
+ - fix exclude_filename to not match partial paths (karen etheridge)
+   If you really intended to match a partial path, use exclude_match instead.
+ - documentation typo fixed in Git::NextVersion (david steinbrunner)
 
 2.015     2013-07-06 21:14:09 Europe/Paris
  - bail out of Build.PL unless git 1.5.4 or later is found (christopher madsen)
