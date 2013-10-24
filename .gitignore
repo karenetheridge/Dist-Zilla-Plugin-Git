@@ -16,5 +16,5 @@ inc/
 nytprof.out
 pod2htm*.tmp
 pm_to_blib
-Dist-Zilla-Stash-Git-*
-Dist-Zilla-Stash-Git-*.tar.gz
+Dist-Zilla-Plugin-Config-Git-*
+Dist-Zilla-Plugin-Config-Git-*.tar.gz
