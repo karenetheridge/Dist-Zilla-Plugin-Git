@@ -1,9 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - remove use of deprecated Class::MOP function (Karen Etheridge)
 
 2.016     2013-10-19 18:27:32 Europe/Paris
- - fix exclude_filename to not match partial paths (karen etheridge)
+ - fix exclude_filename to not match partial paths (Karen Etheridge)
    If you really intended to match a partial path, use exclude_match instead.
  - documentation typo fixed in Git::NextVersion (david steinbrunner)
 

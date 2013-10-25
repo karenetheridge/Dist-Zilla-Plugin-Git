@@ -6,7 +6,7 @@ package Dist::Zilla::PluginBundle::Git;
 # ABSTRACT: all git plugins in one go
 
 use Moose;
-use Class::MOP;
+use Module::Runtime 'use_module';
 
 with 'Dist::Zilla::Role::PluginBundle';
 
@@ -16,7 +16,7 @@ my @names   = qw{ Check Commit Tag Push };
 my %multi;
 for my $name (@names) {
     my $class = "Dist::Zilla::Plugin::Git::$name";
-    Class::MOP::load_class($class);
+    use_module $class;
     @multi{$class->mvp_multivalue_args} = ();
 }
 
