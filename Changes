@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.017     2013-10-26 19:57:59 Europe/Paris
  - remove use of deprecated Class::MOP function (karen etheridge)
  - make Git::CommitBuild compatible with Dist::Zilla 5
    (kent fredric, karen etheridge, & christopher madsen)
