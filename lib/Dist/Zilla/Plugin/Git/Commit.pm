@@ -32,6 +32,11 @@ use String::Formatter method_stringf => {
 with 'Dist::Zilla::Role::AfterRelease';
 with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
+with 'Dist::Zilla::Role::GitConfig';
+
+sub _git_config_mapping { +{
+   changelog => '%{changelog}s',
+} }
 
 # -- attributes
 

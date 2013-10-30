@@ -14,8 +14,13 @@ use namespace::autoclean;
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::AfterRelease';
 with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::GitConfig';
 
 sub mvp_multivalue_args { qw(push_to) }
+
+sub _git_config_mapping { +{
+   push_to => '%{remote}s %{local_branch}s:%{remote_branch}s',
+} }
 
 # -- attributes
 
@@ -27,7 +32,6 @@ has push_to => (
   lazy => 1,
   default => sub { [ qw(origin) ] },
 );
-
 
 sub before_release {
     my $self = shift;

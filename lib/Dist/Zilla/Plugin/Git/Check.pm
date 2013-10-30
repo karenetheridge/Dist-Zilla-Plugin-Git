@@ -14,8 +14,13 @@ use constant _DieWarnIgnore => do { enum [qw[ die warn ignore ]] };
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
+with 'Dist::Zilla::Role::GitConfig';
 
 has untracked_files => ( is=>'ro', isa => _DieWarnIgnore, default => 'die' );
+
+sub _git_config_mapping { +{
+   changelog => '%{changelog}s',
+} }
 
 # -- public methods
 
