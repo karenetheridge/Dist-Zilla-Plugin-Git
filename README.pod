@@ -33,6 +33,8 @@ for intra-plugin data sharing, using distro (not user) data.
 Why use this?  To provide a standard set of information to other Git plugins easily, especially if the repo data is non-standard, or if
 you need more than one set of data.
 
+=for Pod::Coverage mvp_multivalue_args
+
 =head1 OPTIONS
 
 =head2 remote
