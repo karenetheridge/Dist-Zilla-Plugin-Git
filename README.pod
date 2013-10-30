@@ -64,15 +64,11 @@ Default is C<<< dist.ini >>> and whatever L<changelog> is set to.
 
 Name of your change log.
 
-=head1 METHODS
-
-=head2 remote_repo_refspec
-
-Shorthand for C<<< $remote $local_branch:$remote_branch >>>.
+Default is C<<< Changes >>>.
 
 =head1 ACKNOWLEDGEMENTS
 
-Kent Fredric and Karen Etheridge for implementation discussion.
+Kent Fredric and Karen Etheridge for implementation discussion.  Graham Knop for continuous code reviews.
 
 =head1 AVAILABILITY
 

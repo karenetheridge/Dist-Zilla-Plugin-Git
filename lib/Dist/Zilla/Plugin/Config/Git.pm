@@ -121,16 +121,16 @@ has changelog => (
    default  => 'Changes',
 );
 
+sub mvp_multivalue_args { qw(allow_dirty) }
+
 #############################################################################
 # Pre/post-BUILD
 
-# Parts of this stolen from Plugin::Prereqs
 sub BUILDARGS {
    my ($class, @arg) = @_;
    my %copy = ref $arg[0] ? %{$arg[0]} : @arg;
 
    my $zilla = delete $copy{zilla};
-   my $name  = delete $copy{plugin_name};
 
    # Morph allow_dirty REs
    if (defined $copy{allow_dirty}) {
@@ -156,23 +156,16 @@ sub BUILDARGS {
    }
 
    return {
-      zilla       => $zilla,
-      plugin_name => $name,
+      zilla => $zilla,
       %copy,
    };
-}
-
-#############################################################################
-# Methods
-
-sub remote_repo_refspec {
-   my $self = shift;
-   $self->remote.' '.$self->local_branch.':'.$self->remote_branch;
 }
 
 42;
 
 __END__
+
+=for Pod::Coverage mvp_multivalue_args
 
 =begin wikidoc
 
@@ -234,14 +227,10 @@ Default is {dist.ini} and whatever [changelog] is set to.
 
 Name of your change log.
 
-= METHODS
-
-== remote_repo_refspec
-
-Shorthand for {$remote $local_branch:$remote_branch}.
+Default is {Changes}.
 
 = ACKNOWLEDGEMENTS
 
-Kent Fredric and Karen Etheridge for implementation discussion.
+Kent Fredric and Karen Etheridge for implementation discussion.  Graham Knop for continuous code reviews.
 
 =end wikidoc
