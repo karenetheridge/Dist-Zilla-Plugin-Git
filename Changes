@@ -2,6 +2,12 @@ Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
 
+2.018     2013-11-02 23:24:33 Europe/Paris
+ TRIAL RELEASE
+ - use the Config::Git plugin for shared configuration (brendan byrd)
+   You don't have to use Dist::Zilla::Plugin::Config::Git unless you want to,
+   but you do have to install it.
+
 2.017     2013-10-26 19:57:59 Europe/Paris
  - remove use of deprecated Class::MOP function (karen etheridge)
  - make Git::CommitBuild compatible with Dist::Zilla 5
