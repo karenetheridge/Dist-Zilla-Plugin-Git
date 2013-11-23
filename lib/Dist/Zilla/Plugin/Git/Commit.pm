@@ -78,6 +78,7 @@ sub after_release {
 
     # write commit message in a temp file
     my ($fh, $filename) = tempfile( getcwd . '/DZP-git.XXXX', UNLINK => 1 );
+    binmode $fh, ':utf8' unless Dist::Zilla->VERSION < 5;
     print $fh $self->get_commit_message;
     close $fh;
 

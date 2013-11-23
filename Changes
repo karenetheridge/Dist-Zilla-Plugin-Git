@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix #90537: wide character in print with ::Commit
+   With Dist::Zilla 5, Git::Commit now writes the commit message in UTF-8
+   (christopher madsen, reported by kent fredric)
 
 2.018     2013-11-02 23:24:33 Europe/Paris
  TRIAL RELEASE
