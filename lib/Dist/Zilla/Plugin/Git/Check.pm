@@ -24,6 +24,20 @@ sub _git_config_mapping { +{
 
 # -- public methods
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        untracked_files => $self->untracked_files,
+    };
+
+    return $config;
+};
+
 sub before_release {
     my $self = shift;
 

@@ -73,7 +73,19 @@ around mvp_multivalue_args => sub {
 
 sub _build_allow_dirty { [ 'dist.ini', shift->changelog ] }
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
 
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        map { $_ => $self->$_ } qw(allow_dirty allow_dirty_match changelog),
+    };
+
+    return $config;
+};
 
 =method list_dirty_files
 

@@ -19,6 +19,20 @@ C<repo_root>).
 
 my %cached_wrapper;
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        repo_root => $self->repo_root,
+    };
+
+    return $config;
+};
+
 sub git {
   my $root = shift->repo_root;
 

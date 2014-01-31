@@ -29,6 +29,7 @@ sub new_tzil
       add_files => {
         'source/dist.ini' => simple_ini(
           [ 'Git::Check' => { @_ } ],
+          'MetaConfig',
           'FakeRelease',
         ),
         'source/.gitignore' => "DZT-Sample-*\n",

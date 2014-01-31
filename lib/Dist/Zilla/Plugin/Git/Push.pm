@@ -33,6 +33,20 @@ has push_to => (
   default => sub { [ qw(origin) ] },
 );
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        map { $_ => $self->$_ } qw(push_to remotes_must_exist),
+    };
+
+    return $config;
+};
+
 sub before_release {
     my $self = shift;
 

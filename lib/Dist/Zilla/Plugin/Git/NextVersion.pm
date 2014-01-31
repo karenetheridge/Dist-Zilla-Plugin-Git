@@ -112,6 +112,20 @@ sub _last_version {
 
 # -- role implementation
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        map { $_ => $self->$_ } qw(version_regexp first_version version_by_branch),
+    };
+
+    return $config;
+};
+
 sub before_release {
   my $self = shift;
 

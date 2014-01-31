@@ -48,6 +48,20 @@ has add_files_in  => ( ro, isa=>'ArrayRef[Str]', default => sub { [] } );
 
 sub mvp_multivalue_args { qw( add_files_in ) }
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        map { $_ => $self->$_ } qw(commit_msg time_zone add_files_in),
+    };
+
+    return $config;
+};
+
 sub after_release {
     my $self = shift;
 

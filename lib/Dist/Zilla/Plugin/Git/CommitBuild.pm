@@ -76,6 +76,21 @@ sub _build_release_message { return shift->message; }
 
 # -- role implementation
 
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        map { $_ => $self->$_ }
+            qw(branch release_branch message release_message build_root multiple_inheritance),
+    };
+
+    return $config;
+};
+
 sub after_build {
     my ( $self, $args) = @_;
 

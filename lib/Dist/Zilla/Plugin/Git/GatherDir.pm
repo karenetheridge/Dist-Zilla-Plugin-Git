@@ -3,9 +3,8 @@ package Dist::Zilla::Plugin::Git::GatherDir;
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Tiny qw(Path);
+extends 'Dist::Zilla::Plugin::GatherDir' => { -version => 4.200016 }; # exclude_match
 with 'Dist::Zilla::Role::Git::Repo';
-use Dist::Zilla::Plugin::GatherDir 4.200016 (); # exclude_match
-extends 'Dist::Zilla::Plugin::GatherDir';
 
 =head1 DESCRIPTION
 
@@ -109,6 +108,20 @@ has include_untracked => (
   isa => 'Bool',
   default => 0,
 );
+
+around dump_config => sub
+{
+    my $orig = shift;
+    my $self = shift;
+
+    my $config = $self->$orig;
+
+    $config->{+__PACKAGE__} = {
+        include_untracked => $self->include_untracked,
+    };
+
+    return $config;
+};
 
 override gather_files => sub {
   my ($self) = @_;
