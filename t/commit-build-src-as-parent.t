@@ -5,24 +5,23 @@ use warnings;
 
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use File::Temp qw{ tempdir };
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny qw(path);
 use Test::More   tests => 8;
 use Try::Tiny qw(try);
-use Cwd qw(cwd);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
+my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = "$tmpdir";
 
-my $corpus_dir = dir('corpus/commit-build-src-as-parent')->absolute;
+my $corpus_dir = path('corpus/commit-build-src-as-parent')->absolute;
 
-my $cwd = cwd();
+my $cwd = path('.')->absolute;
 END { chdir $cwd if $cwd };
 my $zilla = Dist::Zilla::Tester->from_config({ dist_root => $corpus_dir, });
 
 # build fake repository
-chdir $zilla->tempdir->subdir('source');
+chdir path( $zilla->tempdir )->child('source');
 system "git init -q";
 
 my $git = Git::Wrapper->new('.');
@@ -47,16 +46,16 @@ like try {$log[0]->message} => qr/Build results of \w+ \(on master\)/, 'build co
 chdir $cwd;
 
 my $zilla2 = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit-build')->absolute,
+  dist_root => path('corpus/commit-build')->absolute,
 });
 
 # build fake repository
-chdir $zilla2->tempdir->subdir('source');
+chdir path( $zilla2->tempdir )->child('source');
 system "git init -q";
 my $git2 = Git::Wrapper->new('.');
 $git2->config( 'user.name'  => 'dzp-git test' );
 $git2->config( 'user.email' => 'dzp-git@test' );
-$git2->remote('add','origin', $zilla->tempdir->subdir('source')->stringify);
+$git2->remote('add','origin', path( $zilla->tempdir )->child('source')->stringify);
 $git2->fetch;
 $git2->reset('--hard','origin/master');
 $git2->checkout('-b', 'topic/1');
@@ -68,16 +67,16 @@ ok( $git2->rev_parse('-q', '--verify', 'refs/heads/build/topic/1'), 'source repo
 
 chdir $cwd;
 my $zilla3 = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit-build')->absolute,
+  dist_root => path('corpus/commit-build')->absolute,
 });
 
 # build fake repository
-chdir $zilla3->tempdir->subdir('source');
+chdir path($zilla3->tempdir)->child('source');
 system "git init -q";
 my $git3 = Git::Wrapper->new('.');
 $git3->config( 'user.name'  => 'dzp-git test' );
 $git3->config( 'user.email' => 'dzp-git@test' );
-$git3->remote('add','origin', $zilla->tempdir->subdir('source')->stringify);
+$git3->remote('add','origin', path( $zilla->tempdir )->child('source')->stringify);
 $git3->fetch;
 $git3->branch('build/master', 'origin/build/master');
 $git3->reset('--hard','origin/master');
@@ -91,7 +90,7 @@ is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the 
 
 sub append_to_file {
     my ($file, @lines) = @_;
-    open my $fh, '>>', $file or die "can't open $file: $!";
-    print $fh @lines;
+    my $fh = path($file)->opena(@lines);
+    print $fh @_;
     close $fh;
 }
