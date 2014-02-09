@@ -6,15 +6,16 @@ use warnings;
 use Dist::Zilla     1.093250;
 use Test::DZil;
 use File::pushd;
-use File::Temp qw{ tempdir };
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny 0.012 qw( path );
 use Test::More      tests => 5;
 
 use t::Util;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
+my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+my $cwd     = Path::Tiny->cwd();
+$ENV{HOME} = "$tempdir";
 
 for my $test (
   {
@@ -54,7 +55,7 @@ for my $test (
     skip_unless_git_version($test->{min_git}, 1) if $test->{min_git};
 
     my $tzil = Builder->from_config(
-      { dist_root => dir('corpus/gatherdir')->absolute },
+      { dist_root => $cwd->child('corpus/gatherdir')->absolute },
       {
         add_files => {
           'source/ignored'    => "This is ignored.\n",
@@ -70,11 +71,10 @@ for my $test (
       },
     );
 
-    for my $token (pushd( $tzil->tempdir->subdir('source') )) {
+    for my $token (pushd( path($tzil->tempdir)->child('source')->stringify )) {
       system "git init" and die "error initializing git repo";
     }
-
-    my $git = Git::Wrapper->new( $tzil->tempdir->subdir('source')->stringify );
+    my $git = Git::Wrapper->new( path($tzil->tempdir)->child('source')->stringify );
     $git->config( 'user.name'  => 'dzp-git test' );
     $git->config( 'user.email' => 'dzp-git@test' );
 
