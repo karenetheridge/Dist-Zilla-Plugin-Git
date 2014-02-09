@@ -3,24 +3,24 @@
 use strict;
 use warnings;
 
-use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use File::Temp qw{ tempdir };
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny 0.012 qw( path ); # cwd
 use Test::More   tests => 4;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
-my $cwd = cwd();
+my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+my $cwd     = Path::Tiny->cwd;
+
+$ENV{HOME} = "$cwd";
 END { chdir $cwd if $cwd }
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/tag')->absolute,
+  dist_root => path('corpus/tag')->absolute,
 });
 
-chdir $zilla->tempdir->subdir('source');
+chdir path($zilla->tempdir)->child('source');
 system "git init";
 my $git = Git::Wrapper->new('.');
 
