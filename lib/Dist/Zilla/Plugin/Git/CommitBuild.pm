@@ -14,8 +14,8 @@ use File::Temp;
 use Moose;
 use namespace::autoclean;
 use MooseX::AttributeShortcuts;
-use Path::Class 0.22;           # dir->basename
-use MooseX::Types::Path::Class ':all';
+use Path::Tiny qw();
+use MooseX::Types::Path::Tiny qw( Path );
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
 use Cwd qw(abs_path);
@@ -52,7 +52,7 @@ has branch  => ( ro, isa => Str, default => 'build/%b', required => 1 );
 has release_branch  => ( ro, isa => Str, required => 0 );
 has message => ( ro, isa => Str, default => 'Build results of %h (on %b)', required => 1 );
 has release_message => ( ro, isa => Str, lazy => 1, builder => '_build_release_message' );
-has build_root => ( rw, coerce => 1, isa => Dir );
+has build_root => ( rw, coerce => 1, isa => Path );
 
 has _source_branch => (
     is      => 'ro',
@@ -96,9 +96,9 @@ sub _commit_build {
     my ( $self, undef, $branch, $message ) = @_;
 
     return unless $branch;
-    my $tmp_dir = File::Temp->newdir( CLEANUP => 1) ;
-    my $dir     = Path::Class::Dir->new( $tmp_dir->dirname );
-    my $src     = $self->git;
+
+    my $dir = Path::Tiny->tempdir( CLEANUP => 1) ;
+    my $src = $self->git;
 
     my $target_branch = _format_branch( $branch, $self );
 
@@ -106,12 +106,9 @@ sub _commit_build {
         my ( $name, $content ) = ( $file->name, (Dist::Zilla->VERSION < 5
                                                  ? $file->content
                                                  : $file->encoded_content) );
-        my ( $outfile ) = $dir->file( $name );
+        my ( $outfile ) = $dir->child( $name );
         $outfile->parent->mkpath();
-        my $fd = $outfile->openw;
-        $fd->binmode( ":raw" );
-        $fd->print( $content );
-        $fd->close or die "error closing $outfile: $!";;
+        $outfile->spew_raw( $content );
         chmod $file->mode, "$outfile" or die "couldn't chmod $outfile: $!";
     }
 
