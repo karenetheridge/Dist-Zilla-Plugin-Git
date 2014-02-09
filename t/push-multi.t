@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Git::Wrapper;
-use Path::Class 0.22;           # dir->basename
+use Path::Tiny qw(path);
 use Test::More 0.88;            # done_testing
 
 use t::Util;
@@ -20,8 +20,8 @@ $git->add( qw{ dist.ini Changes } );
 $git->commit( { message => 'initial commit' } );
 
 # create a clone, and use it to set up origin
-my $clone1 = $base_dir->subdir('clone1');
-my $clone2 = $base_dir->subdir('clone2');
+my $clone1 = $base_dir->child('clone1');
+my $clone2 = $base_dir->child('clone2');
 $git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone1" );
 $git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone2" );
 $git->remote('add', 'origin', "$clone1");
