@@ -3,26 +3,25 @@
 use strict;
 use warnings;
 
-use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use File::Temp qw{ tempdir };
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny 0.012 qw(path); # cwd
 use Test::More   tests => 1;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
+my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = "$tmpdir";
 
-my $cwd = cwd();
+my $cwd = Path::Tiny->cwd;
 END { chdir $cwd if $cwd }
 
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit-ws')->absolute,
+  dist_root => path('corpus/commit-ws')->absolute,
 });
 
 # build fake repository
-chdir $zilla->tempdir->subdir('source');
+chdir path( $zilla->tempdir )->child('source');
 system "git init";
 
 my $git = Git::Wrapper->new('.');
@@ -42,7 +41,7 @@ like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message 
 
 sub append_to_file {
     my ($file, @lines) = @_;
-    open my $fh, '>>', $file or die "can't open $file: $!";
+    my $fh = path( $file )->opena;
     print $fh @lines;
     close $fh;
 }
