@@ -3,14 +3,12 @@
 use strict;
 use warnings;
 
-use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
-use File::Temp qw{ tempdir };
 use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
 
@@ -19,9 +17,10 @@ which('gpg')
     : plan skip_all => q{gpg couldn't be located in $PATH; required for GPG-signed tags};
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = $ENV{GNUPGHOME} = tempdir( CLEANUP => 1 );
+my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = $ENV{GNUPGHOME} = "$tempdir";
 
-my $cwd = cwd();
+my $cwd = Path::Tiny->cwd;
 END { chdir $cwd if $cwd }
 
 delete $ENV{GIT_COMMITTER_NAME};
@@ -31,10 +30,10 @@ cp 'corpus/dzp-git.sec', "$ENV{GNUPGHOME}/secring.gpg";
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/tag-signed')->absolute,
+  dist_root => path('corpus/tag-signed')->absolute,
 });
 
-chdir $zilla->tempdir->subdir('source');
+chdir path($zilla->tempdir)->child('source');
 system "git init";
 my $git = Git::Wrapper->new('.');
 
