@@ -4,21 +4,20 @@ use strict;
 use warnings;
 use utf8;
 
-use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use Encode qw( decode );
-use File::Temp qw{ tempdir };
+use Path::Tiny 0.012 qw(path); # cwd
 use Git::Wrapper;
-use Path::Class;
 use Test::More;
 
 plan skip_all => "Dist::Zilla 5 required" if Dist::Zilla->VERSION < 5;
 plan tests => 1;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
-my $cwd = cwd();
+my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+my $cwd     = Path::Tiny->cwd;
+$ENV{HOME} = "$cwd";
 END { chdir $cwd if $cwd }
 
 # UTF-8 encoded strings:
@@ -28,7 +27,7 @@ my $changes3 = 'plain ASCII';
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit')->absolute,
+  dist_root => path('corpus/commit')->absolute,
 },{
   add_files => {
     'source/Changes' => <<"END CHANGES",
@@ -42,7 +41,7 @@ END CHANGES
   },
 });
 
-chdir $zilla->tempdir->subdir('source');
+chdir path($zilla->tempdir)->child('source');
 
 system "git init";
 my $git = Git::Wrapper->new('.');
@@ -62,7 +61,7 @@ like( decode('UTF-8', $log->message), qr/v1.23\n[^a-z]*\Q$changes1\E[^a-z]*\Q$ch
 
 sub append_to_file {
     my ($file, @lines) = @_;
-    open my $fh, '>>', $file or die "can't open $file: $!";
+    my $fh = path($file)->opena;
     print $fh @lines;
     close $fh;
 }
