@@ -5,15 +5,16 @@ use warnings;
 
 use Dist::Zilla     1.093250;
 use Test::DZil qw{ Builder simple_ini };
-use File::Temp qw{ tempdir };
 use File::pushd qw{ pushd };
 use Git::Wrapper;
+use Path::Tiny 0.012 qw(path); # cwd
 use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
 use t::Util qw( throws_ok );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
+my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = "$tempdir";
 
 my ($zilla, $git, $pushd);
 
@@ -35,7 +36,7 @@ sub new_tzil
     },
   );
 
-  $pushd = pushd($zilla->tempdir->subdir('source'));
+  $pushd = pushd(path($zilla->tempdir)->child('source'));
   print "# ";                   # Comment output of git init
   system "git init";
   $git   = Git::Wrapper->new('.');
@@ -307,7 +308,7 @@ our_messages_are(<<'', 'lists dist_ini as uncommitted');
 #---------------------------------------------------------------------
 sub append_to_file {
     my ($file, @lines) = @_;
-    open my $fh, '>>', $file or die "can't open $file: $!";
+    my $fh = path($file)->opena;
     print $fh @lines;
     close $fh;
 }
