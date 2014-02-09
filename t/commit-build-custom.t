@@ -5,23 +5,22 @@ use warnings;
 
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use File::Temp qw{ tempdir };
 use Git::Wrapper;
-use Path::Class;
+use Path::Tiny qw();
 use Test::More   tests => 5;
-use Cwd qw(cwd);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
+my $tmp = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = "$tmp";
 
-my $cwd = cwd();
+my $cwd = Path::Tiny::path('.')->absolute;
 END { chdir $cwd if $cwd }
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit-build-custom')->absolute,
+  dist_root => Path::Tiny::path('corpus/commit-build-custom')->absolute,
 });
 
 # build fake repository
-chdir $zilla->tempdir->subdir('source');
+chdir Path::Tiny::path($zilla->tempdir)->child('source');
 system "git init -q";
 
 my $git = Git::Wrapper->new('.');
