@@ -3,26 +3,25 @@
 use strict;
 use warnings;
 
-use Cwd qw( cwd );
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use Git::Wrapper;
-use Path::Class;
-use File::Temp qw/tempdir/;
+use Path::Tiny 0.012 qw(path); # cwd
 use lib 't/lib';
 use Test::More   tests => 3;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-$ENV{HOME} = tempdir( CLEANUP => 1 );
-my $cwd = cwd();
+my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
+$ENV{HOME} = "$tmpdir";
+my $cwd = Path::Tiny->cwd;
 END { chdir $cwd if $cwd }
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => dir('corpus/commit-dirtydir')->absolute,
+  dist_root => path('corpus/commit-dirtydir')->absolute,
 });
 
-chdir $zilla->tempdir->subdir('source');
+chdir path($zilla->tempdir)->child('source');
 system "git init";
 my $git = Git::Wrapper->new('.');
 $git->config( 'user.name'  => 'dzp-git test' );
@@ -50,7 +49,7 @@ ok( @files == 1, "No untracked files left" );
 
 sub append_to_file {
     my ($file, @lines) = @_;
-    open my $fh, '>>', $file or die "can't open $file: $!";
+    my $fh = path($file)->opena;
     print $fh @lines;
     close $fh;
 }
