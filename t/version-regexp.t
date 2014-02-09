@@ -1,8 +1,6 @@
 use strict;
 use warnings;
 
-use Path::Class;
-
 use Test::More 0.88 tests => 6;
 
 use t::Util qw(:DEFAULT zilla_version);
