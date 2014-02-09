@@ -2,7 +2,7 @@
 package Dist::Zilla::Plugin::MyTestArchiver;
 use Moose;
 use Moose::Autobox;
-use Path::Class::Dir ();
+use Path::Tiny qw(path);
 use File::Copy ();
 
 with 'Dist::Zilla::Role::Releaser';
@@ -13,7 +13,7 @@ sub release {
     chmod(0444, $tgz);
     my $dir = 'releases';
     mkdir $dir or $self->log_fatal( "Unable to create directory $dir: $!" );
-    my $dest = Path::Class::Dir->new( $dir )->file($tgz->basename);
+    my $dest = path( $dir )->child($tgz->basename);
     File::Copy::move($tgz, $dest) or $self->log_fatal( "Unable to move: $!" );
     $self->log("Moved $tgz to $dest");
 }
