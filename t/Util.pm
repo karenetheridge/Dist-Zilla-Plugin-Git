@@ -25,7 +25,7 @@ use Cwd qw(cwd);
 use File::Copy::Recursive qw(dircopy);
 use File::pushd qw(pushd tempd);
 use Git::Wrapper ();
-use Path::Class;
+use Path::Tiny qw(path);
 use Test::DZil qw(Builder);
 use Test::More;
 use version 0.80 ();
@@ -46,9 +46,9 @@ my $original_cwd;
 BEGIN {
   # Change back to the original directory when shutting down,
   # to avoid problems with cleaning up tmpdirs.
-  $original_cwd = cwd();
+  $original_cwd = path('.')->absolute;
   # we chdir around so make @INC absolute
-  @INC = map {; ref($_) ? $_ : dir($_)->absolute->stringify } @INC;
+  @INC = map {; ref($_) ? $_ : path($_)->absolute->stringify } @INC;
 }
 
 END { chdir $original_cwd if $original_cwd }
@@ -67,9 +67,7 @@ sub append_and_add
 sub append_to_file {
   my $file = shift;
 
-  my $fh = $git_dir->file($file)->open('>>:raw:utf8')
-      or die "can't open $file: $!";
-
+  my $fh = $git_dir->child($file)->opena_utf8;
   print $fh @_;
   close $fh;
 }
@@ -79,32 +77,30 @@ sub init_test
 {
   my %opt = @_;
 
-  $dist_dir = dir('.')->absolute; # root of the distribution
+  $dist_dir = path('.')->absolute; # root of the distribution
 
   # Make a new directory so we don't affect the source repo:
-  $base_dir_pushed = tempd;
-  $base_dir = dir($base_dir_pushed)->absolute;
+  $base_dir_pushed = Path::Tiny->tempdir;
+  $base_dir = $base_dir_pushed->absolute;
 
   # Mock HOME to keep user's global Git config from causing problems:
-  mkdir($ENV{HOME} = $base_dir->subdir('home')->stringify)
+  mkdir($ENV{HOME} = $base_dir->child('home')->stringify)
       or die "Failed to create $ENV{HOME}: $!";
 
   delete $ENV{V}; # In case we're being released with a manual version
 
   # Create the test repo:
-  $git_dir = $base_dir->subdir('repo');
+  $git_dir = $base_dir->child('repo');
   $git_dir->mkpath;
 
-  dircopy($dist_dir->subdir(corpus => $opt{corpus}), $git_dir)
+  dircopy($dist_dir->child(corpus => $opt{corpus}), $git_dir)
       if defined $opt{corpus};
 
   if (my $files = $opt{add_files}) {
     while (my ($name, $content) = each %$files) {
-      my $fn = $git_dir->file($name);
-      $fn->dir->mkpath;
-      open my $fh, '>:raw:utf8', $fn or die "Can't open $fn: $!";
-      print { $fh } $content;
-      close $fh;
+      my $fn = $git_dir->child($name);
+      $fn->parent->mkpath;
+      $fn->spew_utf8( $content );
     }
   } # end if add_files
 
@@ -153,16 +149,7 @@ sub skip_unless_git_version
 sub slurp_text_file
 {
   my ($filename) = @_;
-
-  return scalar do {
-    local $/;
-    if (open my $fh, '<:utf8', $zilla->tempdir->file($filename)) {
-      <$fh>;
-    } else {
-      diag("Unable to open $filename: $!");
-      undef;
-    }
-  };
+  return path( $zilla->tempdir )->child( $filename )->slurp_utf8;
 } # end slurp_text_file
 
 #---------------------------------------------------------------------
