@@ -11,7 +11,7 @@ use List::Util           qw{ first };
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };
-use Path::Class::Dir ();
+use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
 
 use String::Formatter method_stringf => {
@@ -65,7 +65,7 @@ sub after_release {
         my @untracked_files = $git->ls_files( { others=>1, 'exclude-standard'=>1 } );
         foreach my $f ( @untracked_files ) {
             foreach my $path ( @{ $self->add_files_in } ) {
-                if ( Path::Class::Dir->new( $path )->subsumes( $f ) ) {
+                if ( Path::Tiny::path( $path )->subsumes( $f ) ) {
                     push( @output, $f );
                     last;
                 }
