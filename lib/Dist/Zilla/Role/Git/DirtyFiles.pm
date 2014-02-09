@@ -12,7 +12,7 @@ use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
 use List::Util 'first';
-use Path::Class;
+use Path::Tiny 0.048 qw(); # subsumes
 use Try::Tiny;
 
 requires qw(log_fatal repo_root zilla);
@@ -88,21 +88,20 @@ sub list_dirty_files
 
   if ($git_root ne '.') {
     # Interpret allow_dirty relative to the dzil root
-    my $dzil_root = $self->zilla->root->absolute->resolve;
-    $git_root     = dir($git_root)
+    my $dzil_root = Path::Tiny::path($self->zilla->root)->absolute->realpath;
+    $git_root     = Path::Tiny::path($git_root)
                       ->absolute($dzil_root)
-                      ->resolve;
+                      ->realpath;
 
     $self->log_fatal("Dzil root $dzil_root is not inside Git root $git_root")
         unless $git_root->subsumes($dzil_root);
 
     for my $fn (@filenames) {
       try {
-        $fn = file($fn)
+        $fn = Path::Tiny::path($fn)
                 ->absolute($dzil_root)
-                ->resolve            # process ..
+                ->realpath            # process ..
                 ->relative($git_root)
-                ->as_foreign('Unix') # Git always uses Unix-style paths
                 ->stringify;
       };
     }
