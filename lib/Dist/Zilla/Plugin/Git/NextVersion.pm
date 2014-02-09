@@ -9,7 +9,7 @@ use version 0.80 ();
 
 use Moose;
 use namespace::autoclean 0.09;
-use Path::Class qw(file);
+use Path::Tiny qw();
 use Try::Tiny;
 use Moose::Util::TypeConstraints;
 
@@ -75,7 +75,7 @@ sub _last_version {
 
   if ($by_branch) {
     my $head;
-    my $cachefile = file(_cache_fn);
+    my $cachefile = Path::Tiny::path(_cache_fn);
     if (-f $cachefile) {
       ($head) = $git->rev_parse('HEAD');
       return $1 if $cachefile->slurp =~ /^\Q$head\E (.+)/;
