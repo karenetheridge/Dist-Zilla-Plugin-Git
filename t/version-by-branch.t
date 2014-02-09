@@ -2,9 +2,8 @@ use strict;
 use warnings;
 
 use Test::DZil qw(dist_ini);
-use Path::Class;
-use File::pushd qw(pushd);
 
+use Path::Tiny qw(path);
 use Test::More 0.88;            # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
 
@@ -68,7 +67,7 @@ sub head_last_ver
     is(slurp_text_file("source/$cache"), "$head $last_ver\n",
        "cache file contains $last_ver");
   } else {
-    ok( !-f $zilla->root->file($cache), "no cache file created");
+    ok( !-f path($zilla->root)->child($cache), "no cache file created");
   }
 } # end head_last_ver
 
