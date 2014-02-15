@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - convert from Path::Class to Path::Tiny (kent fredric - github#16)
 
 2.019     2013-11-23 20:49:27 Europe/Paris
  - fix #90537: wide character in print with ::Commit
