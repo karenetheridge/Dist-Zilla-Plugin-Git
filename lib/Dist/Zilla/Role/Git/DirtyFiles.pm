@@ -21,12 +21,21 @@ requires qw(log_fatal repo_root zilla);
 
 =attr allow_dirty
 
-A list of files that are allowed to be dirty in the git checkout.
+A list of paths that are allowed to be dirty in the git checkout.
 Defaults to C<dist.ini> and the changelog (as defined per the
 C<changelog> attribute.
 
-If your C<repo_root> is not the default (C<.>), then these filenames
+If your C<repo_root> is not the default (C<.>), then these pathnames
 are relative to Dist::Zilla's root directory, not the Git root directory.
+
+=attr allow_dirty_match
+
+A list of regular expressions that match paths allowed to be dirty in
+the git checkout.  This is combined with C<allow_dirty>.  Defaults to
+the empty list.
+
+The paths being matched are relative to the Git root directory, even
+if your C<repo_root> is not the default (C<.>).
 
 =attr changelog
 
