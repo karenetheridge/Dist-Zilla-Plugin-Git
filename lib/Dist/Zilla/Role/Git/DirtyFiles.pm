@@ -8,6 +8,7 @@ package Dist::Zilla::Role::Git::DirtyFiles;
 use Moose::Role;
 use Moose::Autobox;
 use MooseX::Types::Moose qw{ ArrayRef Str RegexpRef };
+use MooseX::Types::Path::Tiny 0.010 qw{ Paths };
 use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
@@ -45,7 +46,7 @@ The name of the changelog. Defaults to C<Changes>.
 
 has allow_dirty => (
   is => 'ro', lazy => 1,
-  isa     => ArrayRef[Str],
+  isa     => Paths,
   builder => '_build_allow_dirty',
 );
 has changelog => ( is => 'ro', isa=>Str, default => 'Changes' );
