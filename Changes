@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - use MX:Path::Tiny Paths type to catch config issues at startup
+   (kent fredric - github#18)
  - prune files using the prune_file method (karen etheridge - github#19)
 
 2.021     2014-04-12 06:01:53 Europe/Paris
