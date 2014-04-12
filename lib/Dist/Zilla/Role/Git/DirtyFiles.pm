@@ -47,6 +47,7 @@ The name of the changelog. Defaults to C<Changes>.
 has allow_dirty => (
   is => 'ro', lazy => 1,
   isa     => Paths,
+  coerce  => 1,
   builder => '_build_allow_dirty',
 );
 has changelog => ( is => 'ro', isa=>Str, default => 'Changes' );
