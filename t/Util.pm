@@ -149,7 +149,18 @@ sub skip_unless_git_version
 sub slurp_text_file
 {
   my ($filename) = @_;
-  return path( $zilla->tempdir )->child( $filename )->slurp_utf8;
+
+  return scalar do {
+    local $/;
+    # Don't use Path::Tiny's slurp_utf8 because it doesn't do
+    # CRLF translation on Windows.
+    if (open my $fh, '<:utf8', path( $zilla->tempdir )->child( $filename )) {
+      <$fh>;
+    } else {
+      diag("Unable to open $filename: $!");
+      undef;
+    }
+  };
 } # end slurp_text_file
 
 #---------------------------------------------------------------------
