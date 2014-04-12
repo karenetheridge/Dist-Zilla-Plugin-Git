@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.021     2014-04-12 06:01:53 Europe/Paris
  - add support for MetaConfig (karen etheridge - github#17)
  - fix tests to work on Windows (christopher madsen)
 
