@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - add support for MetaConfig (karen etheridge - github#17)
 
 2.020     2014-02-15 20:22:29 Europe/Paris
  - convert from Path::Class to Path::Tiny (kent fredric - github#16)
