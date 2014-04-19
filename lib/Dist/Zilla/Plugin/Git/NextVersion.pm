@@ -164,10 +164,15 @@ sub provide_version {
 sub prune_files {
   my $self = shift;
 
-  my $files = $self->zilla->files;
+  for my $file (@{ $self->zilla->files }) {
 
-  # Ensure we don't distribute .gitnxtver_cache:
-  @$files = grep { $_->name ne _cache_fn } @$files;
+    # Ensure we don't distribute .gitnxtver_cache:
+    next unless $file->name eq _cache_fn;
+
+    $self->log_debug([ 'pruning %s', $file->name ]);
+
+    $self->zilla->prune_file($file);
+  }
 
   return;
 } # end prune_files
