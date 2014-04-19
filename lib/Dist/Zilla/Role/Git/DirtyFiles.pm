@@ -7,8 +7,8 @@ package Dist::Zilla::Role::Git::DirtyFiles;
 
 use Moose::Role;
 use Moose::Autobox;
-use MooseX::Types::Moose qw{ ArrayRef Str RegexpRef };
-use MooseX::Types::Path::Tiny 0.010 qw{ Paths };
+use MooseX::Types::Moose qw{ Any ArrayRef Str RegexpRef };
+use MooseX::Types::Path::Tiny 0.010 qw{ Paths to_Paths };
 use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
@@ -44,12 +44,23 @@ The name of the changelog. Defaults to C<Changes>.
 
 =cut
 
-has allow_dirty => (
-  is => 'ro', lazy => 1,
-  isa     => Paths,
-  coerce  => 1,
-  builder => '_build_allow_dirty',
-);
+{
+  # We specifically allow the empty string to represent the empty list.
+  # Otherwise, there'd be no way to specify an empty list in an INI file.
+  my $type = subtype as Paths;
+  coerce($type,
+    from ArrayRef, via { to_Paths( [ grep { length } @$_ ] ) },
+    from Any, via { length($_) ? to_Paths($_) : [] },
+  );
+
+  has allow_dirty => (
+    is => 'ro', lazy => 1,
+    isa     => $type,
+    coerce  => 1,
+    builder => '_build_allow_dirty',
+  );
+}
+
 has changelog => ( is => 'ro', isa=>Str, default => 'Changes' );
 
 {
@@ -131,6 +142,8 @@ sub list_dirty_files
   } # end if git root ne dzil root
 
   my $allowed = join '|', $self->allow_dirty_match->flatten, map { qr{^\Q$_\E$} } @filenames;
+
+  $allowed = qr/(?!X)X/ if $allowed eq ''; # this cannot match anything
 
   return grep { /$allowed/ ? $listAllowed : !$listAllowed }
       $git->ls_files( { modified=>1, deleted=>1 } );
