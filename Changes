@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - warn that Dist::Zilla::App::CommandHelper::ChainSmoking <= 1.04 is broken
+   (karen etheridge - github#20)
 
 2.022     2014-04-19 20:29:22 Europe/Paris
  - use MX:Path::Tiny Paths type to catch config issues at startup
