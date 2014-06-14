@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.023     2014-06-14 18:32:30 Europe/Paris
+ - no functional changes
  - warn that Dist::Zilla::App::CommandHelper::ChainSmoking <= 1.04 is broken
    (karen etheridge - github#20)
 
