@@ -71,8 +71,13 @@ sub after_mint {
 
     $git->add("$opts->{mint_root}");
     if ($self->commit) {
+      my $message = 'Made initial commit';
+      if (length $self->branch) {
+        $git->checkout('-b', $self->branch);
+        $message .= ' on branch ' . $self->branch;
+      }
       $git->commit({message => _format_string($self->commit_message, $self)});
-      $git->branch(qw(-m master), $self->branch) if $self->branch;
+      $self->log($message);
     }
     foreach my $remoteSpec (@{ $self->remotes }) {
       my ($remote, $url) = split ' ', _format_string($remoteSpec, $self), 2;
@@ -95,7 +100,7 @@ In your F<profile.ini>:
     [Git::Init]
     commit_message = initial commit  ; this is the default
     commit = 1                       ; this is the default
-    branch = master                  ; this is the default
+    branch =                         ; this is the default (means master)
     remote = origin git@github.com:USERNAME/%{lc}N.git ; no default
     config = user.email USERID@cpan.org  ; there is no default
 
@@ -119,8 +124,8 @@ If set to a false value, add the files to the Git index but don't
 actually make a commit.
 
 =item * branch - the branch name under which the newly-minted dist is checked
-in. Defaults to an empty string, which means that Git default branch is used
-(master).
+in (if C<commit> is true). Defaults to an empty string, which means that
+the Git default branch is used (master).
 
 =item * config - a config setting to make in the repository.  No
 config entries are made by default.  A setting is specified as

@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - add branch option to Git::Init (tuomas jormola - github#21)
+ - Git::Init now logs when it makes the initial commit
 
 2.023     2014-06-14 18:32:30 Europe/Paris
  - no functional changes
