@@ -11,10 +11,13 @@ use Moose::Util::TypeConstraints qw(enum);
 
 use constant _DieWarnIgnore => do { enum [qw[ die warn ignore ]] };
 
+with 'Dist::Zilla::Role::AfterBuild';
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::GitConfig';
+
+has build_warnings => ( is=>'ro', isa => 'Bool', default => 0 );
 
 has untracked_files => ( is=>'ro', isa => _DieWarnIgnore, default => 'die' );
 
@@ -38,8 +41,8 @@ around dump_config => sub
     return $config;
 };
 
-sub before_release {
-    my $self = shift;
+sub _perform_checks {
+    my ($self, $log_method) = @_;
 
     my @issues;
     my $git = $self->git;
@@ -53,20 +56,24 @@ sub before_release {
     # check if some changes are staged for commit
     @output = $git->diff( { cached=>1, 'name-status'=>1 } );
     if ( @output ) {
+        push @issues, @output . " staged change" . (@output == 1 ? '' : 's');
+
         my $errmsg =
             "branch $branch has some changes staged for commit:\n" .
             join "\n", map { "\t$_" } @output;
-        $self->log_fatal($errmsg);
+        $self->$log_method($errmsg);
     }
 
     # everything but files listed in allow_dirty should be in a
     # clean state
     @output = $self->list_dirty_files($git);
     if ( @output ) {
+        push @issues, @output . " uncommitted file" . (@output == 1 ? '' : 's');
+
         my $errmsg =
             "branch $branch has some uncommitted files:\n" .
             join "\n", map { "\t$_" } @output;
-        $self->log_fatal($errmsg);
+        $self->$log_method($errmsg);
     }
 
     # no files should be untracked
@@ -76,7 +83,10 @@ sub before_release {
 
       my $untracked = $self->untracked_files;
       if ($untracked ne 'ignore') {
-        my $log_method = ($untracked eq 'die') ? 'log_fatal' : 'log';
+        # If $log_method is log_fatal, switch to log unless
+        # untracked files are fatal.  If $log_method is already log,
+        # this is a no-op.
+        $log_method = 'log' unless $untracked eq 'die';
 
         my $errmsg =
             "branch $branch has some untracked files:\n" .
@@ -90,13 +100,25 @@ sub before_release {
     } else {
       $self->log( "branch $branch is in a clean state" );
     }
+} # end _perform_checks
+
+sub after_build {
+    my $self = shift;
+
+    $self->_perform_checks('log') if $self->build_warnings;
 }
 
+sub before_release {
+    my $self = shift;
+
+    $self->_perform_checks('log_fatal');
+}
 
 1;
 __END__
 
 =for Pod::Coverage
+    after_build
     before_release
 
 
@@ -108,6 +130,7 @@ In your F<dist.ini>:
     allow_dirty = dist.ini
     allow_dirty = README
     changelog = Changes      ; this is the default
+    build_warnings = 0       ; this is the default
     untracked_files = die    ; default value (can also be "warn" or "ignore")
 
 
@@ -144,6 +167,9 @@ can use C<allow_dirty => to prohibit all local modifications.
 
 =item * allow_dirty_match - works the same as allow_dirty, but
 matching as a regular expression instead of an exact filename.
+
+=item * build_warnings - if 1, perform the same checks after every build,
+but as warnings, not errors.  Defaults to 0.
 
 =item * untracked_files - indicates what to do if there are untracked
 files.  Must be either C<die> (the default), C<warn>, or C<ignore>.
