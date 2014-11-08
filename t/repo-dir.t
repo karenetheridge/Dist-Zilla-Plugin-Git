@@ -53,6 +53,8 @@ $zilla2->release;
 my ($log) = $git->log( 'HEAD' );
 like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message taken from changelog' );
 
+chdir "$cwd";
+
 sub append_to_file {
     my ($file, @lines) = @_;
     my $fh = path($file)->opena;

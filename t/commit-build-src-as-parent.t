@@ -88,6 +88,8 @@ is( scalar $git3->log('build/master'), 3, 'three commits on the build/master bra
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
 
+chdir $cwd;
+
 sub append_to_file {
     my ($file, @lines) = @_;
     my $fh = path($file)->opena(@lines);

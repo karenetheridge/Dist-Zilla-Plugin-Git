@@ -7,6 +7,7 @@ use utf8;
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use Encode qw( decode );
+use File::pushd qw(pushd);
 use Path::Tiny 0.012 qw(path); # cwd
 use Git::Wrapper;
 use Test::More;
@@ -16,9 +17,7 @@ plan tests => 1;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-my $cwd     = Path::Tiny->cwd;
-$ENV{HOME} = "$cwd";
-END { chdir $cwd if $cwd }
+$ENV{HOME} = "$tempdir";
 
 # UTF-8 encoded strings:
 my $changes1 = 'Ævar Arnfjörð Bjarmason';
@@ -41,23 +40,25 @@ END CHANGES
   },
 });
 
-chdir path($zilla->tempdir)->child('source');
+{
+  my $dir = pushd(path($zilla->tempdir)->child('source'));
 
-system "git init";
-my $git = Git::Wrapper->new('.');
-$git->config( 'user.name'  => 'dzp-git test' );
-$git->config( 'user.email' => 'dzp-git@test' );
-$git->add( qw{ dist.ini Changes } );
-$git->commit( { message => 'initial commit' } );
+  system "git init";
+  my $git = Git::Wrapper->new('.');
+  $git->config( 'user.name'  => 'dzp-git test' );
+  $git->config( 'user.email' => 'dzp-git@test' );
+  $git->add( qw{ dist.ini Changes } );
+  $git->commit( { message => 'initial commit' } );
 
-# do a release, with changes and dist.ini updated
-append_to_file('Changes',  "\n");
-append_to_file('dist.ini', "\n");
-$zilla->release;
+  # do a release, with changes and dist.ini updated
+  append_to_file('Changes',  "\n");
+  append_to_file('dist.ini', "\n");
+  $zilla->release;
 
-# check if dist.ini and changelog have been committed
-my ($log) = $git->log( 'HEAD' );
-like( decode('UTF-8', $log->message), qr/v1.23\n[^a-z]*\Q$changes1\E[^a-z]*\Q$changes2\E[^a-z]*\Q$changes3\E/, 'commit message taken from changelog' );
+  # check if dist.ini and changelog have been committed
+  my ($log) = $git->log( 'HEAD' );
+  like( decode('UTF-8', $log->message), qr/v1.23\n[^a-z]*\Q$changes1\E[^a-z]*\Q$changes2\E[^a-z]*\Q$changes3\E/, 'commit message taken from changelog' );
+}
 
 sub append_to_file {
     my ($file, @lines) = @_;

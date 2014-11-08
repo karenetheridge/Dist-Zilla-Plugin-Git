@@ -7,6 +7,7 @@ use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
 use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
+use File::pushd qw(pushd);
 use Git::Wrapper;
 use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
@@ -20,9 +21,6 @@ which('gpg')
 my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
 $ENV{HOME} = $ENV{GNUPGHOME} = "$tempdir";
 
-my $cwd = Path::Tiny->cwd;
-END { chdir $cwd if $cwd }
-
 delete $ENV{GIT_COMMITTER_NAME};
 delete $ENV{GIT_COMMITTER_EMAIL};
 cp 'corpus/dzp-git.pub', "$ENV{GNUPGHOME}/pubring.gpg";
@@ -33,33 +31,35 @@ my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/tag-signed')->absolute,
 });
 
-chdir path($zilla->tempdir)->child('source');
-system "git init";
-my $git = Git::Wrapper->new('.');
+{
+  my $dir = pushd(path($zilla->tempdir)->child('source'));
+  system "git init";
+  my $git = Git::Wrapper->new('.');
 
-$git->config( 'user.name'  => 'dzp-git test' );
-$git->config( 'user.email' => 'dzp-git@test' );
-$git->config( 'user.signingkey' => '7D85ED44');
-$git->add( qw{ dist.ini Changes } );
-$git->commit( { message => 'initial commit' } );
+  $git->config( 'user.name'  => 'dzp-git test' );
+  $git->config( 'user.email' => 'dzp-git@test' );
+  $git->config( 'user.signingkey' => '7D85ED44');
+  $git->add( qw{ dist.ini Changes } );
+  $git->commit( { message => 'initial commit' } );
 
-# do the release
-$zilla->release;
+  # do the release
+  $zilla->release;
 
-# check if tag has been correctly created
-my @tags = $git->tag;
-is( scalar(@tags), 1, 'one tag created' );
-is( $tags[0], 'v1.23', 'new tag created after new version' );
-is( $tags[0], $zilla->plugin_named('Git::Tag')->tag(), 'new tag matches the tag the plugin claims is the tag.');
+  # check if tag has been correctly created
+  my @tags = $git->tag;
+  is( scalar(@tags), 1, 'one tag created' );
+  is( $tags[0], 'v1.23', 'new tag created after new version' );
+  is( $tags[0], $zilla->plugin_named('Git::Tag')->tag(), 'new tag matches the tag the plugin claims is the tag.');
 
-# Check that it is a signed tag
-my @lines = $git->show('v1.23');
-my $tag = join "\n", @lines;
-like( $tag, qr/^tag v1.23/m, 'Is it a real tag?' );
-like( $tag, qr/^Tagger: dzp-git test <dzp-git\@test>/m, 'Is it a real tag?' );
-like( $tag, qr/PGP SIGNATURE/m, 'Is it GPG-signed?' );
+  # Check that it is a signed tag
+  my @lines = $git->show('v1.23');
+  my $tag = join "\n", @lines;
+  like( $tag, qr/^tag v1.23/m, 'Is it a real tag?' );
+  like( $tag, qr/^Tagger: dzp-git test <dzp-git\@test>/m, 'Is it a real tag?' );
+  like( $tag, qr/PGP SIGNATURE/m, 'Is it GPG-signed?' );
 
-# attempting to release again should fail
-eval { $zilla->release };
+  # attempting to release again should fail
+  eval { $zilla->release };
 
-like($@, qr/tag v1\.23 already exists/, 'prohibit duplicate tag');
+  like($@, qr/tag v1\.23 already exists/, 'prohibit duplicate tag');
+}
