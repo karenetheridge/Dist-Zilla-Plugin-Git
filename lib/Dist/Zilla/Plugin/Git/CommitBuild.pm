@@ -14,7 +14,6 @@ use File::Spec::Functions qw/ rel2abs catfile /;
 use File::Temp;
 use Moose;
 use namespace::autoclean;
-use MooseX::AttributeShortcuts;
 use Path::Tiny qw();
 use MooseX::Types::Path::Tiny qw( Path );
 use MooseX::Has::Sugar;

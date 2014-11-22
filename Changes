@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - don't "use MooseX::AttributeShortcuts" (wasn't actually using its features)
+   (christopher madsen, suggested by karen etheridge - rt#100498)
 
 2.025     2014-10-11 19:05:56 Europe/Paris
  - add build_warnings option to Git::Check
