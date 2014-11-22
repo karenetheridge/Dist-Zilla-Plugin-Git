@@ -1,5 +1,7 @@
 package Dist::Zilla::Plugin::Git::GatherDir;
 # ABSTRACT: gather all tracked files in a Git working directory
+
+
 use Moose;
 use Moose::Autobox;
 use MooseX::Types::Path::Tiny qw(Path);

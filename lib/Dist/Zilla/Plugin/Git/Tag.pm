@@ -5,6 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Tag;
 # ABSTRACT: tag the new version
 
+
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };

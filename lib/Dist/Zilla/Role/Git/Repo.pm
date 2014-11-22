@@ -1,6 +1,6 @@
 package Dist::Zilla::Role::Git::Repo;
-
 # ABSTRACT: Provide repository information for Git plugins
+
 
 use Moose::Role;
 
