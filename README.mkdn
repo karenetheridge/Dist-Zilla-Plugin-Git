@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::Git - update your git repository after release
 
 # VERSION
 
-version 2.026
+version 2.027
 
 # DESCRIPTION
 
