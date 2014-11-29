@@ -16,24 +16,10 @@ use MooseX::Types::Path::Tiny 0.010 qw{ Paths };
 use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
 
-use String::Formatter method_stringf => {
-  -as => '_format_string',
-  codes => {
-    c => sub { $_[0]->_get_changes },
-    d => sub { require DateTime;
-               DateTime->now(time_zone => $_[0]->time_zone)
-                       ->format_cldr($_[1] || 'dd-MMM-yyyy') },
-    n => sub { "\n" },
-    N => sub { $_[0]->zilla->name },
-    t => sub { $_[0]->zilla->is_trial
-                   ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
-    v => sub { $_[0]->zilla->version },
-  },
-};
-
 with 'Dist::Zilla::Role::AfterRelease';
 with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
+with 'Dist::Zilla::Role::Git::StringFormatter';
 with 'Dist::Zilla::Role::GitConfig';
 
 sub _git_config_mapping { +{
@@ -43,7 +29,6 @@ sub _git_config_mapping { +{
 # -- attributes
 
 has commit_msg => ( ro, isa=>Str, default => 'v%v%n%n%c' );
-has time_zone  => ( ro, isa=>Str, default => 'local' );
 has add_files_in  => ( ro, isa=> Paths, coerce => 1, default => sub { [] });
 
 
@@ -116,40 +101,8 @@ reads the Changes file to get the list of changes in the just-released version.
 sub get_commit_message {
     my $self = shift;
 
-    return _format_string($self->commit_msg, $self);
+    return $self->_format_string($self->commit_msg);
 } # end get_commit_message
-
-# -- private methods
-
-sub _get_changes {
-    my $self = shift;
-
-    # parse changelog to find commit message
-    my $cl_name   = $self->changelog;
-    my $changelog = first { $_->name eq $cl_name } @{ $self->zilla->files };
-    unless ($changelog) {
-      $self->log("WARNING: Unable to find $cl_name");
-      return '';
-    }
-    my $newver    = $self->zilla->version;
-    $changelog->content =~ /
-      ^\Q$newver\E(?![_.]*[0-9]).*\n # from line beginning with version number
-      ( (?: (?> .* ) (?:\n|\z) )*? ) # capture as few lines as possible
-      (?: (?> \s* ) ^\S | \z )       # until non-indented line or EOF
-    /xm or do {
-      $self->log("WARNING: Unable to find $newver in $cl_name");
-      return '';
-    };
-
-    (my $changes = $1) =~ s/^\s*\n//; # Remove leading blank lines
-
-    $self->log("WARNING: No changes listed under $newver in $cl_name")
-        unless length $changes;
-
-    # return commit message
-    return $changes;
-} # end _get_changes
-
 
 1;
 __END__
@@ -198,48 +151,15 @@ This option may appear multiple times. This is used to add files
 generated during build-time to the repository, for example. The default
 list is empty.
 
-Note: The files have to be generated between those phases: BeforeRelease
+Note: The files have to be generated between the phases BeforeRelease
 E<lt>-E<gt> AfterRelease, and after Git::Check + before Git::Commit.
 
 =item * commit_msg - the commit message to use. Defaults to
 C<v%v%n%n%c>, meaning the version number and the list of changes.
+The L<formatting codes|Dist::Zilla::Role::Git::StringFormatter/DESCRIPTION>
+are documented under L<Dist::Zilla::Role::Git::StringFormatter>.
 
 =item * time_zone - the time zone to use with C<%d>.  Can be any
 time zone name accepted by DateTime.  Defaults to C<local>.
-
-=back
-
-You can use the following codes in commit_msg:
-
-=over 4
-
-=item C<%c>
-
-The list of changes in the just-released version (read from C<changelog>).
-It will include lines between the current version and timestamp and
-the next non-indented line, except that blank lines at the beginning
-or end are removed.  It normally ends in a newline.
-
-=item C<%{dd-MMM-yyyy}d>
-
-The current date.  You can use any CLDR format supported by
-L<DateTime>.  A bare C<%d> means C<%{dd-MMM-yyyy}d>.
-
-=item C<%n>
-
-a newline
-
-=item C<%N>
-
-the distribution name
-
-=item C<%{-TRIAL}t>
-
-Expands to -TRIAL (or any other supplied string) if this is a trial
-release, or the empty string if not.  A bare C<%t> means C<%{-TRIAL}t>.
-
-=item C<%v>
-
-the distribution version
 
 =back

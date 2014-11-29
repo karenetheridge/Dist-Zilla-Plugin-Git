@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - unify string formatting code into Dist::Zilla::Role::Git::StringFormatter
+   This allows you to use %c (the changelog entry) with Git::Tag.
+   (christopher madsen, suggested by doug bell - rt#99990)
 
 2.026     2014-11-22 17:35:45CET+0100 Europe/Paris
  - don't "use MooseX::AttributeShortcuts" (wasn't actually using its features)
