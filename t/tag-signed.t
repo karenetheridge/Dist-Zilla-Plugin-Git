@@ -9,12 +9,13 @@ use File::Copy qw{ cp };
 use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
 use File::pushd qw(pushd);
 use Git::Wrapper;
+use List::MoreUtils qw(firstidx);
 use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
 
 which('gpg')
-    ? plan tests => 7
+    ? plan tests => 8
     : plan skip_all => q{gpg couldn't be located in $PATH; required for GPG-signed tags};
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
@@ -52,11 +53,16 @@ my $zilla = Dist::Zilla::Tester->from_config({
   is( $tags[0], $zilla->plugin_named('Git::Tag')->tag(), 'new tag matches the tag the plugin claims is the tag.');
 
   # Check that it is a signed tag
-  my @lines = $git->show('v1.23');
+  my @lines = $git->show({pretty => 'short'}, 'v1.23');
+  if (my $commit_begins = firstidx { /^commit / } @lines) {
+    splice @lines, $commit_begins;
+  }
   my $tag = join "\n", @lines;
   like( $tag, qr/^tag v1.23/m, 'Is it a real tag?' );
   like( $tag, qr/^Tagger: dzp-git test <dzp-git\@test>/m, 'Is it a real tag?' );
   like( $tag, qr/PGP SIGNATURE/m, 'Is it GPG-signed?' );
+  like( $tag, qr/^v1.23:\n\n - foo\n - bar\n - baz\n/m,
+        'Includes commit message?');
 
   # attempting to release again should fail
   eval { $zilla->release };
