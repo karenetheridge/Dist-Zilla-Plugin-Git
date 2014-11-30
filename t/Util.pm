@@ -88,6 +88,7 @@ sub init_test
       or die "Failed to create $ENV{HOME}: $!";
 
   delete $ENV{V}; # In case we're being released with a manual version
+  delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
 
   # Create the test repo:
   $git_dir = $base_dir->child('repo');

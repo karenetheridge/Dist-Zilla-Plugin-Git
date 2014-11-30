@@ -15,6 +15,9 @@ use Test::More   tests => 8;
 my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
 $ENV{HOME} = "$tempdir";
 
+# Don't let GIT_* variables interfere with the test
+delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/tag')->absolute,

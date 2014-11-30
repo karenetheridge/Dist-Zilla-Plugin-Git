@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - make tests more robust when GIT_* environment variables are set
+   (christopher madsen)
 
 2.027     2014-11-29 21:09:02CET+0100 Europe/Paris
  - unify string formatting code into Dist::Zilla::Role::Git::StringFormatter

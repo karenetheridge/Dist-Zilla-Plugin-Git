@@ -22,8 +22,9 @@ which('gpg')
 my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
 $ENV{HOME} = $ENV{GNUPGHOME} = "$tempdir";
 
-delete $ENV{GIT_COMMITTER_NAME};
-delete $ENV{GIT_COMMITTER_EMAIL};
+# Don't let GIT_* variables interfere with the test
+delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+
 cp 'corpus/dzp-git.pub', "$ENV{GNUPGHOME}/pubring.gpg";
 cp 'corpus/dzp-git.sec', "$ENV{GNUPGHOME}/secring.gpg";
 
