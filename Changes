@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.028     2014-11-30 05:48:59CET+0100 Europe/Paris
+ - no functional changes
  - make tests more robust when GIT_* environment variables are set
    (christopher madsen)
 
