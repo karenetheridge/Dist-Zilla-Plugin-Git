@@ -1,7 +1,6 @@
 # taken from DZP::ArchiveRelease, thanks CJM!
 package Dist::Zilla::Plugin::MyTestArchiver;
 use Moose;
-use Moose::Autobox;
 use Path::Tiny qw(path);
 use File::Copy ();
 

@@ -3,7 +3,6 @@ package Dist::Zilla::Plugin::Git::GatherDir;
 
 
 use Moose;
-use Moose::Autobox;
 use MooseX::Types::Path::Tiny qw(Path);
 extends 'Dist::Zilla::Plugin::GatherDir' => { -version => 4.200016 }; # exclude_match
 with 'Dist::Zilla::Role::Git::Repo';
@@ -141,9 +140,9 @@ override gather_files => sub {
 
   my $exclude_regex = qr/\000/;
   $exclude_regex = qr/$exclude_regex|$_/
-    for ($self->exclude_match->flatten);
+    for (@{ $self->exclude_match });
 
-  my %is_excluded = map {; $_ => 1 } $self->exclude_filename->flatten;
+  my %is_excluded = map {; $_ => 1 } @{ $self->exclude_filename };
 
   my @files;
   FILE: for my $filename (uniq $git->ls_files(@opts)) {
