@@ -14,19 +14,18 @@ use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
 
+use t::Util qw(clean_environment);
+
 which('gpg')
     ? plan tests => 8
     : plan skip_all => q{gpg couldn't be located in $PATH; required for GPG-signed tags};
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = $ENV{GNUPGHOME} = "$tempdir";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
-# Don't let GIT_* variables interfere with the test
-delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
-
-cp 'corpus/dzp-git.pub', "$ENV{GNUPGHOME}/pubring.gpg";
-cp 'corpus/dzp-git.sec', "$ENV{GNUPGHOME}/secring.gpg";
+cp 'corpus/dzp-git.pub', "$homedir/pubring.gpg";
+cp 'corpus/dzp-git.sec', "$homedir/secring.gpg";
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({

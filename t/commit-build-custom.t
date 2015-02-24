@@ -10,9 +10,11 @@ use Git::Wrapper;
 use Path::Tiny qw();
 use Test::More   tests => 5;
 
+use t::Util qw(clean_environment);
+
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tmp = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tmp";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => Path::Tiny::path('corpus/commit-build-custom')->absolute,

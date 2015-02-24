@@ -10,11 +10,11 @@ use Git::Wrapper;
 use Path::Tiny 0.012 qw(path); # cwd
 use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
-use t::Util qw( throws_ok );
+use t::Util qw( clean_environment throws_ok );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tempdir";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 my ($zilla, $git, $pushd);
 

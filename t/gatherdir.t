@@ -13,9 +13,8 @@ use Test::More      tests => 5;
 use t::Util;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+my $homedir = clean_environment;
 my $cwd     = Path::Tiny->cwd();
-$ENV{HOME} = "$tempdir";
 
 for my $test (
   {

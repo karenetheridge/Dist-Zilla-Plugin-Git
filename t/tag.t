@@ -11,12 +11,11 @@ use List::MoreUtils qw(firstidx);
 use Path::Tiny 0.012 qw( path ); # cwd
 use Test::More   tests => 8;
 
-# Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tempdir";
+use t::Util qw(clean_environment);
 
-# Don't let GIT_* variables interfere with the test
-delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+# Mock HOME to avoid ~/.gitexcludes from causing problems
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({

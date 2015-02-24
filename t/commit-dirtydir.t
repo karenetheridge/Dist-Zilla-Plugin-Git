@@ -11,9 +11,11 @@ use Path::Tiny 0.012 qw(path); # cwd
 use lib 't/lib';
 use Test::More   tests => 3;
 
+use t::Util qw(clean_environment);
+
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tmpdir";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({

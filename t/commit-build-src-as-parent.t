@@ -10,14 +10,14 @@ use Path::Tiny qw(path);
 use Test::More   tests => 8;
 use Try::Tiny qw(try);
 
+use t::Util qw( chdir_original_cwd clean_environment );
+
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tmpdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tmpdir";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 my $corpus_dir = path('corpus/commit-build-src-as-parent')->absolute;
 
-my $cwd = path('.')->absolute;
-END { chdir $cwd if $cwd };
 my $zilla = Dist::Zilla::Tester->from_config({ dist_root => $corpus_dir, });
 
 # build fake repository
@@ -43,7 +43,7 @@ my @log = $git->log('build/master');
 like try {$log[1]->message} => qr/initial commit/, 'master is a parent';
 like try {$log[0]->message} => qr/Build results of \w+ \(on master\)/, 'build commit';
 
-chdir $cwd;
+chdir_original_cwd;
 
 my $zilla2 = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/commit-build')->absolute,
@@ -65,7 +65,7 @@ $zilla2->build;
 
 ok( $git2->rev_parse('-q', '--verify', 'refs/heads/build/topic/1'), 'source repo has the "build/topic/1" branch') or diag $git2->branch;
 
-chdir $cwd;
+chdir_original_cwd;
 my $zilla3 = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/commit-build')->absolute,
 });
@@ -88,7 +88,7 @@ is( scalar $git3->log('build/master'), 3, 'three commits on the build/master bra
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
 
-chdir $cwd;
+chdir_original_cwd;
 
 sub append_to_file {
     my ($file, @lines) = @_;

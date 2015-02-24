@@ -35,7 +35,8 @@ our ($base_dir, $base_dir_pushed, $dist_dir, $git_dir, $git, $zilla);
 use Exporter ();
 our @ISA    = qw(Exporter);
 our @EXPORT = qw($base_dir $git_dir $git $zilla
-                 append_and_add append_to_file init_test keep_tempdir
+                 append_and_add append_to_file chdir_original_cwd
+                 clean_environment init_test keep_tempdir
                  new_zilla_from_repo
                  skip_unless_git_version slurp_text_file
                  zilla_log_is);
@@ -73,6 +74,37 @@ sub append_to_file {
 }
 
 #---------------------------------------------------------------------
+sub chdir_original_cwd {
+  chdir $original_cwd or die "Can't chdir $original_cwd: $!";
+}
+
+#---------------------------------------------------------------------
+# Internal function shared by clean_environment & init_test
+
+sub _clean_environment
+{
+  my $homedir = shift;
+
+  delete $ENV{V}; # In case we're being released with a manual version
+  delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+
+  $ENV{HOME} = $ENV{GNUPGHOME} = $homedir;
+  $ENV{GIT_CONFIG_NOSYSTEM} = 1; # Don't read /etc/gitconfig
+} # end _clean_environment
+
+#---------------------------------------------------------------------
+# Create a mock home directory & clear the environment
+
+sub clean_environment
+{
+  my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
+
+  _clean_environment($tempdir->stringify);
+
+  $tempdir;            # Object must remain in scope until you're done
+} # end clean_environment
+
+#---------------------------------------------------------------------
 sub init_test
 {
   my %opt = @_;
@@ -84,11 +116,9 @@ sub init_test
   $base_dir = $base_dir_pushed->absolute;
 
   # Mock HOME to keep user's global Git config from causing problems:
-  mkdir($ENV{HOME} = $base_dir->child('home')->stringify)
-      or die "Failed to create $ENV{HOME}: $!";
-
-  delete $ENV{V}; # In case we're being released with a manual version
-  delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+  my $homedir = $base_dir->child('home')->stringify;
+  mkdir($homedir) or die "Failed to create $homedir: $!";
+  _clean_environment($homedir);
 
   # Create the test repo:
   $git_dir = $base_dir->child('repo');

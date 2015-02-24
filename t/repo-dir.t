@@ -10,11 +10,11 @@ use Path::Tiny 0.012 qw(path); # cwd
 use File::Copy 'move';
 use Test::More   tests => 1;
 
+use t::Util qw(chdir_original_cwd clean_environment);
+
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tempdir";
-my $cwd = Path::Tiny->cwd;
-END { chdir $cwd if $cwd }
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
@@ -53,7 +53,7 @@ $zilla2->release;
 my ($log) = $git->log( 'HEAD' );
 like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message taken from changelog' );
 
-chdir "$cwd";
+chdir_original_cwd;
 
 sub append_to_file {
     my ($file, @lines) = @_;

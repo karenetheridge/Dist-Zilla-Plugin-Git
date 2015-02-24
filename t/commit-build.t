@@ -9,12 +9,12 @@ use Git::Wrapper;
 use Path::Tiny qw( path );
 use Test::More   tests => 6;
 
-# Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tempdir";
+use t::Util qw( chdir_original_cwd clean_environment );
 
-my $cwd = path('.')->absolute;
-END { chdir $cwd if $cwd }
+# Mock HOME to avoid ~/.gitexcludes from causing problems
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
+
 my $zilla = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/commit-build')->absolute,
 });
@@ -37,7 +37,7 @@ is( scalar $git->log('build/master'), 1, 'one commit on the build/master branch'
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
 
-chdir $cwd;
+chdir_original_cwd;
 
 my $zilla2 = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/commit-build')->absolute,
@@ -59,7 +59,7 @@ $zilla2->build;
 
 ok( $git2->rev_parse('-q', '--verify', 'refs/heads/build/topic/1'), 'source repo has the "build/topic/1" branch') or diag $git2->branch;
 
-chdir $cwd;
+chdir_original_cwd;
 my $zilla3 = Dist::Zilla::Tester->from_config({
   dist_root => path('corpus/commit-build')->absolute,
 });
@@ -82,7 +82,7 @@ is( scalar $git3->log('build/master'), 2, 'two commits on the build/master branc
 is( scalar $git->ls_tree('build/master'), 2, 'two files in latest commit on the build/master branch')
     or diag $git->branch;
 
-chdir $cwd;
+chdir_original_cwd;
 
 sub append_to_file {
     my ($file, @lines) = @_;

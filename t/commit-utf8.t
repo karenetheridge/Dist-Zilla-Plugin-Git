@@ -15,9 +15,11 @@ use Test::More;
 plan skip_all => "Dist::Zilla 5 required" if Dist::Zilla->VERSION < 5;
 plan tests => 1;
 
+use t::Util qw(clean_environment);
+
 # Mock HOME to avoid ~/.gitexcludes from causing problems
-my $tempdir = Path::Tiny->tempdir( CLEANUP => 1 );
-$ENV{HOME} = "$tempdir";
+# and clear GIT_ environment variables
+my $homedir = clean_environment;
 
 # UTF-8 encoded strings:
 my $changes1 = 'Ævar Arnfjörð Bjarmason';
