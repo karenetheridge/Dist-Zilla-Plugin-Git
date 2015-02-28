@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.030     2015-02-28 20:43:24+0100 Europe/Paris
+ - no functional changes
  - make tests more robust by setting GIT_CONFIG_NOSYSTEM
    (christopher madsen, reported by dylan cali - rt#102287)
 
