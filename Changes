@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - tests that check Git version parse versions like 1.9.5.msysgit.0 correctly
 
 2.030     2015-02-28 20:43:24+0100 Europe/Paris
  - no functional changes

@@ -166,7 +166,7 @@ sub skip_unless_git_version
   my $need_version = shift;
 
   $git_version = version->parse(
-    Git::Wrapper->new('.')->version =~ m[^( \d+ \. \d[.\d]+ )]x
+    Git::Wrapper->new('.')->version =~ m[^( \d+ (?: \. \d+ )+ )]x
   ) unless defined $git_version;
 
   if ( $git_version < version->parse($need_version) ) {
