@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - clear GPG_* environment variables to make tests more robust
+   (christopher madsen)
 
 2.031     2015-03-21 21:56:38+0100 Europe/Paris
  - no functional changes

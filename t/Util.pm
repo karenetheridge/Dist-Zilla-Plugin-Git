@@ -86,7 +86,7 @@ sub _clean_environment
   my $homedir = shift;
 
   delete $ENV{V}; # In case we're being released with a manual version
-  delete $ENV{$_} for grep /^GIT_/i, keys %ENV;
+  delete $ENV{$_} for grep /^G(?:IT|PG)_/i, keys %ENV;
 
   $ENV{HOME} = $ENV{GNUPGHOME} = $homedir;
   $ENV{GIT_CONFIG_NOSYSTEM} = 1; # Don't read /etc/gitconfig
