@@ -8,13 +8,12 @@ use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
 use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
 use File::pushd qw(pushd);
-use Git::Wrapper;
 use List::MoreUtils qw(firstidx);
 use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
 
-use t::Util qw(clean_environment);
+use t::Util qw(clean_environment init_repo);
 
 which('gpg')
     ? plan tests => 8
@@ -34,11 +33,8 @@ my $zilla = Dist::Zilla::Tester->from_config({
 
 {
   my $dir = pushd(path($zilla->tempdir)->child('source'));
-  system "git init";
-  my $git = Git::Wrapper->new('.');
+  my $git = init_repo('.');
 
-  $git->config( 'user.name'  => 'dzp-git test' );
-  $git->config( 'user.email' => 'dzp-git@test' );
   $git->config( 'user.signingkey' => '7D85ED44');
   $git->add( qw{ dist.ini Changes } );
   $git->commit( { message => 'initial commit' } );

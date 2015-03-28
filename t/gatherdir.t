@@ -5,8 +5,6 @@ use warnings;
 
 use Dist::Zilla     1.093250;
 use Test::DZil;
-use File::pushd;
-use Git::Wrapper;
 use Path::Tiny 0.012 qw( path );
 use Test::More      tests => 5;
 
@@ -70,33 +68,8 @@ for my $test (
       },
     );
 
-    for my $token (pushd( path($tzil->tempdir)->child('source')->stringify )) {
-      system "git init" and die "error initializing git repo";
-    }
-    my $git = Git::Wrapper->new( path($tzil->tempdir)->child('source')->stringify );
-    $git->config( 'user.name'  => 'dzp-git test' );
-    $git->config( 'user.email' => 'dzp-git@test' );
-
-    # If core.autocrlf is true, the git add comand below may hang on
-    # Windows.  This is probably a bug in Git::Wrapper, but a
-    # workaround is to set autocrlf to false.  It seems to be caused
-    # by these warning messages (from git version 1.8.5.2.msysgit.0):
-    #   warning: LF will be replaced by CRLF in .gitignore.
-    #   The file will have its original line endings in your working directory.
-    #   warning: LF will be replaced by CRLF in .tracked.
-    #   The file will have its original line endings in your working directory.
-    #   warning: LF will be replaced by CRLF in share/tracked.
-    #   The file will have its original line endings in your working directory.
-    #   warning: LF will be replaced by CRLF in tracked.
-    #   The file will have its original line endings in your working directory.
-    $git->config( 'core.autocrlf' => 'false' );
-
-    # check in tracked files
-    # we cannot ship it in the dist, since PruneCruft plugin would trim it
-    #   Don't use --force, because only -f works before git 1.5.6
-    $git->add( -f => qw(lib share tracked .tracked .gitignore) );
-    $git->commit( { message=>'files known to git' } );
-
+    my $git = init_repo( path($tzil->tempdir)->child('source')->stringify,
+                         qw(lib share tracked .tracked .gitignore) );
     $tzil->build;
 
     is_deeply(

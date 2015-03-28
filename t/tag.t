@@ -6,12 +6,11 @@ use warnings;
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::pushd qw(pushd);
-use Git::Wrapper;
 use List::MoreUtils qw(firstidx);
 use Path::Tiny 0.012 qw( path ); # cwd
 use Test::More   tests => 8;
 
-use t::Util qw(clean_environment);
+use t::Util qw(clean_environment init_repo);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -24,13 +23,7 @@ my $zilla = Dist::Zilla::Tester->from_config({
 
 {
   my $dir = pushd(path($zilla->tempdir)->child('source'));
-  system "git init";
-  my $git = Git::Wrapper->new('.');
-
-  $git->config( 'user.name'  => 'dzp-git test' );
-  $git->config( 'user.email' => 'dzp-git@test' );
-  $git->add( qw{ dist.ini Changes } );
-  $git->commit( { message => 'initial commit' } );
+  my $git = init_repo(qw{ .  dist.ini Changes } );
 
   # do the release
   $zilla->release;

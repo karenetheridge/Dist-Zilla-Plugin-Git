@@ -5,12 +5,11 @@ use warnings;
 
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use Git::Wrapper;
 use Path::Tiny qw(path);
 use Test::More   tests => 8;
 use Try::Tiny qw(try);
 
-use t::Util qw( chdir_original_cwd clean_environment );
+use t::Util qw( chdir_original_cwd clean_environment init_repo );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -22,13 +21,8 @@ my $zilla = Dist::Zilla::Tester->from_config({ dist_root => $corpus_dir, });
 
 # build fake repository
 chdir path( $zilla->tempdir )->child('source');
-system "git init -q";
 
-my $git = Git::Wrapper->new('.');
-$git->config( 'user.name'  => 'dzp-git test' );
-$git->config( 'user.email' => 'dzp-git@test' );
-$git->add( qw{ dist.ini Changes } );
-$git->commit( { message => 'initial commit' } );
+my $git = init_repo( qw{ .   dist.ini Changes } );
 
 $zilla->build;
 ok( $git->rev_parse('-q', '--verify', 'refs/heads/build/master'), 'source repo has the "build/master" branch')
@@ -51,10 +45,7 @@ my $zilla2 = Dist::Zilla::Tester->from_config({
 
 # build fake repository
 chdir path( $zilla2->tempdir )->child('source');
-system "git init -q";
-my $git2 = Git::Wrapper->new('.');
-$git2->config( 'user.name'  => 'dzp-git test' );
-$git2->config( 'user.email' => 'dzp-git@test' );
+my $git2 = init_repo('.');
 $git2->remote('add','origin', path( $zilla->tempdir )->child('source')->stringify);
 $git2->fetch;
 $git2->reset('--hard','origin/master');
@@ -72,10 +63,7 @@ my $zilla3 = Dist::Zilla::Tester->from_config({
 
 # build fake repository
 chdir path($zilla3->tempdir)->child('source');
-system "git init -q";
-my $git3 = Git::Wrapper->new('.');
-$git3->config( 'user.name'  => 'dzp-git test' );
-$git3->config( 'user.email' => 'dzp-git@test' );
+my $git3 = init_repo('.');
 $git3->remote('add','origin', path( $zilla->tempdir )->child('source')->stringify);
 $git3->fetch;
 $git3->branch('build/master', 'origin/build/master');

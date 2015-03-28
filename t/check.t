@@ -6,11 +6,10 @@ use warnings;
 use Dist::Zilla     1.093250;
 use Test::DZil qw{ Builder simple_ini };
 use File::pushd qw{ pushd };
-use Git::Wrapper;
 use Path::Tiny 0.012 qw(path); # cwd
 use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
-use t::Util qw( clean_environment throws_ok );
+use t::Util qw( clean_environment init_repo throws_ok );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -38,16 +37,7 @@ sub new_tzil
   );
 
   $pushd = pushd(path($zilla->tempdir)->child('source'));
-  print "# ";                   # Comment output of git init
-  system "git init";
-  $git   = Git::Wrapper->new('.');
-  $git->config( 'user.name'  => 'dzp-git test' );
-  $git->config( 'user.email' => 'dzp-git@test' );
-
-  # create initial commit
-  #   Don't use --force, because only -f works before git 1.5.6
-  $git->add( -f => '.gitignore');
-  $git->commit( { message=>'ignore file for git' } );
+  $git   = init_repo( qw{ .  .gitignore } );
 } # end new_tzil
 
 #---------------------------------------------------------------------

@@ -5,12 +5,11 @@ use warnings;
 
 use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
-use Git::Wrapper;
 use Path::Tiny 0.012 qw(path); # cwd
 use File::Copy 'move';
 use Test::More   tests => 1;
 
-use t::Util qw(chdir_original_cwd clean_environment);
+use t::Util qw(chdir_original_cwd clean_environment init_repo);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -23,10 +22,7 @@ my $zilla = Dist::Zilla::Tester->from_config({
 
 chdir path($zilla->tempdir)->child( 'source' );
 
-system "git init";
-my $git = Git::Wrapper->new('.');
-$git->config( 'user.name'  => 'dzp-git test' );
-$git->config( 'user.email' => 'dzp-git@test' );
+my $git = init_repo('.');
 
 mkdir 'dist';
 

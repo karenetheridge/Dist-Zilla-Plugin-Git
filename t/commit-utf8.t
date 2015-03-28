@@ -9,13 +9,12 @@ use Dist::Zilla::Tester;
 use Encode qw( decode );
 use File::pushd qw(pushd);
 use Path::Tiny 0.012 qw(path); # cwd
-use Git::Wrapper;
 use Test::More;
 
 plan skip_all => "Dist::Zilla 5 required" if Dist::Zilla->VERSION < 5;
 plan tests => 1;
 
-use t::Util qw(clean_environment);
+use t::Util qw(clean_environment init_repo);
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -45,12 +44,7 @@ END CHANGES
 {
   my $dir = pushd(path($zilla->tempdir)->child('source'));
 
-  system "git init";
-  my $git = Git::Wrapper->new('.');
-  $git->config( 'user.name'  => 'dzp-git test' );
-  $git->config( 'user.email' => 'dzp-git@test' );
-  $git->add( qw{ dist.ini Changes } );
-  $git->commit( { message => 'initial commit' } );
+  my $git = init_repo( qw{ .  dist.ini Changes } );
 
   # do a release, with changes and dist.ini updated
   append_to_file('Changes',  "\n");

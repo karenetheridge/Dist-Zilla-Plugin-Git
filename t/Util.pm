@@ -36,7 +36,7 @@ use Exporter ();
 our @ISA    = qw(Exporter);
 our @EXPORT = qw($base_dir $git_dir $git $zilla
                  append_and_add append_to_file chdir_original_cwd
-                 clean_environment init_test keep_tempdir
+                 clean_environment init_repo init_test keep_tempdir
                  new_zilla_from_repo
                  skip_unless_git_version slurp_text_file
                  zilla_log_is);
@@ -135,15 +135,45 @@ sub init_test
     }
   } # end if add_files
 
-  my $pushd = pushd($git_dir);
-  system "git init --quiet" and die "Can't initialize repo";
+  $git = init_repo($git_dir);
+} # end init_test
 
-  $git = Git::Wrapper->new("$git_dir");
+#---------------------------------------------------------------------
+# Init a Git repo and set defaults.
+# Returns a Git::Wrapper for the new repo.
+# If @initial_files are supplied, also does add -f and commits.
+
+sub init_repo
+{
+  my ($git_dir, @initial_files) = @_;
+
+  {
+    my $pushd = pushd($git_dir);
+    system qw(git init --quiet) and die "Can't initialize repo in $git_dir";
+  }
+
+  my $git = Git::Wrapper->new("$git_dir");
 
   $git->config( 'push.default' => 'matching' ); # compatibility with Git 1.8
   $git->config( 'user.name'  => 'dzp-git test' );
   $git->config( 'user.email' => 'dzp-git@test' );
-} # end init_test
+
+  # If core.autocrlf is true, then git add may hang on Windows.
+  # This is probably a bug in Git::Wrapper, but a workaround is to set
+  # autocrlf to false.  It seems to be caused by these warning messages
+  # (from git version 1.8.5.2.msysgit.0):
+  #   warning: LF will be replaced by CRLF in .gitignore.
+  #   The file will have its original line endings in your working directory.
+  $git->config( 'core.autocrlf' => 'false' );
+
+  if (@initial_files) {
+    # Don't use --force, because only -f works before git 1.5.6
+    $git->add(-f => @initial_files);
+    $git->commit( { message => 'initial commit' } );
+  }
+
+  $git;
+} # end init_repo
 
 #---------------------------------------------------------------------
 sub keep_tempdir
