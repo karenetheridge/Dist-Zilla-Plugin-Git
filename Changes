@@ -1,6 +1,9 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - rewrite Git::GatherDir to handle non-default root properly.
+   It now supports "~user/" as well as "~/".
+   (christopher madsen, reported by karen etheridge - rt#101851)
  - clear GPG_* environment variables to make tests more robust
    (christopher madsen)
 

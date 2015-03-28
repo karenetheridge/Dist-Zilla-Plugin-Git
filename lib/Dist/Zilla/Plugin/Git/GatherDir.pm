@@ -3,9 +3,19 @@ package Dist::Zilla::Plugin::Git::GatherDir;
 
 
 use Moose;
-use MooseX::Types::Path::Tiny qw(Path);
 extends 'Dist::Zilla::Plugin::GatherDir' => { -version => 4.200016 }; # exclude_match
-with 'Dist::Zilla::Role::Git::Repo';
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+    [Git::GatherDir]
+    root = .                     ; this is the default
+    prefix =                     ; this is the default
+    include_dotfiles = 0         ; this is the default
+    include_untracked = 0        ; this is the default
+    exclude_filename = dir/skip  ; there is no default
+    exclude_match = ^local_      ; there is no default
 
 =head1 DESCRIPTION
 
@@ -34,9 +44,7 @@ files into a subdir of your dist, you might write:
 
 =cut
 
-use File::Spec;
 use List::AllUtils qw(uniq);
-use Path::Tiny;
 
 use namespace::autoclean;
 
@@ -44,7 +52,10 @@ use namespace::autoclean;
 
 This is the directory in which to look for files.  If not given, it defaults to
 the dist root -- generally, the place where your F<dist.ini> or other
-configuration file is located.
+configuration file is located.  It may begin with C<~> (or C<~user>)
+to mean your (or some other user's) home directory.  If a relative path,
+it's relative to the dist root.  It does not need to be the root of a
+Git repository, but it must be inside a repository.
 
 =attr prefix
 
@@ -128,12 +139,21 @@ override gather_files => sub {
   my ($self) = @_;
 
   require Git::Wrapper;
+  require Path::Tiny;
 
   my $root = "" . $self->root;
-  $root =~ s{^~([\\/])}{require File::HomeDir; File::HomeDir->my_home . $1}e;
-  $root = Path::Tiny::path($root);
+  # Convert ~ to home directory:
+  if ($root =~ /^~/) {
+    require File::HomeDir;
+    File::HomeDir->VERSION(0.81);
 
-  my $git = Git::Wrapper->new("$root");
+    $root =~ s/^~(\w+)/ File::HomeDir->users_home("$1") /e;
+    $root =~ s/^~/      File::HomeDir->my_home /e;
+  } # end if $root begins with ~
+  $root = Path::Tiny::path($root)->absolute($self->zilla->root->absolute);
+
+  # Prepare to gather files
+  my $git = Git::Wrapper->new($root->stringify);
 
   my @opts;
   @opts = qw(--cached --others --exclude-standard) if $self->include_untracked;
@@ -144,33 +164,39 @@ override gather_files => sub {
 
   my %is_excluded = map {; $_ => 1 } @{ $self->exclude_filename };
 
-  my @files;
-  FILE: for my $filename (uniq $git->ls_files(@opts)) {
-    my $file = Path::Tiny::path($filename)->relative($root);
+  my $prefix = $self->prefix;
 
+  # Loop over files reported by git ls-files
+  for my $filename (uniq $git->ls_files(@opts)) {
+    # $file is a Path::Tiny relative to $root
+    my $file = Path::Tiny::path($filename);
+
+    $self->log_debug("considering $file");
+
+    # Exclusion tests
     unless ($self->include_dotfiles) {
-      next FILE if $file->basename =~ qr/^\./;
-      next FILE if grep { /^\.[^.]/ } split q{/}, $file->parent->stringify;
+      next if grep { /^\./ } split q{/}, $file->stringify;
     }
 
     next if $file =~ $exclude_regex;
     next if $is_excluded{ $file };
 
-    if (-d $file) {
+    # DZil can't gather directory symlinks
+    my $path = $root->child($file);
+
+    if (-d $path) {
       $self->log("WARNING: $file is symlink to directory, skipping it");
       next;
     }
 
-    push @files, $self->_file_from_filename($filename);
-  }
+    # Gather the file
+    my $fileobj = $self->_file_from_filename($path->stringify);
 
-  for my $file (@files) {
-    (my $newname = $file->name) =~ s{\A\Q$root\E[\\/]}{}g;
-    $newname = File::Spec->catdir($self->prefix, $newname) if $self->prefix;
-    $newname = Path::Tiny::path($newname)->stringify;
+    $file = Path::Tiny::path($prefix, $file) if length $prefix;
 
-    $file->name($newname);
-    $self->add_file($file);
+    $fileobj->name($file->stringify);
+    $self->add_file($fileobj);
+    $self->log_debug("gathered $file");
   }
 
   return;
