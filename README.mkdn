@@ -4,28 +4,67 @@ Dist::Zilla::Plugin::Git - update your git repository after release
 
 # VERSION
 
-version 2.032
+version 2.033
 
 # DESCRIPTION
 
 This set of plugins for [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) can do interesting things for
-module authors using Git ([http://git-scm.com](http://git-scm.com)) to track their work. The
-following plugins are provided in this distribution:
-
-- [Dist::Zilla::Plugin::Git::Check](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Check)
-- [Dist::Zilla::Plugin::Git::Commit](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Commit)
-- [Dist::Zilla::Plugin::Git::CommitBuild](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::CommitBuild)
-- [Dist::Zilla::Plugin::Git::GatherDir](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::GatherDir)
-- [Dist::Zilla::Plugin::Git::Init](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Init)
-- [Dist::Zilla::Plugin::Git::NextVersion](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::NextVersion)
-- [Dist::Zilla::Plugin::Git::Push](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Push)
-- [Dist::Zilla::Plugin::Git::Tag](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Tag)
-
-A [Dist::Zilla::PluginBundle::Git](https://metacpan.org/pod/Dist::Zilla::PluginBundle::Git) bundle is also provided for your
-convenience, check its documentation to see which plugins it will load.
+module authors using Git ([http://git-scm.com](http://git-scm.com)) to track their work.
 
 You need Git 1.5.4 or later to use these plugins.  Some plugins
 require a more recent version of Git for certain features.
+
+## The @Git Bundle
+
+The most commonly used plugins are part of the
+[@Git bundle](https://metacpan.org/pod/Dist::Zilla::PluginBundle::Git).  They are:
+
+- [Git::Check](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Check)
+
+    Before a release, check that the repo is in a clean state
+    (you have committed your changes).
+
+- [Git::Commit](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Commit)
+
+    After a release, commit updated files.
+
+- [Git::Tag](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Tag)
+
+    After a release, tag the just-released version.
+
+- [Git::Push](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Push)
+
+    After a release, push the released code & tag to your public repo.
+
+## Non-Bundled Plugins
+
+The other plugins in this distribution are not included in the @Git
+bundle, either because they conflict with [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla)'s
+[@Basic bundle](https://metacpan.org/pod/Dist::Zilla::PluginBundle::Basic) or because they
+have more specialized uses.
+
+- [Git::CommitBuild](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::CommitBuild)
+
+    Commits the released files to a separate branch of your repo.
+
+- [Git::GatherDir](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::GatherDir)
+
+    A replacement for Dist::Zilla's standard
+    [GatherDir](https://metacpan.org/pod/Dist::Zilla::Plugin::GatherDir) plugin that gathers
+    files based on whether they are tracked by Git (conflicts with @Basic
+    because that includes GatherDir).
+
+- [Git::Init](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::Init)
+
+    Can be used in a minting profile
+    ([http://dzil.org/tutorial/minting-profile.html](http://dzil.org/tutorial/minting-profile.html))
+    to initialize and configure your Git repo automatically
+    when you do `dzil&nbsp;new`.
+
+- [Git::NextVersion](https://metacpan.org/pod/Dist::Zilla::Plugin::Git::NextVersion)
+
+    Calculates the version number of your distribution from your Git tags
+    using [Version::Next](https://metacpan.org/pod/Version::Next).
 
 # SEE ALSO
 
@@ -45,7 +84,7 @@ You can look for information on this module at:
 
 - Git repository
 
-    [http://github.com/jquelin/dist-zilla-plugin-git](http://github.com/jquelin/dist-zilla-plugin-git)
+    [http://github.com/madsen/dist-zilla-plugin-git](http://github.com/madsen/dist-zilla-plugin-git)
 
 - AnnoCPAN: Annotated CPAN documentation
 
