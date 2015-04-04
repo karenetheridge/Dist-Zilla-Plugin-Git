@@ -137,8 +137,8 @@ In your F<dist.ini>:
 
 =head1 DESCRIPTION
 
-This plugin checks that git is in a clean state before releasing. The
-following checks are performed before releasing:
+This plugin checks that your Git repo is in a clean state before releasing.
+The following checks are performed before releasing:
 
 =over 4
 

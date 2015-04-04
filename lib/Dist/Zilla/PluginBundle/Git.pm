@@ -68,11 +68,40 @@ In your F<dist.ini>:
 
 =head1 DESCRIPTION
 
-This is a plugin bundle to load all git plugins. It is equivalent to:
+This is a plugin bundle to load the most common Git plugins.
+It is equivalent to:
 
     [Git::Check]
     [Git::Commit]
     [Git::Tag]
     [Git::Push]
 
-The options are passed through to the plugins.
+Any options given are passed through to each plugin.  See each
+plugin's documentation for the options it supports.  (Plugins just
+ignore options they don't understand.)
+
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Git::Check|Dist::Zilla::Plugin::Git::Check>
+
+Before a release, check that the repo is in a clean state
+(you have committed your changes).
+
+=item * L<Git::Commit|Dist::Zilla::Plugin::Git::Commit>
+
+After a release, commit updated files.
+
+=item * L<Git::Tag|Dist::Zilla::Plugin::Git::Tag>
+
+After a release, tag the just-released version.
+
+=item * L<Git::Push|Dist::Zilla::Plugin::Git::Push>
+
+After a release, push the released code & tag to your public repo.
+
+=back
+
+For a list of Git plugins in this distribution that are not part of
+this bundle, see L<Dist::Zilla::Plugin::Git>.

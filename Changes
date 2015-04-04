@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - rewrite documentation to make it clear which plugins are part of @Git
+   (christopher madsen, reported by kent fredric - rt#101911)
 
 2.032     2015-03-28 21:38:59+0100 Europe/Paris (TRIAL RELEASE)
  - rewrite Git::GatherDir to handle non-default root properly.
