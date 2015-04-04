@@ -68,8 +68,7 @@ Revision history for Dist::Zilla::Plugin::Git
    With Dist::Zilla 5, Git::Commit now writes the commit message in UTF-8
    (christopher madsen, reported by kent fredric)
 
-2.018     2013-11-02 23:24:33 Europe/Paris
- TRIAL RELEASE
+2.018     2013-11-02 23:24:33 Europe/Paris (TRIAL RELEASE)
  - use the Config::Git plugin for shared configuration (brendan byrd)
    You don't have to use Dist::Zilla::Plugin::Config::Git unless you want to,
    but you do have to install it.
