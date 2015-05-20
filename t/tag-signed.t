@@ -8,7 +8,6 @@ use Dist::Zilla::Tester;
 use File::Copy qw{ cp };
 use File::Path 2.07 qw{ make_path }; # 2.07 required for make_path
 use File::pushd qw(pushd);
-use List::MoreUtils qw(firstidx);
 use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
@@ -49,11 +48,8 @@ my $zilla = Dist::Zilla::Tester->from_config({
   is( $tags[0], $zilla->plugin_named('Git::Tag')->tag(), 'new tag matches the tag the plugin claims is the tag.');
 
   # Check that it is a signed tag
-  my @lines = $git->show({pretty => 'short'}, 'v1.23');
-  if (my $commit_begins = firstidx { /^commit / } @lines) {
-    splice @lines, $commit_begins;
-  }
-  my $tag = join "\n", @lines;
+  my $tag = join "\n", $git->show({pretty => 'short'}, 'v1.23');
+  $tag = substr($tag, 0, index($tag, "\ncommit "));
   like( $tag, qr/^tag v1.23/m, 'Is it a real tag?' );
   like( $tag, qr/^Tagger: dzp-git test <dzp-git\@test>/m, 'Is it a real tag?' );
   like( $tag, qr/PGP SIGNATURE/m, 'Is it GPG-signed?' );
