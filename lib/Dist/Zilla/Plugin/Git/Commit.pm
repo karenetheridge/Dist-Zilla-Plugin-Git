@@ -8,7 +8,6 @@ package Dist::Zilla::Plugin::Git::Commit;
 
 use namespace::autoclean;
 use File::Temp           qw{ tempfile };
-use List::Util           qw{ first };
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str };

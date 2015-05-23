@@ -12,7 +12,6 @@ use MooseX::Types::Path::Tiny 0.010 qw{ Paths to_Paths };
 use Moose::Util::TypeConstraints;
 
 use namespace::autoclean;
-use List::Util 'first';
 use Path::Tiny 0.048 qw(); # subsumes
 use Try::Tiny;
 
