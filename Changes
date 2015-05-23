@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - replace List::AllUtils with List::MoreUtils (christopher madsen)
+ - don't "use List::MoreUtils" in tests (karen etheridge - github#23)
 
 2.033     2015-04-04 21:05:13+0200 Europe/Paris
  - no functional changes (but note Git::GatherDir change in 2.032-TRIAL)
