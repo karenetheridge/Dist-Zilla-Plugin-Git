@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+
+2.035     2015-06-06 21:50:20+0200 Europe/Paris
  - handle push.default=nothing by specifying current branch explicitly
    (christopher madsen, reported by alastair mcgowan-douglas - github#24)
 
