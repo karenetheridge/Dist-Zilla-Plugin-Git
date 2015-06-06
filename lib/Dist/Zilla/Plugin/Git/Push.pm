@@ -81,6 +81,16 @@ sub after_release {
     for my $remote ( @{ $self->push_to } ) {
       $self->log("pushing to $remote");
       my @remote = split(/\s+/,$remote);
+      if (@remote == 1) {
+        # Newer versions of Git may not push the current branch automatically.
+        # Append the current branch since the remote didn't specify a branch.
+        my $branch = $self->current_git_branch;
+        unless (defined $branch) {
+          $self->log("skipped push to @remote (can't determine branch to push)");
+          next;
+        }
+        push @remote, $branch;
+      }
       $self->log_debug($_) for $git->push( @remote );
       $self->log_debug($_) for $git->push( { tags=>1 },  $remote[0] );
     }
