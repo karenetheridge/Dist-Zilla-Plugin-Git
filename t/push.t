@@ -25,6 +25,7 @@ $git->clone( { quiet=>1, 'no-checkout'=>1, bare=>1 }, "$git_dir", "$clone" );
 $git->remote('add', 'origin', "$clone");
 $git->config('branch.master.remote', 'origin');
 $git->config('branch.master.merge', 'refs/heads/master');
+$git->config('push.default', 'nothing');
 
 # do the release
 append_to_file('Changes',  "\n");
