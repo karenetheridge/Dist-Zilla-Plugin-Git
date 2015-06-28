@@ -22,35 +22,36 @@ use String::Formatter method_stringf => {
   },
 };
 
+use MooseX::Types::Moose qw(Str Bool ArrayRef);
 with 'Dist::Zilla::Role::AfterMint';
 
 has commit_message => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => Str,
     default => 'initial commit',
 );
 
 has commit => (
     is      => 'ro',
-    isa     => 'Bool',
+    isa     => Bool,
     default => 1,
 );
 
 has branch => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => Str,
     default => '',
 );
 
 has remotes => (
   is   => 'ro',
-  isa  => 'ArrayRef[Str]',
+  isa  => ArrayRef[Str],
   default => sub { [] },
 );
 
 has config_entries => (
   is   => 'ro',
-  isa  => 'ArrayRef[Str]',
+  isa  => ArrayRef[Str],
   default => sub { [] },
 );
 

@@ -3,8 +3,9 @@ package Dist::Zilla::Role::Git::Repo;
 
 
 use Moose::Role;
+use MooseX::Types::Moose qw(Str Maybe);
 
-has 'repo_root'   => ( is => 'ro', isa => 'Str', default => '.' );
+has 'repo_root'   => ( is => 'ro', isa => Str, default => '.' );
 
 =method current_git_branch
 
@@ -18,7 +19,7 @@ be updated if the branch is changed during the run.
 
 has current_git_branch => (
     is => 'ro',
-    isa => 'Maybe[Str]',
+    isa => Maybe[Str],
     lazy => 1,
     builder => '_build_current_git_branch',
     init_arg => undef,          # Not configurable

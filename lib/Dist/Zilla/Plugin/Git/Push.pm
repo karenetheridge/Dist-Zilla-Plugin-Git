@@ -8,7 +8,7 @@ package Dist::Zilla::Plugin::Git::Push;
 
 use Moose;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ ArrayRef Str };
+use MooseX::Types::Moose qw{ ArrayRef Str Bool };
 
 use namespace::autoclean;
 
@@ -25,11 +25,11 @@ sub _git_config_mapping { +{
 
 # -- attributes
 
-has remotes_must_exist => ( ro, isa=>'Bool', default=>1 );
+has remotes_must_exist => ( ro, isa=>Bool, default=>1 );
 
 has push_to => (
   is   => 'ro',
-  isa  => 'ArrayRef[Str]',
+  isa  => ArrayRef[Str],
   lazy => 1,
   default => sub { [ qw(origin) ] },
 );

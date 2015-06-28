@@ -13,6 +13,7 @@ use namespace::autoclean 0.09;
 use Path::Tiny qw();
 use Try::Tiny;
 use Moose::Util::TypeConstraints;
+use MooseX::Types::Moose qw(Str RegexpRef Bool ArrayRef);
 
 use constant _cache_fn => '.gitnxtver_cache';
 
@@ -25,17 +26,17 @@ with 'Dist::Zilla::Role::Git::Repo';
 # -- attributes
 
 use constant _CoercedRegexp => do {
-    my $tc = subtype as 'RegexpRef';
-    coerce $tc, from 'Str', via { qr/$_/ };
+    my $tc = subtype as RegexpRef;
+    coerce $tc, from Str, via { qr/$_/ };
     $tc;
 };
 
 has version_regexp  => ( is => 'ro', isa=> _CoercedRegexp, coerce => 1,
                          default => sub { qr/^v(.+)$/ } );
 
-has first_version  => ( is => 'ro', isa=>'Str', default => '0.001' );
+has first_version  => ( is => 'ro', isa=>Str, default => '0.001' );
 
-has version_by_branch  => ( is => 'ro', isa=>'Bool', default => 0 );
+has version_by_branch  => ( is => 'ro', isa=>Bool, default => 0 );
 
 sub _versions_from_tags {
   my ($regexp, $tags) = @_;
@@ -46,7 +47,7 @@ sub _versions_from_tags {
 } # end _versions_from_tags
 
 has _all_versions => (
-  is => 'ro',  isa=>'ArrayRef',  init_arg => undef,  lazy => 1,
+  is => 'ro',  isa=>ArrayRef,  init_arg => undef,  lazy => 1,
   default => sub {
     my $self = shift;
     my $v = _versions_from_tags($self->version_regexp, [ $self->git->tag ]);

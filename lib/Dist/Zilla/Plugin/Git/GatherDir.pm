@@ -45,6 +45,7 @@ files into a subdir of your dist, you might write:
 =cut
 
 use List::MoreUtils qw(uniq);
+use MooseX::Types::Moose qw(Bool);
 
 use namespace::autoclean;
 
@@ -117,7 +118,7 @@ multiple times to specify multiple patterns to exclude.
 
 has include_untracked => (
   is  => 'ro',
-  isa => 'Bool',
+  isa => Bool,
   default => 0,
 );
 

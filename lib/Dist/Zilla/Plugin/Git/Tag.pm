@@ -8,7 +8,7 @@ package Dist::Zilla::Plugin::Git::Tag;
 
 use Moose;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ Str };
+use MooseX::Types::Moose qw{ Str Bool};
 
 sub _git_config_mapping { +{
    changelog => '%{changelog}s',
@@ -20,7 +20,7 @@ has tag_format  => ( ro, isa=>Str, default => 'v%v' );
 has tag_message => ( ro, isa=>Str, default => 'v%v' );
 has changelog   => ( ro, isa=>Str, default => 'Changes' );
 has branch => ( ro, isa=>Str, predicate=>'has_branch' );
-has signed => ( ro, isa=>'Bool', default=>0 );
+has signed => ( ro, isa=>Bool, default=>0 );
 
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::AfterRelease';

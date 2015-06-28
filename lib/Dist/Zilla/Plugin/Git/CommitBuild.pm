@@ -17,7 +17,7 @@ use namespace::autoclean;
 use Path::Tiny qw();
 use MooseX::Types::Path::Tiny qw( Path );
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ Str };
+use MooseX::Types::Moose qw{ Str Bool };
 use Cwd qw(abs_path);
 use Try::Tiny;
 
@@ -56,7 +56,7 @@ has build_root => ( rw, coerce => 1, isa => Path );
 
 has _source_branch => (
     is      => 'ro',
-    isa     => 'Str',
+    isa     => Str,
     lazy    => 1,
     init_arg=> undef,
     default => sub {
@@ -66,7 +66,7 @@ has _source_branch => (
 
 has multiple_inheritance => (
     is      => 'ro',
-    isa     => 'Bool',
+    isa     => Bool,
     default => 0,
 );
 
