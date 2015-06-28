@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - keep dumped configs consistent between builds
 
 2.035     2015-06-06 21:50:20+0200 Europe/Paris
  - handle push.default=nothing by specifying current branch explicitly

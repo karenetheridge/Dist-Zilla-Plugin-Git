@@ -43,7 +43,8 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        map { $_ => $self->$_ } qw(commit_msg time_zone add_files_in),
+        commit_msg => $self->commit_msg,
+        add_files_in => [ sort @{ $self->add_files_in } ],
     };
 
     return $config;

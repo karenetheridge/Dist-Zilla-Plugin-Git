@@ -42,7 +42,8 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        map { $_ => $self->$_ } qw(push_to remotes_must_exist),
+        push_to => $self->push_to,
+        remotes_must_exist => $self->remotes_must_exist ? 1 : 0,
     };
 
     return $config;

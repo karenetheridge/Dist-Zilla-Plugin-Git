@@ -84,8 +84,9 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        map { $_ => $self->$_ }
-            qw(branch release_branch message release_message build_root multiple_inheritance),
+        (map { $_ => $self->$_ }
+            qw(branch release_branch message release_message build_root)),
+        multiple_inheritance => $self->multiple_inheritance ? 1 : 0,
     };
 
     return $config;

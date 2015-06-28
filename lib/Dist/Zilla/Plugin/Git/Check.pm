@@ -34,6 +34,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
+        # build_warnings does not affect the build outcome; do not need to track it
         untracked_files => $self->untracked_files,
     };
 

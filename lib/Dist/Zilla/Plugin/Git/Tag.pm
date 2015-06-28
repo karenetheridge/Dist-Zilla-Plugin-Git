@@ -56,7 +56,8 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        map { $_ => $self->$_ } qw(tag_format tag_message time_zone branch signed tag),
+        (map { $_ => $self->$_ } qw(tag_format tag_message changelog branch tag)),
+        signed => $self->signed ? 1 : 0,
     };
 
     return $config;

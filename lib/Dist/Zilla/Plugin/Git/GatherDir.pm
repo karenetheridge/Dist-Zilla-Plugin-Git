@@ -129,7 +129,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        include_untracked => $self->include_untracked,
+        include_untracked => $self->include_untracked ? 1 : 0,
     };
 
     return $config;

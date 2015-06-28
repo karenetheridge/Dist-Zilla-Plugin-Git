@@ -93,7 +93,8 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        map { $_ => $self->$_ } qw(allow_dirty allow_dirty_match changelog),
+        (map { $_ => [ sort @{ $self->$_ } ] } qw(allow_dirty allow_dirty_match)),
+        changelog => $self->changelog,
     };
 
     return $config;
