@@ -10,8 +10,6 @@ use Moose;
 use namespace::autoclean 0.09;
 use Moose::Util::TypeConstraints qw(enum);
 
-use constant _DieWarnIgnore => do { enum [qw[ die warn ignore ]] };
-
 with 'Dist::Zilla::Role::AfterBuild';
 with 'Dist::Zilla::Role::BeforeRelease';
 with 'Dist::Zilla::Role::Git::Repo';
@@ -20,7 +18,7 @@ with 'Dist::Zilla::Role::GitConfig';
 
 has build_warnings => ( is=>'ro', isa => 'Bool', default => 0 );
 
-has untracked_files => ( is=>'ro', isa => _DieWarnIgnore, default => 'die' );
+has untracked_files => ( is=>'ro', isa => enum([qw(die warn ignore)]), default => 'die' );
 
 sub _git_config_mapping { +{
    changelog => '%{changelog}s',
