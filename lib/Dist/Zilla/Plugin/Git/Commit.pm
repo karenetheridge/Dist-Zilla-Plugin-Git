@@ -15,8 +15,8 @@ use MooseX::Types::Path::Tiny 0.010 qw{ Paths };
 use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
 
-with 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::Git::StringFormatter';
 with 'Dist::Zilla::Role::GitConfig';

@@ -17,11 +17,11 @@ use MooseX::Types::Moose qw(Str RegexpRef Bool ArrayRef);
 
 use constant _cache_fn => '.gitnxtver_cache';
 
-with 'Dist::Zilla::Role::BeforeRelease';
-with 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::FilePruner';
-with 'Dist::Zilla::Role::VersionProvider';
-with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::BeforeRelease',
+    'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::FilePruner',
+    'Dist::Zilla::Role::VersionProvider',
+    'Dist::Zilla::Role::Git::Repo';
 
 # -- attributes
 

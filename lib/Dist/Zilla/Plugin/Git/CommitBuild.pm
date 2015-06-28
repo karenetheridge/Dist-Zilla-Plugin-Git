@@ -43,8 +43,9 @@ use String::Formatter (
 # debugging...
 #use Smart::Comments '###';
 
-with 'Dist::Zilla::Role::AfterBuild', 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::Git::Repo';
+with 'Dist::Zilla::Role::AfterBuild',
+    'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::Git::Repo';
 
 # -- attributes
 

@@ -12,10 +12,10 @@ use MooseX::Types::Moose qw{ ArrayRef Str Bool };
 
 use namespace::autoclean;
 
-with 'Dist::Zilla::Role::BeforeRelease';
-with 'Dist::Zilla::Role::AfterRelease';
-with 'Dist::Zilla::Role::Git::Repo';
-with 'Dist::Zilla::Role::GitConfig';
+with 'Dist::Zilla::Role::BeforeRelease',
+    'Dist::Zilla::Role::AfterRelease';
+with 'Dist::Zilla::Role::Git::Repo',
+    'Dist::Zilla::Role::GitConfig';
 
 sub mvp_multivalue_args { qw(push_to) }
 

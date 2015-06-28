@@ -22,10 +22,10 @@ has changelog   => ( ro, isa=>Str, default => 'Changes' );
 has branch => ( ro, isa=>Str, predicate=>'has_branch' );
 has signed => ( ro, isa=>Bool, default=>0 );
 
-with 'Dist::Zilla::Role::BeforeRelease';
-with 'Dist::Zilla::Role::AfterRelease';
+with 'Dist::Zilla::Role::BeforeRelease',
+    'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::StringFormatter';
-with 'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::GitConfig';
 
 =method tag
