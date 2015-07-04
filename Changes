@@ -1,7 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
- - keep dumped configs consistent between builds
+
+2.036     2015-07-04 19:11:06+0200 Europe/Paris
+ - keep dumped configs consistent between builds (karen etheridge - github#25)
+ - use MooseX::Types in all modules (karen etheridge - github#25)
 
 2.035     2015-06-06 21:50:20+0200 Europe/Paris
  - handle push.default=nothing by specifying current branch explicitly
