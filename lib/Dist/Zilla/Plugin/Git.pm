@@ -8,6 +8,7 @@ package Dist::Zilla::Plugin::Git;
 our $VERSION = '2.037';
 
 use Dist::Zilla 2.100880;    # Need mvp_multivalue_args in Plugin role
+use namespace::autoclean;
 1;
 __END__
 

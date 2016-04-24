@@ -25,6 +25,7 @@ use String::Formatter method_stringf => {
 
 use MooseX::Types::Moose qw(Str Bool ArrayRef);
 with 'Dist::Zilla::Role::AfterMint';
+use namespace::autoclean;
 
 has commit_message => (
     is      => 'ro',

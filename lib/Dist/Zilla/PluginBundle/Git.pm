@@ -9,6 +9,7 @@ our $VERSION = '2.037';
 
 use Moose;
 use Module::Runtime 'use_module';
+use namespace::autoclean;
 
 with 'Dist::Zilla::Role::PluginBundle';
 

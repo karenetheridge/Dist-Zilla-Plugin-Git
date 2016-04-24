@@ -5,6 +5,7 @@ our $VERSION = '2.037';
 
 use Moose::Role;
 use MooseX::Types::Moose qw(Str Maybe);
+use namespace::autoclean;
 
 has 'repo_root'   => ( is => 'ro', isa => Str, default => '.' );
 

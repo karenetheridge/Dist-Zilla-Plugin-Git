@@ -10,6 +10,7 @@ our $VERSION = '2.037';
 use Moose;
 use MooseX::Has::Sugar;
 use MooseX::Types::Moose qw{ Str Bool};
+use namespace::autoclean;
 
 sub _git_config_mapping { +{
    changelog => '%{changelog}s',
