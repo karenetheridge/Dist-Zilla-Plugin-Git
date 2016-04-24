@@ -10,7 +10,7 @@ use version 0.80 ();
 
 use Moose;
 use namespace::autoclean 0.09;
-use Path::Tiny qw();
+use Path::Tiny;
 use Try::Tiny;
 use Moose::Util::TypeConstraints;
 use MooseX::Types::Moose qw(Str RegexpRef Bool ArrayRef);
@@ -77,7 +77,7 @@ sub _last_version {
 
   if ($by_branch) {
     my $head;
-    my $cachefile = Path::Tiny::path(_cache_fn);
+    my $cachefile = path(_cache_fn);
     if (-f $cachefile) {
       ($head) = $git->rev_parse('HEAD');
       return $1 if $cachefile->slurp =~ /^\Q$head\E (.+)/;
@@ -143,7 +143,7 @@ sub after_release {
   my $self = shift;
 
   # Remove the cache file, just in case:
-  $self->zilla->root->file(_cache_fn)->remove;
+  path($self->zilla->root)->child(_cache_fn)->remove;
 }
 
 sub provide_version {

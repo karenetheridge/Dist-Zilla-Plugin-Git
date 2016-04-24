@@ -2,6 +2,7 @@ Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
  - remove remaining uses of List::MoreUtils (Karen Etheridge)
+ - remove last vestiges of Path::Class, for Dist::Zilla v6 compatibility
 
 2.036     2015-07-04 19:11:06+0200 Europe/Paris
  - keep dumped configs consistent between builds (karen etheridge - github#25)
