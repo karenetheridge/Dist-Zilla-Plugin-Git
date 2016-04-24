@@ -1,6 +1,10 @@
 # avoid dist::zilla generated and utility files
-.build
-tmp/
+/.ackrc
+/.build/
+!/.gitignore
+/.latest
+/tmp/
 
 # avoid archives of this distribution
-Dist-Zilla-Plugin-Git-*
+/Dist-Zilla-Plugin-Git-*/
+/Dist-Zilla-Plugin-Git-*.tar.gz

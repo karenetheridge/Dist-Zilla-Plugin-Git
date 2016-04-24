@@ -5,6 +5,7 @@ use warnings;
 package Dist::Zilla::PluginBundle::Git;
 # ABSTRACT: all git plugins in one go
 
+our $VERSION = '2.037';
 
 use Moose;
 use Module::Runtime 'use_module';

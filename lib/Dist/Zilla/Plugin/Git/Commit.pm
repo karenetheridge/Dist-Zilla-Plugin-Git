@@ -5,6 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Commit;
 # ABSTRACT: commit dirty files
 
+our $VERSION = '2.037';
 
 use namespace::autoclean;
 use File::Temp           qw{ tempfile };
