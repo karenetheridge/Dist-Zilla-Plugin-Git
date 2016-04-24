@@ -1,5 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+{{$NEXT}}
+
 2.037     2016-04-24 23:14:59Z (TRIAL RELEASE)
  - remove remaining uses of List::MoreUtils (Karen Etheridge)
  - remove last vestiges of Path::Class, for Dist::Zilla v6 compatibility
