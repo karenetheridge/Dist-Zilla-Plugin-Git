@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+ - fix Makefile.PL for when git is not installed or too old
 
 2.037     2016-04-24 23:14:59Z (TRIAL RELEASE)
  - remove remaining uses of List::MoreUtils (Karen Etheridge)
