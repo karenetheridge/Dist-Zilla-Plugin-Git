@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::Git - update your git repository after release
 
 =head1 VERSION
 
-version 2.037
+version 2.038
 
 =head1 DESCRIPTION
 
@@ -129,7 +129,7 @@ Jerome Quelin
 
 =head1 CONTRIBUTORS
 
-=for stopwords Christopher J. Madsen J�r�me Quelin Kent Fredric Yanick Champoux Karen Etheridge Ricardo Signes David Golden Graham Knop Chris Weyl Mike Friedman Your Name Stephen R. Scaffidi Randy Stauner Apocalypse Doherty Barr Brian Phillips Matt Follett Michael Schout Brendan Byrd Nigel Metheringham Olivier Mengu� Alessandro Ghedini Tatsuhiko Miyagawa Tuomas Jormola Alexandr Ciornii Harley Pig Jesse Luehrs Geoffrey Broadwell Steinbrunner
+=for stopwords Christopher J. Madsen Jérôme Quelin Kent Fredric Karen Etheridge Yanick Champoux Ricardo Signes David Golden Graham Knop Chris Weyl Mike Friedman Your Name Stephen R. Scaffidi Randy Stauner Apocalypse Doherty Barr Brian Phillips Matt Follett Michael Schout Brendan Byrd Nigel Metheringham Olivier Mengué Alessandro Ghedini Tatsuhiko Miyagawa Tuomas Jormola Alexandr Ciornii Harley Pig Jesse Luehrs Geoffrey Broadwell Steinbrunner
 
 =over 4
 
@@ -139,7 +139,7 @@ Christopher J. Madsen <perl@cjmweb.net>
 
 =item *
 
-J�r�me Quelin <jquelin@gmail.com>
+Jérôme Quelin <jquelin@gmail.com>
 
 =item *
 
@@ -147,11 +147,11 @@ Kent Fredric <kentfredric@gmail.com>
 
 =item *
 
-Yanick Champoux <yanick@babyl.dyndns.org>
+Karen Etheridge <ether@cpan.org>
 
 =item *
 
-Karen Etheridge <ether@cpan.org>
+Yanick Champoux <yanick@babyl.dyndns.org>
 
 =item *
 
@@ -223,7 +223,7 @@ Nigel Metheringham <nigel.metheringham@dev.intechnology.co.uk>
 
 =item *
 
-Olivier Mengu� <dolmen@cpan.org>
+Olivier Mengué <dolmen@cpan.org>
 
 =item *
 

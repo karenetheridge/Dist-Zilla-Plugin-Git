@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.038     2016-04-28 04:15:25Z (TRIAL RELEASE)
  - fix Makefile.PL for when git is not installed or too old
 
 2.037     2016-04-24 23:14:59Z (TRIAL RELEASE)
