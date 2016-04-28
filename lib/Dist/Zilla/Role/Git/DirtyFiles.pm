@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Role::Git::DirtyFiles;
 # ABSTRACT: provide the allow_dirty & changelog attributes
 
-our $VERSION = '2.038';
+our $VERSION = '2.039';
 
 use Moose::Role;
 use MooseX::Types::Moose qw{ Any ArrayRef Str RegexpRef };

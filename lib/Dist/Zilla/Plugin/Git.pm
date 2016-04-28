@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git;
 # ABSTRACT: update your git repository after release
 
-our $VERSION = '2.038';
+our $VERSION = '2.039';
 
 use Dist::Zilla 2.100880;    # Need mvp_multivalue_args in Plugin role
 use namespace::autoclean;
