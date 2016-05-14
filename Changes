@@ -10,8 +10,8 @@ Revision history for Dist::Zilla::Plugin::Git
  - remove last vestiges of Path::Class, for Dist::Zilla v6 compatibility
 
 2.036     2015-07-04 19:11:06+0200 Europe/Paris
- - keep dumped configs consistent between builds (karen etheridge - github#25)
- - use MooseX::Types in all modules (karen etheridge - github#25)
+ - keep dumped configs consistent between builds (Karen Etheridge - github#25)
+ - use MooseX::Types in all modules (Karen Etheridge - github#25)
 
 2.035     2015-06-06 21:50:20+0200 Europe/Paris
  - handle push.default=nothing by specifying current branch explicitly
@@ -19,7 +19,7 @@ Revision history for Dist::Zilla::Plugin::Git
 
 2.034     2015-05-23 17:41:32+0200 Europe/Paris
  - replace List::AllUtils with List::MoreUtils (christopher madsen)
- - don't "use List::MoreUtils" in tests (karen etheridge - github#23)
+ - don't "use List::MoreUtils" in tests (Karen Etheridge - github#23)
 
 2.033     2015-04-04 21:05:13+0200 Europe/Paris
  - no functional changes (but note Git::GatherDir change in 2.032-TRIAL)
@@ -29,7 +29,7 @@ Revision history for Dist::Zilla::Plugin::Git
 2.032     2015-03-28 21:38:59+0100 Europe/Paris (TRIAL RELEASE)
  - rewrite Git::GatherDir to handle non-default root properly.
    It now supports "~user/" as well as "~/".
-   (christopher madsen, reported by karen etheridge - rt#101851)
+   (christopher madsen, reported by Karen Etheridge - rt#101851)
  - clear GPG_* environment variables to make tests more robust
    (christopher madsen)
 
@@ -44,7 +44,7 @@ Revision history for Dist::Zilla::Plugin::Git
 
 2.029     2014-12-21 22:23:24+0100 Europe/Paris
  - don't "use Moose::Autobox" (Dist::Zilla doesn't use it anymore)
-   (karen etheridge - github#22)
+   (Karen Etheridge - github#22)
 
 2.028     2014-11-30 05:48:59+0100 Europe/Paris
  - no functional changes
@@ -58,11 +58,11 @@ Revision history for Dist::Zilla::Plugin::Git
 
 2.026     2014-11-22 17:35:45+0100 Europe/Paris
  - don't "use MooseX::AttributeShortcuts" (wasn't actually using its features)
-   (christopher madsen, suggested by karen etheridge - rt#100498)
+   (christopher madsen, suggested by Karen Etheridge - rt#100498)
 
 2.025     2014-10-11 19:05:56 Europe/Paris
  - add build_warnings option to Git::Check
-   (christopher madsen, suggested by karen etheridge - rt#91057)
+   (christopher madsen, suggested by Karen Etheridge - rt#91057)
 
 2.024     2014-09-13 21:21:42 Europe/Paris
  - add branch option to Git::Init (tuomas jormola - github#21)
@@ -71,21 +71,21 @@ Revision history for Dist::Zilla::Plugin::Git
 2.023     2014-06-14 18:32:30 Europe/Paris
  - no functional changes
  - warn that Dist::Zilla::App::CommandHelper::ChainSmoking <= 1.04 is broken
-   (karen etheridge - github#20)
+   (Karen Etheridge - github#20)
 
 2.022     2014-04-19 20:29:22 Europe/Paris
  - use MX:Path::Tiny Paths type to catch config issues at startup
    (kent fredric - github#18 & christopher madsen)
- - prune files using the prune_file method (karen etheridge - github#19)
+ - prune files using the prune_file method (Karen Etheridge - github#19)
 
 2.021     2014-04-12 06:01:53 Europe/Paris
- - add support for MetaConfig (karen etheridge - github#17)
+ - add support for MetaConfig (Karen Etheridge - github#17)
  - fix tests to work on Windows (christopher madsen)
 
 2.020     2014-02-15 20:22:29 Europe/Paris
  - convert from Path::Class to Path::Tiny (kent fredric - github#16)
  - better documentation for allow_dirty_match (christopher madsen,
-   requested by karen etheridge)
+   requested by Karen Etheridge)
 
 2.019     2013-11-23 20:49:27 Europe/Paris
  - fix #90537: wide character in print with ::Commit
@@ -98,12 +98,12 @@ Revision history for Dist::Zilla::Plugin::Git
    but you do have to install it.
 
 2.017     2013-10-26 19:57:59 Europe/Paris
- - remove use of deprecated Class::MOP function (karen etheridge)
+ - remove use of deprecated Class::MOP function (Karen Etheridge)
  - make Git::CommitBuild compatible with Dist::Zilla 5
-   (kent fredric, karen etheridge, & christopher madsen)
+   (kent fredric, Karen Etheridge, & christopher madsen)
 
 2.016     2013-10-19 18:27:32 Europe/Paris
- - fix exclude_filename to not match partial paths (karen etheridge)
+ - fix exclude_filename to not match partial paths (Karen Etheridge)
    If you really intended to match a partial path, use exclude_match instead.
  - documentation typo fixed in Git::NextVersion (david steinbrunner)
 
@@ -121,7 +121,7 @@ Revision history for Dist::Zilla::Plugin::Git
  - fix rt#84491 - Git::GatherDir does not handle symlinks
    Symlinks to directories used to make it crash with a cryptic error.
    It now skips them with a warning, and this is documented.
-   (christopher madsen, reported by karen etheridge)
+   (christopher madsen, reported by Karen Etheridge)
  - mention Git::GatherDir in Git (christopher madsen, reported by kevin dawson)
 
 2.012     2013-03-27 00:41:08 Europe/Paris
