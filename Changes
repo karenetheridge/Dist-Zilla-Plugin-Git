@@ -1,5 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+{{$NEXT}}
+
 2.039     2016-05-25 04:17:42Z
  - no changes since last release
 
