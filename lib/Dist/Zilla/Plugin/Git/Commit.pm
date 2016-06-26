@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::Commit;
-# ABSTRACT: commit dirty files
+# ABSTRACT: Commit dirty files
 
 our $VERSION = '2.040';
 

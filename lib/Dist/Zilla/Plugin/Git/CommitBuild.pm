@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::CommitBuild;
-# ABSTRACT: checkin build results on separate branch
+# ABSTRACT: Check in build results on separate branch
 
 our $VERSION = '2.040';
 

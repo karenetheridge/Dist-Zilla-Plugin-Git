@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git;
-# ABSTRACT: update your git repository after release
+# ABSTRACT: Update your git repository after release
 
 our $VERSION = '2.040';
 

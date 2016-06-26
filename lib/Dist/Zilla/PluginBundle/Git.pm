@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::PluginBundle::Git;
-# ABSTRACT: all git plugins in one go
+# ABSTRACT: All git plugins in one bundle
 
 our $VERSION = '2.040';
 

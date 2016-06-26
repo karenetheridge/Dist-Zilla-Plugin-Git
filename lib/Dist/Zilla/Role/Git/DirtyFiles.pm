@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Role::Git::DirtyFiles;
-# ABSTRACT: provide the allow_dirty & changelog attributes
+# ABSTRACT: Provide the allow_dirty & changelog attributes
 
 our $VERSION = '2.040';
 

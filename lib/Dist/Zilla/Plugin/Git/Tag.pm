@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::Tag;
-# ABSTRACT: tag the new version
+# ABSTRACT: Tag the new version
 
 our $VERSION = '2.040';
 

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::Init;
-# ABSTRACT: initialize git repository on dzil new
+# ABSTRACT: Initialize git repository on dzil new
 
 our $VERSION = '2.040';
 

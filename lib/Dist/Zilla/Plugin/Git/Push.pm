@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::Push;
-# ABSTRACT: push current branch
+# ABSTRACT: Push current branch
 
 our $VERSION = '2.040';
 

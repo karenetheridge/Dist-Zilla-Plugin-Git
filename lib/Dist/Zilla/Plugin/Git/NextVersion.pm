@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::NextVersion;
-# ABSTRACT: provide a version number by bumping the last git release tag
+# ABSTRACT: Provide a version number by bumping the last git release tag
 
 our $VERSION = '2.040';
 

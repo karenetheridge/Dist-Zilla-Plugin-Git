@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::Plugin::Git::Check;
-# ABSTRACT: check your git repository before releasing
+# ABSTRACT: Check your git repository before releasing
 
 our $VERSION = '2.040';
 
