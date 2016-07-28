@@ -10,7 +10,8 @@ use Test::Fatal qw(exception);
 
 use Devel::SimpleTrace;
 
-use t::Util;
+use lib 't';
+use Util;
 
 eval { require Dist::Zilla::Plugin::Config::Git };
 plan skip_all => 'Dist::Zilla::Plugin::Config::Git not installed'

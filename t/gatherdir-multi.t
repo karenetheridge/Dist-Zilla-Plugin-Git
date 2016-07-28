@@ -9,7 +9,8 @@ use Test::DZil;
 use Path::Tiny 0.012 qw( path );
 use Test::More 0.88 tests => 8; # done_testing
 
-use t::Util;
+use lib 't';
+use Util;
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 my $homedir = clean_environment;

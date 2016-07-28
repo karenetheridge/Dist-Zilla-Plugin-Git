@@ -12,7 +12,8 @@ use Path::Tiny 0.012 qw(path); # cwd
 use File::Which qw{ which };
 use Test::More;
 
-use t::Util qw(clean_environment init_repo);
+use lib 't';
+use Util qw(clean_environment init_repo);
 
 which('gpg')
     ? plan tests => 8

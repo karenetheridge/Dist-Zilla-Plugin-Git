@@ -9,7 +9,8 @@ use Path::Tiny qw(path);
 use Test::More   tests => 8;
 use Try::Tiny qw(try);
 
-use t::Util qw( chdir_original_cwd clean_environment init_repo );
+use lib 't';
+use Util qw( chdir_original_cwd clean_environment init_repo );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables

@@ -7,7 +7,8 @@ use Path::Tiny qw(path);
 use Test::More 0.88;            # done_testing
 use Test::Fatal 0.006 qw( lives_ok );
 
-use t::Util qw(:DEFAULT throws_ok zilla_version);
+use lib 't';
+use Util qw(:DEFAULT throws_ok zilla_version);
 
 skip_unless_git_version('1.6.1'); # need --simplify-by-decoration
 

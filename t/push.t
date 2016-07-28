@@ -7,7 +7,8 @@ use Git::Wrapper;
 use Test::More 0.88;            # done_testing
 use Test::Fatal qw(exception);
 
-use t::Util;
+use lib 't';
+use Util;
 
 # rt#56485 - skip test to avoid failures for old git versions
 skip_unless_git_version('1.7.0');

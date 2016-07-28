@@ -1,5 +1,5 @@
 #---------------------------------------------------------------------
-package t::Util;
+package Util;
 #
 # Copyright 2012 Christopher J. Madsen
 #
