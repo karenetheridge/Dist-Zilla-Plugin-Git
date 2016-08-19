@@ -3,6 +3,8 @@ Revision history for Dist::Zilla::Plugin::Git
 {{$NEXT}}
  - fix tests to no longer rely on . being in @INC
  - update tests to remove all uses of Test::Fatal::lives_ok
+ - the git version used during the packaging is now logged into the metadata
+   for the built distribution
 
 2.039     2016-05-25 04:17:42Z
  - no changes since last release
