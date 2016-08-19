@@ -8,7 +8,7 @@ use Test::More 0.88;            # done_testing
 use Test::Fatal;
 
 use lib 't';
-use Util qw(:DEFAULT throws_ok zilla_version);
+use Util qw(:DEFAULT zilla_version);
 
 skip_unless_git_version('1.6.1'); # need --simplify-by-decoration
 
@@ -168,8 +168,11 @@ is(
     "builds with duplicate version",
 );
 is( $zilla->version, "1.2.4", "version is duplicate" );
-throws_ok { $zilla->release } qr/version 1\.2\.4 has already been tagged/,
-    "don't release duplicate version";
+like(
+    exception { $zilla->release },
+    qr/version 1\.2\.4 has already been tagged/,
+    "don't release duplicate version",
+);
 
 #keep_tempdir;
 

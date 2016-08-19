@@ -40,7 +40,7 @@ our @EXPORT = qw($base_dir $git_dir $git $zilla
                  new_zilla_from_repo
                  skip_unless_git_version slurp_text_file
                  zilla_log_is);
-our @EXPORT_OK = qw($dist_dir throws_ok zilla_version);
+our @EXPORT_OK = qw($dist_dir zilla_version);
 
 my $original_cwd;
 
@@ -223,24 +223,6 @@ sub slurp_text_file
     }
   };
 } # end slurp_text_file
-
-#---------------------------------------------------------------------
-# DON'T USE THIS FUNCTION
-#
-# It's a limited clone of Test::Exception's throws_ok I wrote to make
-# it easier to port the tests from Test::Exception to Test::Fatal.
-# Use Test::Fatal directly instead.
-
-sub throws_ok (&$;$)
-{
-  my ($coderef, $expected, $name) = @_;
-
-  # The test program must load Test::Fatal
-  my $exception = &Test::Fatal::exception($coderef);
-
-  local $Test::Builder::Level = $Test::Builder::Level + 1;
-  like( $exception, $expected, $name);
-} # end throws_ok
 
 #---------------------------------------------------------------------
 sub zilla_log_is

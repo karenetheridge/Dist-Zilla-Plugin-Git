@@ -10,7 +10,7 @@ use Path::Tiny 0.012 qw(path); # cwd
 use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal;
 use lib 't';
-use Util qw( clean_environment init_repo throws_ok );
+use Util qw( clean_environment init_repo );
 
 # Mock HOME to avoid ~/.gitexcludes from causing problems
 # and clear GIT_ environment variables
@@ -47,7 +47,11 @@ sub new_tzil
 new_tzil();
 
 # untracked files
-throws_ok { $zilla->release } qr/untracked files/, 'untracked files';
+like(
+    exception { $zilla->release },
+    qr/untracked files/,
+    'untracked files',
+);
 our_messages_are(<<'', 'lists untracked files');
 [Git::Check] branch master has some untracked files:
 [Git::Check] 	Changes
@@ -56,7 +60,11 @@ our_messages_are(<<'', 'lists untracked files');
 
 # index not clean
 $git->add( qw{ dist.ini Changes foobar } );
-throws_ok { $zilla->release } qr/some changes staged/, 'index not clean';
+like(
+    exception { $zilla->release },
+    qr/some changes staged/,
+    'index not clean',
+);
 our_messages_are(<<'', 'lists staged files');
 [Git::Check] branch master has some changes staged for commit:
 [Git::Check] 	A	Changes
@@ -67,7 +75,11 @@ $git->commit( { message => 'initial commit' } );
 
 # modified files
 append_to_file('foobar', 'Foo-*');
-throws_ok { $zilla->release } qr/uncommitted files/, 'uncommitted files';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'uncommitted files',
+);
 our_messages_are(<<'', 'lists uncommitted files');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	foobar
@@ -91,8 +103,11 @@ $git->add( qw{ dist_ini } );
 $git->commit( { message => 'add dist_ini' } );
 append_to_file('dist_ini', 'World');
 
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'dist_ini must not be modified';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'dist_ini must not be modified',
+);
 our_messages_are(<<'', 'lists uncommitted dist_ini');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist_ini
@@ -103,8 +118,11 @@ our_messages_are(<<'', 'lists uncommitted dist_ini');
 new_tzil(allow_dirty => '');
 
 # untracked files
-throws_ok { $zilla->release } qr/untracked files/,
-    'untracked files with allow_dirty = ""';
+like(
+    exception { $zilla->release },
+    qr/untracked files/,
+    'untracked files with allow_dirty = ""',
+);
 our_messages_are(<<'', 'lists untracked files');
 [Git::Check] branch master has some untracked files:
 [Git::Check] 	Changes
@@ -113,8 +131,11 @@ our_messages_are(<<'', 'lists untracked files');
 
 # index not clean
 $git->add( qw{ dist.ini Changes foobar } );
-throws_ok { $zilla->release } qr/some changes staged/,
-    'index not clean with allow_dirty = ""';
+like(
+    exception { $zilla->release },
+    qr/some changes staged/,
+    'index not clean with allow_dirty = ""',
+);
 our_messages_are(<<'', 'lists staged files');
 [Git::Check] branch master has some changes staged for commit:
 [Git::Check] 	A	Changes
@@ -125,8 +146,11 @@ $git->commit( { message => 'initial commit' } );
 
 # modified files
 append_to_file('foobar', 'Foo-*');
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'uncommitted files with allow_dirty = ""';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'uncommitted files with allow_dirty = ""',
+);
 our_messages_are(<<'', 'lists uncommitted files');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	foobar
@@ -135,8 +159,11 @@ $git->checkout( 'foobar' );
 
 # changelog cannot be modified
 append_to_file('Changes', "\n");
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'Changes must not be modified';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'Changes must not be modified',
+);
 our_messages_are(<<'', 'lists uncommitted Changes file');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	Changes
@@ -145,8 +172,11 @@ $git->checkout( 'Changes' );
 
 # dist.ini cannot be modified
 append_to_file('dist.ini', "\n");
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'dist.ini must not be modified';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'dist.ini must not be modified',
+);
 our_messages_are(<<'', 'lists uncommitted dist.ini');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist.ini
@@ -167,8 +197,11 @@ our_messages_are(<<'', 'reports master in clean state');
 new_tzil(allow_dirty => '', allow_dirty_match => 'a');
 
 # untracked files
-throws_ok { $zilla->release } qr/untracked files/,
-    'untracked files with allow_dirty_match = "a"';
+like(
+    exception { $zilla->release },
+    qr/untracked files/,
+    'untracked files with allow_dirty_match = "a"',
+);
 our_messages_are(<<'', 'lists untracked files');
 [Git::Check] branch master has some untracked files:
 [Git::Check] 	Changes
@@ -177,8 +210,11 @@ our_messages_are(<<'', 'lists untracked files');
 
 # index not clean
 $git->add( qw{ dist.ini Changes foobar } );
-throws_ok { $zilla->release } qr/some changes staged/,
-    'index not clean with allow_dirty_match = "a"';
+like(
+    exception { $zilla->release },
+    qr/some changes staged/,
+    'index not clean with allow_dirty_match = "a"',
+);
 our_messages_are(<<'', 'lists staged files');
 [Git::Check] branch master has some changes staged for commit:
 [Git::Check] 	A	Changes
@@ -191,8 +227,11 @@ $git->commit( { message => 'initial commit' } );
 append_to_file('Changes',  "\n");
 append_to_file('dist.ini', "\n");
 append_to_file('foobar', "\n");
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'uncommitted files with allow_dirty_match = "a"';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'uncommitted files with allow_dirty_match = "a"',
+);
 our_messages_are(<<'', 'lists uncommitted files');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist.ini
@@ -229,7 +268,11 @@ our_messages_are(<<'', 'warns about untracked files');
 
 # index not clean
 $git->add( qw{ dist.ini Changes foobar } );
-throws_ok { $zilla->release } qr/some changes staged/, 'index not clean';
+like(
+    exception { $zilla->release },
+    qr/some changes staged/,
+    'index not clean',
+);
 our_messages_are(<<'', 'lists staged files');
 [Git::Check] branch master has some changes staged for commit:
 [Git::Check] 	A	Changes
@@ -240,7 +283,11 @@ $git->commit( { message => 'initial commit' } );
 
 # modified files
 append_to_file('foobar', 'Foo-*');
-throws_ok { $zilla->release } qr/uncommitted files/, 'uncommitted files';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'uncommitted files',
+);
 our_messages_are(<<'', 'lists uncommitted files');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	foobar
@@ -263,8 +310,11 @@ append_to_file('dist_ini', 'Hello');
 $git->add( qw{ dist_ini } );
 $git->commit( { message => 'add dist_ini' } );
 append_to_file('dist_ini', 'World');
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'dist_ini must not be modified';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'dist_ini must not be modified',
+);
 our_messages_are(<<'', 'lists dist_ini as uncommitted');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist_ini
@@ -285,7 +335,11 @@ our_messages_are(<<'', 'counts untracked files');
 
 # index not clean
 $git->add( qw{ dist.ini Changes foobar } );
-throws_ok { $zilla->release } qr/some changes staged/, 'index not clean';
+like(
+    exception { $zilla->release },
+    qr/some changes staged/,
+    'index not clean',
+);
 our_messages_are(<<'', 'lists staged files');
 [Git::Check] branch master has some changes staged for commit:
 [Git::Check] 	A	Changes
@@ -296,7 +350,11 @@ $git->commit( { message => 'initial commit' } );
 
 # modified files
 append_to_file('foobar', 'Foo-*');
-throws_ok { $zilla->release } qr/uncommitted files/, 'uncommitted files';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'uncommitted files',
+);
 our_messages_are(<<'', 'lists foobar as uncommitted');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	foobar
@@ -319,8 +377,11 @@ append_to_file('dist_ini', 'Hello');
 $git->add( qw{ dist_ini } );
 $git->commit( { message => 'add dist_ini' } );
 append_to_file('dist_ini', 'World');
-throws_ok { $zilla->release } qr/uncommitted files/,
-    'dist_ini must not be modified';
+like(
+    exception { $zilla->release },
+    qr/uncommitted files/,
+    'dist_ini must not be modified',
+);
 our_messages_are(<<'', 'lists dist_ini as uncommitted');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist_ini
