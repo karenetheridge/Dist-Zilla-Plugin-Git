@@ -1,4 +1,3 @@
-#!perl
 # Test multiple instances of Git::GatherDir (including prefix)
 
 use strict;

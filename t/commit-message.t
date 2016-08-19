@@ -1,5 +1,3 @@
-#! /usr/bin/perl
-#---------------------------------------------------------------------
 # Test the get_commit_message method in Git::Commit
 
 use 5.008;

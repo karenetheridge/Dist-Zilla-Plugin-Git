@@ -1,5 +1,3 @@
-#! /usr/bin/perl
-#
 # Test the _max_version_from_tags function of Git::NextVersion
 #---------------------------------------------------------------------
 
