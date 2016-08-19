@@ -5,7 +5,7 @@ use Test::DZil qw(dist_ini);
 
 use Path::Tiny qw(path);
 use Test::More 0.88;            # done_testing
-use Test::Fatal 0.006 qw( lives_ok );
+use Test::Fatal;
 
 use lib 't';
 use Util qw(:DEFAULT throws_ok zilla_version);
@@ -162,7 +162,11 @@ head_last_ver("1.2.4");
 
 # see if it catches a duplicate version
 _new_zilla(qw(HEAD 1.2.3));
-lives_ok { $zilla->build } "builds with duplicate version";
+is(
+    exception { $zilla->build },
+    undef,
+    "builds with duplicate version",
+);
 is( $zilla->version, "1.2.4", "version is duplicate" );
 throws_ok { $zilla->release } qr/version 1\.2\.4 has already been tagged/,
     "don't release duplicate version";

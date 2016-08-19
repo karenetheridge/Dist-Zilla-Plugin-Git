@@ -8,7 +8,7 @@ use Test::DZil qw{ Builder simple_ini };
 use File::pushd qw{ pushd };
 use Path::Tiny 0.012 qw(path); # cwd
 use Test::More 0.88 tests => 50; # done_testing
-use Test::Fatal 0.006 qw( lives_ok );
+use Test::Fatal;
 use lib 't';
 use Util qw( clean_environment init_repo throws_ok );
 
@@ -77,7 +77,11 @@ $git->checkout( 'foobar' );
 # changelog and dist.ini can be modified
 append_to_file('Changes',  "\n");
 append_to_file('dist.ini', "\n");
-lives_ok { $zilla->release } 'Changes and dist.ini can be modified';
+is(
+    exception { $zilla->release },
+    undef,
+    'Changes and dist.ini can be modified',
+);
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
 
@@ -149,7 +153,11 @@ our_messages_are(<<'', 'lists uncommitted dist.ini');
 
 $git->checkout( 'dist.ini' );
 
-lives_ok { $zilla->release } 'Changes and dist.ini are unmodified';
+is(
+    exception { $zilla->release },
+    undef,
+    'Changes and dist.ini are unmodified',
+);
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
 
@@ -192,7 +200,11 @@ our_messages_are(<<'', 'lists uncommitted files');
 $git->checkout( 'dist.ini' );
 
 # files matching /a/ can be modified
-lives_ok { $zilla->release } 'Changes foobar can be modified';
+is(
+    exception { $zilla->release },
+    undef,
+    'Changes foobar can be modified',
+);
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
 
@@ -203,7 +215,11 @@ our_messages_are(<<'', 'reports master in clean state');
 new_tzil(untracked_files => 'warn');
 
 # untracked files
-lives_ok { $zilla->release } 'untracked files are ok';
+is(
+    exception { $zilla->release },
+    undef,
+    'untracked files are ok',
+);
 our_messages_are(<<'', 'warns about untracked files');
 [Git::Check] branch master has some untracked files:
 [Git::Check] 	Changes
@@ -234,7 +250,11 @@ $git->checkout( 'foobar' );
 # changelog and dist.ini can be modified
 append_to_file('Changes',  "\n");
 append_to_file('dist.ini', "\n");
-lives_ok { $zilla->release } 'Changes and dist.ini can be modified';
+is(
+    exception { $zilla->release },
+    undef,
+    'Changes and dist.ini can be modified',
+);
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
 
@@ -255,7 +275,11 @@ our_messages_are(<<'', 'lists dist_ini as uncommitted');
 new_tzil(untracked_files => 'ignore');
 
 # untracked files
-lives_ok { $zilla->release } 'untracked files are ok';
+is(
+    exception { $zilla->release },
+    undef,
+    'untracked files are ok',
+);
 our_messages_are(<<'', 'counts untracked files');
 [Git::Check] branch master has 3 untracked files
 
@@ -282,7 +306,11 @@ $git->checkout( 'foobar' );
 # changelog and dist.ini can be modified
 append_to_file('Changes',  "\n");
 append_to_file('dist.ini', "\n");
-lives_ok { $zilla->release } 'Changes and dist.ini can be modified';
+is(
+    exception { $zilla->release },
+    undef,
+    'Changes and dist.ini can be modified',
+);
 our_messages_are(<<'', 'reports master in clean state');
 [Git::Check] branch master is in a clean state
 
