@@ -62,7 +62,7 @@ around dump_config => sub
 
     $config->{+__PACKAGE__} = {
         repo_root => $self->repo_root,
-        'git --version' => $self->git('version'),
+        'git --version' => $self->git->version,
     };
 
     return $config;
