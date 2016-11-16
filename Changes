@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.041     2016-11-16 03:36:23Z
  - log the git version *properly* into metadata (thanks so much to Dan Book
    for noticing so quickly!)
 
