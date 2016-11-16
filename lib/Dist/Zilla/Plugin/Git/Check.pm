@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Check;
 # ABSTRACT: Check your git repository before releasing
 
-our $VERSION = '2.040';
+our $VERSION = '2.041';
 
 use Moose;
 use namespace::autoclean 0.09;
