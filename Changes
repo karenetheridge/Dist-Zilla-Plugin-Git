@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.040     2016-11-16 03:23:50Z
  - fix tests to no longer rely on . being in @INC
  - update tests to remove all uses of Test::Fatal::lives_ok
  - the git version used during the packaging is now logged into the metadata

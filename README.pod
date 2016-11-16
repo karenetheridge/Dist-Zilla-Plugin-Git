@@ -4,11 +4,11 @@
 
 =head1 NAME
 
-Dist::Zilla::Plugin::Git - update your git repository after release
+Dist::Zilla::Plugin::Git - Update your git repository after release
 
 =head1 VERSION
 
-version 2.039
+version 2.040
 
 =head1 DESCRIPTION
 
@@ -129,7 +129,7 @@ Jerome Quelin
 
 =head1 CONTRIBUTORS
 
-=for stopwords Christopher J. Madsen Jérôme Quelin Kent Fredric Karen Etheridge Yanick Champoux Ricardo Signes David Golden Graham Knop Chris Weyl Mike Friedman Your Name Stephen R. Scaffidi Randy Stauner Apocalypse Doherty Barr Brian Phillips Matt Follett Michael Schout Brendan Byrd Nigel Metheringham Olivier Mengué Alessandro Ghedini Tatsuhiko Miyagawa Tuomas Jormola Alexandr Ciornii Harley Pig Jesse Luehrs Geoffrey Broadwell Steinbrunner
+=for stopwords Christopher J. Madsen Jérôme Quelin Karen Etheridge Kent Fredric Yanick Champoux Ricardo Signes David Golden Graham Knop Chris Weyl Mike Friedman Your Name Stephen R. Scaffidi Randy Stauner Apocalypse Doherty Barr Brian Phillips Matt Follett Michael Schout Brendan Byrd Nigel Metheringham Olivier Mengué Alessandro Ghedini Tatsuhiko Miyagawa Tuomas Jormola Alexandr Ciornii Harley Pig Jesse Luehrs Geoffrey Broadwell Steinbrunner
 
 =over 4
 
@@ -143,11 +143,11 @@ Jérôme Quelin <jquelin@gmail.com>
 
 =item *
 
-Kent Fredric <kentfredric@gmail.com>
+Karen Etheridge <ether@cpan.org>
 
 =item *
 
-Karen Etheridge <ether@cpan.org>
+Kent Fredric <kentfredric@gmail.com>
 
 =item *
 
