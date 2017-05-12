@@ -16,7 +16,7 @@ __END__
 =head1 DESCRIPTION
 
 This set of plugins for L<Dist::Zilla> can do interesting things for
-module authors using Git (L<http://git-scm.com>) to track their work.
+module authors using Git (L<https://git-scm.com>) to track their work.
 
 You need Git 1.5.4 or later to use these plugins.  Some plugins
 require a more recent version of Git for certain features.
