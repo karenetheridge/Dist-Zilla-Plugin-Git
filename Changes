@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.042     2017-05-12 16:29:18Z
  - remove spaces from config data dumped to META, which parses badly on older
    YAML decoders in the toolchain
 
