@@ -54,6 +54,16 @@ BEGIN {
 
 END { chdir $original_cwd if $original_cwd }
 
+{
+    package Git::Wrapper;
+    # adds --no-verify to all 'git commit' commands, to avoid triggering any
+    # globally-configured pre-commit hooks.
+    sub commit {
+        return shift->RUN(commit => @_, { 'no-verify' => 1 });
+    }
+}
+
+
 #=====================================================================
 sub append_and_add
 {
