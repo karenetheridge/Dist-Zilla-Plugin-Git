@@ -32,12 +32,12 @@ use constant _CoercedRegexp => do {
     $tc;
 };
 
-has version_regexp  => ( is => 'ro', isa=> _CoercedRegexp, coerce => 1,
+has version_regexp  => ( is => 'ro', isa => _CoercedRegexp, coerce => 1,
                          default => sub { qr/^v(.+)$/ } );
 
-has first_version  => ( is => 'ro', isa=>Str, default => '0.001' );
+has first_version  => ( is => 'ro', isa => Str, default => '0.001' );
 
-has version_by_branch  => ( is => 'ro', isa=>Bool, default => 0 );
+has version_by_branch  => ( is => 'ro', isa => Bool, default => 0 );
 
 sub _versions_from_tags {
   my ($regexp, $tags) = @_;
@@ -48,7 +48,9 @@ sub _versions_from_tags {
 } # end _versions_from_tags
 
 has _all_versions => (
-  is => 'ro',  isa=>ArrayRef,  init_arg => undef,  lazy => 1,
+  is => 'ro',  isa => ArrayRef,
+  init_arg => undef,
+  lazy => 1,
   default => sub {
     my $self = shift;
     my $v = _versions_from_tags($self->version_regexp, [ $self->git->tag ]);
@@ -186,6 +188,8 @@ no Moose;
 1;
 
 __END__
+
+=pod
 
 =for Pod::Coverage
     provide_version
