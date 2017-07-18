@@ -127,6 +127,7 @@ around dump_config => sub
     $config->{+__PACKAGE__} = {
         (map { $_ => $self->$_ } qw(version_regexp first_version)),
         version_by_branch => $self->version_by_branch ? 1 : 0,
+        blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
     return $config;

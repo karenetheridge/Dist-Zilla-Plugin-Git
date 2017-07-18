@@ -45,6 +45,7 @@ around dump_config => sub
     $config->{+__PACKAGE__} = {
         push_to => $self->push_to,
         remotes_must_exist => $self->remotes_must_exist ? 1 : 0,
+        blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
     return $config;

@@ -46,6 +46,7 @@ around dump_config => sub
     $config->{+__PACKAGE__} = {
         commit_msg => $self->commit_msg,
         add_files_in => [ sort @{ $self->add_files_in } ],
+        blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
     return $config;

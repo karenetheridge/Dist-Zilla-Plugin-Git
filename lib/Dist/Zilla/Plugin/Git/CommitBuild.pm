@@ -89,6 +89,7 @@ around dump_config => sub
         (map { $_ => $self->$_ }
             qw(branch release_branch message release_message build_root)),
         multiple_inheritance => $self->multiple_inheritance ? 1 : 0,
+        blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
     return $config;

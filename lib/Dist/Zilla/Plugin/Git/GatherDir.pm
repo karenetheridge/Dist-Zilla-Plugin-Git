@@ -132,6 +132,7 @@ around dump_config => sub
 
     $config->{+__PACKAGE__} = {
         include_untracked => $self->include_untracked ? 1 : 0,
+        blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
     return $config;
