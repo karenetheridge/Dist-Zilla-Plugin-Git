@@ -117,6 +117,7 @@ sub before_release {
     $self->_perform_checks('log_fatal');
 }
 
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

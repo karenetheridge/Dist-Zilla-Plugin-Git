@@ -106,6 +106,7 @@ sub get_commit_message {
     return $self->_format_string($self->commit_msg);
 } # end get_commit_message
 
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

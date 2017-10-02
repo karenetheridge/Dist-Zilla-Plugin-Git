@@ -190,6 +190,7 @@ sub _create_tree {
     return $sha;
 }
 
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 

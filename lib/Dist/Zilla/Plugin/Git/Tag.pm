@@ -92,6 +92,7 @@ sub after_release {
     $self->log("Tagged $tag");
 }
 
+__PACKAGE__->meta->make_immutable;
 1;
 __END__
 
