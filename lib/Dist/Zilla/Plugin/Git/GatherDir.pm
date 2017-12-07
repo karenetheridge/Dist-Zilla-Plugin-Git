@@ -23,8 +23,7 @@ In your F<dist.ini>:
 This is a trivial variant of the L<GatherDir|Dist::Zilla::Plugin::GatherDir>
 plugin.  It looks in the directory named in the L</root> attribute and adds all
 the Git tracked files it finds there (as determined by C<git ls-files>).  If the
-root begins with a tilde, the tilde is replaced with the current user's home
-directory according to L<File::HomeDir>.
+root begins with a tilde, the directory name is passed through C<glob()> first.
 
 Most users just need:
 
@@ -144,15 +143,15 @@ override gather_files => sub {
   require Git::Wrapper;
   require Path::Tiny;
 
-  my $root = "" . $self->root;
+  my $root = '' . $self->root;
+
   # Convert ~ to home directory:
   if ($root =~ /^~/) {
-    require File::HomeDir;
-    File::HomeDir->VERSION(0.81);
+    ($root) = glob($root);
+    warn 'old perl on Win32 detected: ~ in root not translated'
+      if $root =~ /^~/ and $^O eq 'Win32' && "$]" < '5.016';
+  }
 
-    $root =~ s/^~(\w+)/ File::HomeDir->users_home("$1") /e;
-    $root =~ s/^~/      File::HomeDir->my_home /e;
-  } # end if $root begins with ~
   $root = Path::Tiny::path($root)->absolute($self->zilla->root->absolute);
 
   # Prepare to gather files
