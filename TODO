@@ -1,2 +1,9 @@
 
 - apparently no test coverage on [Git::NextVersion]  after_release
+
+NEW FEATURES:
+
+- new option in [Git::Init] to enable Travis CI builds
+    this might be helpful:
+    https://stackoverflow.com/questions/32889364/travis-ci-enabling-repository-build-via-api
+
