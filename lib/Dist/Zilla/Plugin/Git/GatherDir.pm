@@ -23,7 +23,7 @@ In your F<dist.ini>:
 This is a trivial variant of the L<GatherDir|Dist::Zilla::Plugin::GatherDir>
 plugin.  It looks in the directory named in the L</root> attribute and adds all
 the Git tracked files it finds there (as determined by C<git ls-files>).  If the
-root begins with a tilde, the directory name is passed through C<glob()> first.
+root begins with a tilde, the tilde portion is passed through C<glob()> first.
 
 Most users just need:
 
@@ -145,12 +145,8 @@ override gather_files => sub {
 
   my $root = '' . $self->root;
 
-  # Convert ~ to home directory:
-  if ($root =~ /^~/) {
-    ($root) = glob($root);
-    warn 'old perl on Win32 detected: ~ in root not translated'
-      if $root =~ /^~/ and $^O eq 'Win32' && "$]" < '5.016';
-  }
+  # Convert ~ portion to real directory:
+  $root =~ s{^(~[^\\/]*)([\\/])}{$self->_homedir($1) . $2}e;
 
   $root = Path::Tiny::path($root)->absolute($self->zilla->root->absolute);
 
@@ -204,6 +200,19 @@ override gather_files => sub {
   return;
 };
 
+sub _homedir {
+  my ($self, $tilde_dir) = @_;
+
+  # other architectures have no issue with globbing any kind of ~user path
+  return (glob($tilde_dir))[0] if $^O ne 'Win32';
+
+  # on Win32, we can use the environment variable(s) for the current user
+  return "$]" < '5.016' ? $ENV{HOME} || $ENV{USERPROFILE} : (glob('~'))[0]
+    if $tilde_dir eq '~';
+
+  # but otherwise, we can't support this at all, on any version.
+  $self->log_fatal('expanding "' . $tilde_dir . '" on Win32 not supported');
+}
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
