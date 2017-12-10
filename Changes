@@ -1,5 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
+{{$NEXT}}
+
 2.043     2017-12-10 00:49:29Z
  - replace uses of File::HomeDir with a simple glob()
 
