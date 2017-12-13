@@ -6,7 +6,8 @@ addons:
       - aspell-en
 language: perl
 perl:
-  - "blead"
+  - "blead"       # builds perl from git
+  - "dev"         # latest point release
   - "5.26"
   - "5.24"
   - "5.22"
