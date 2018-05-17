@@ -7,7 +7,18 @@ use Moose::Role;
 use MooseX::Types::Moose qw(Str Maybe);
 use namespace::autoclean;
 
-has 'repo_root'   => ( is => 'ro', isa => Str, default => '.' );
+has repo_root => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    builder => '_build_repo_root',
+);
+
+sub _build_repo_root
+{
+    my $self = shift;
+    $self->zilla->root->stringify;
+}
 
 =method current_git_branch
 
@@ -91,6 +102,7 @@ repository structure, and to create a Git::Wrapper object.
 
 =attr repo_root
 
-The repository root, either as a full path or relative to the distribution root. Default is C<.>.
+The repository root, either as a full path or relative to the distribution
+root. The default is the distribution root (C<$zilla->root>).
 
 =cut

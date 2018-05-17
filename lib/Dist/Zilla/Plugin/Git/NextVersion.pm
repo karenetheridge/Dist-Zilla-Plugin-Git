@@ -80,7 +80,7 @@ sub _last_version {
 
   if ($by_branch) {
     my $head;
-    my $cachefile = path(_cache_fn);
+    my $cachefile = $self->zilla->root->child(_cache_fn);
     if (-f $cachefile) {
       ($head) = $git->rev_parse('HEAD');
       return $1 if $cachefile->slurp =~ /^\Q$head\E (.+)/;
@@ -258,7 +258,7 @@ the last tag is 0.005 and you want to jump to 1.000 you can set V = 1.000.
 
 Because tracing history takes time, if you use the
 C<version_by_branch> option, Git::NextVersion will create a
-F<.gitnxtver_cache> file in your repository to track the highest
+F<.gitnxtver_cache> file in your repository root to track the highest
 version number that is an ancestor of the HEAD revision.  You should
 add F<.gitnxtver_cache> to your F<.gitignore> file.  It will
 automatically be pruned from the distribution.
