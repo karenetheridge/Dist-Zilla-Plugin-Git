@@ -121,9 +121,8 @@ In your F<dist.ini>:
 
 =head1 DESCRIPTION
 
-Once the release is done, this plugin will push current git branch to
-remote end, with the associated tags.
-
+Once the release is done, this plugin will push the current git branch to
+the remote, with the associated tags.
 
 The plugin accepts the following options:
 
