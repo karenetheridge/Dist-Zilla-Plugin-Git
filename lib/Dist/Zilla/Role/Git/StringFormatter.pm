@@ -103,6 +103,8 @@ sub _get_changes {
 
 __END__
 
+=pod
+
 =head1 DESCRIPTION
 
 This role is used within the Git plugins to format strings that may
@@ -142,3 +144,5 @@ release, or the empty string if not.  A bare C<%t> means C<%{-TRIAL}t>.
 the distribution version
 
 =back
+
+=cut

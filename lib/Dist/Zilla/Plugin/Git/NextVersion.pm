@@ -264,4 +264,3 @@ add F<.gitnxtver_cache> to your F<.gitignore> file.  It will
 automatically be pruned from the distribution.
 
 =cut
-

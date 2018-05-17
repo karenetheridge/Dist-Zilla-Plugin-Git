@@ -103,6 +103,8 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_release
     before_release
@@ -141,3 +143,5 @@ URL or path are not checked, but will produce a
 C<Will push to %s (not checked)> message.
 
 =back
+
+=cut

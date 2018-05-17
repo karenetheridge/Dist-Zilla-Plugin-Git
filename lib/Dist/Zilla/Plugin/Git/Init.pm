@@ -94,9 +94,10 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_mint mvp_aliases mvp_multivalue_args
-
 
 =head1 SYNOPSIS
 
@@ -113,7 +114,6 @@ In your F<profile.ini>:
 
 This plugin initializes a git repository when a new distribution is
 created with C<dzil new>.
-
 
 =head2 Plugin options
 
@@ -158,3 +158,5 @@ The distribution name.  You can also use C<%{lc}N> or C<%{uc}N> to get
 the name in lower case or upper case, respectively.
 
 =back
+
+=cut

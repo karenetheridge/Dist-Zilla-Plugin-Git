@@ -96,10 +96,11 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_release
     before_release
-
 
 =head1 SYNOPSIS
 
@@ -120,7 +121,6 @@ It also checks before the release to ensure the tag to be created
 doesn't already exist.  (You would have to manually delete the
 existing tag before you could release the same version again, but that
 is almost never a good idea.)
-
 
 =head2 Plugin options
 
@@ -148,3 +148,5 @@ can't find the correct key:
     $ git config user.signingkey 450F89EC
 
 =back
+
+=cut

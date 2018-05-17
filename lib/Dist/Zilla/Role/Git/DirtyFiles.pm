@@ -154,6 +154,8 @@ sub list_dirty_files
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     mvp_multivalue_args
 
@@ -161,3 +163,5 @@ __END__
 
 This role is used within the git plugin to work with files that are
 dirty in the local git checkout.
+
+=cut

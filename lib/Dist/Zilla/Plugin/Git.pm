@@ -10,6 +10,7 @@ our $VERSION = '2.044';
 1;
 __END__
 
+=pod
 
 =head1 DESCRIPTION
 
@@ -110,3 +111,5 @@ L<http://annocpan.org/dist/Dist-Zilla-Plugin-Git>
 L<http://cpanratings.perl.org/d/Dist-Zilla-Plugin-Git>
 
 =back
+
+=cut

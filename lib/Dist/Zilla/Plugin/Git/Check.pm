@@ -121,10 +121,11 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_build
     before_release
-
 
 =head1 SYNOPSIS
 
@@ -157,7 +158,6 @@ C<allow_dirty> can be modified locally, though.
 If those conditions are not met, the plugin will die, and the release
 will thus be aborted. This lets you fix the problems before continuing.
 
-
 The plugin accepts the following options:
 
 =over 4
@@ -181,3 +181,5 @@ C<warn> lists the untracked files, while C<ignore> only prints the
 total number of untracked files.
 
 =back
+
+=cut

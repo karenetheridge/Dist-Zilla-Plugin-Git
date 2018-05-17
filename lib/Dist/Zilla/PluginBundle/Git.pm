@@ -50,6 +50,8 @@ no Moose;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     bundle_config
     mvp_multivalue_args
@@ -107,3 +109,5 @@ After a release, push the released code & tag to your public repo.
 
 For a list of Git plugins in this distribution that are not part of
 this bundle, see L<Dist::Zilla::Plugin::Git>.
+
+=cut

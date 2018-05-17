@@ -92,3 +92,5 @@ repository structure, and to create a Git::Wrapper object.
 =attr repo_root
 
 The repository root, either as a full path or relative to the distribution root. Default is C<.>.
+
+=cut

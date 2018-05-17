@@ -110,9 +110,10 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_release mvp_multivalue_args
-
 
 =head1 SYNOPSIS
 
@@ -120,7 +121,6 @@ In your F<dist.ini>:
 
     [Git::Commit]
     changelog = Changes      ; this is the default
-
 
 =head1 DESCRIPTION
 
@@ -166,3 +166,5 @@ are documented under L<Dist::Zilla::Role::Git::StringFormatter>.
 time zone name accepted by DateTime.  Defaults to C<local>.
 
 =back
+
+=cut

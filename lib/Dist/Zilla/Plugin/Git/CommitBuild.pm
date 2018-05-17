@@ -194,6 +194,8 @@ __PACKAGE__->meta->make_immutable;
 1;
 __END__
 
+=pod
+
 =for Pod::Coverage
     after_build
     after_release
@@ -270,4 +272,3 @@ source commit from which the build was generated.
 =back
 
 =cut
-
