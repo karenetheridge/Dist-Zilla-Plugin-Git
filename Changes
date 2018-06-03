@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.045     2018-06-03 19:28:19Z
   - fix possible failure in 2.044: zilla->root is not a Path::Tiny with older
     Dist::Zilla versions
 
