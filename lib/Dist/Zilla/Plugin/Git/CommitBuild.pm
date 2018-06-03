@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::CommitBuild;
 # ABSTRACT: Check in build results on separate branch
 
-our $VERSION = '2.045';
+our $VERSION = '2.046';
 
 use Git::Wrapper 0.021 ();      # need -STDIN
 use IPC::Open3;
