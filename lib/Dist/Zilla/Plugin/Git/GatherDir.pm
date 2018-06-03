@@ -148,8 +148,7 @@ override gather_files => sub {
   # Convert ~ portion to real directory:
   $root =~ s{^(~[^\\/]*)([\\/])}{$self->_homedir($1) . $2}e;
 
-  $root = Path::Tiny::path($root);
-  $root = $root->absolute($self->zilla->root->absolute);
+  $root = Path::Tiny::path($root)->absolute($self->zilla->root);
 
   # Prepare to gather files
   my $git = Git::Wrapper->new($root->stringify);

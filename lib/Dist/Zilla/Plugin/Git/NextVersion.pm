@@ -80,7 +80,7 @@ sub _last_version {
 
   if ($by_branch) {
     my $head;
-    my $cachefile = $self->zilla->root->child(_cache_fn);
+    my $cachefile = path($self->zilla->root)->child(_cache_fn);
     if (-f $cachefile) {
       ($head) = $git->rev_parse('HEAD');
       return $1 if $cachefile->slurp =~ /^\Q$head\E (.+)/;
