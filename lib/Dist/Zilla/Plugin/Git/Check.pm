@@ -11,6 +11,7 @@ use Moose;
 use namespace::autoclean 0.09;
 use Moose::Util::TypeConstraints qw(enum);
 use MooseX::Types::Moose qw(Bool);
+use Try::Tiny qw( catch try );
 
 with 'Dist::Zilla::Role::AfterBuild',
     'Dist::Zilla::Role::BeforeRelease',
@@ -50,6 +51,10 @@ sub _perform_checks {
     my @issues;
     my $git = $self->git;
     my @output;
+
+    for my $key (qw(user.email user.name)) {
+        try { $git->config($key) } catch { die "git $key is not set" };
+    }
 
     # fetch current branch
     my ($branch) =
@@ -145,6 +150,8 @@ This plugin checks that your Git repo is in a clean state before releasing.
 The following checks are performed before releasing:
 
 =over 4
+
+=item * user.email and user.name are set in your Git config
 
 =item * there should be no files in the index (staged copy)
 

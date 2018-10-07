@@ -1,6 +1,7 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+  - check that git config has user.email and user.name before releasing
 
 2.045     2018-06-03 19:28:19Z
   - fix possible failure in 2.044: zilla->root is not a Path::Tiny with older
