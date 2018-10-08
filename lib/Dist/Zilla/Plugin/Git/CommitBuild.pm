@@ -23,22 +23,22 @@ use Cwd qw(abs_path);
 use Try::Tiny;
 
 use String::Formatter (
-	method_stringf => {
-		-as   => '_format_branch',
-		codes => {
-			b => sub { shift->_source_branch },
-		},
-	},
-	method_stringf => {
-		-as   => '_format_message',
-		codes => {
-			b => sub { shift->_source_branch },
-			h => sub { (shift->git->rev_parse( '--short',    'HEAD' ))[0] },
-			H => sub { (shift->git->rev_parse('HEAD'))[0] },
-		    t => sub { shift->zilla->is_trial ? '-TRIAL' : '' },
-		    v => sub { shift->zilla->version },
-		}
-	}
+    method_stringf => {
+        -as   => '_format_branch',
+        codes => {
+            b => sub { shift->_source_branch },
+        },
+    },
+    method_stringf => {
+        -as   => '_format_message',
+        codes => {
+            b => sub { shift->_source_branch },
+            h => sub { (shift->git->rev_parse( '--short',    'HEAD' ))[0] },
+            H => sub { (shift->git->rev_parse('HEAD'))[0] },
+            t => sub { shift->zilla->is_trial ? '-TRIAL' : '' },
+            v => sub { shift->zilla->version },
+        }
+    }
 );
 
 # debugging...
@@ -213,7 +213,7 @@ __END__
 In your F<dist.ini>:
 
     [Git::CommitBuild]
-	; these are the defaults
+    ; these are the defaults
     branch = build/%b
     message = Build results of %h (on %b)
     multiple_inheritance = 0
