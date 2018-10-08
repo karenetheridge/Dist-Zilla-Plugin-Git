@@ -33,16 +33,21 @@ my $zilla = Dist::Zilla::Tester->from_config({
   my ($log) = $git->log( 'HEAD' );
   like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message taken from changelog' );
 
-  for my $k (qw( user.email user.name )) {
-    $git->config('--unset', $k);
-    like(
-      exception{ $zilla->release },
-      qr/\Qgit $k is not set/,
-      'exception when ' . $k . ' is not set',
-    );
-    $git->config( 'user.email', 'dzip-git test');
-    $git->config( 'user.name',  'dzip-git@test');
-  }
+}
+
+for my $k (qw( user.email user.name )) {
+  Dist::Zilla::Role::Git::Config::_reset_check_config();
+  my $zilla = Dist::Zilla::Tester->from_config({
+    dist_root => path('corpus/commit')->absolute,
+  });
+  my $dir = pushd(path( $zilla->tempdir )->child('source'));
+  my $git = init_repo( qw{ .  dist.ini Changes } );
+  $git->config('--unset', $k);
+  like(
+    exception{ $zilla->release },
+    qr/\Qgit $k is not set/,
+    'exception when ' . $k . ' is not set',
+  );
 }
 
 sub append_to_file {

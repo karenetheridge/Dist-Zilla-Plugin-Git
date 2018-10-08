@@ -10,8 +10,13 @@ use Try::Tiny qw( catch try );
 
 with 'Dist::Zilla::Role::Git::Repo';
 
+my $Checked = 0;
+
 sub check_config {
     my $self = shift;
+
+    return if $Checked;
+    $Checked = 1;
 
     for my $key (qw(user.email user.name)) {
         try {
@@ -21,6 +26,11 @@ sub check_config {
         };
     }
 
+    return;
+}
+
+sub _reset_check_config {
+    $Checked = 0;
     return;
 }
 
