@@ -46,6 +46,8 @@ use String::Formatter (
 
 with 'Dist::Zilla::Role::AfterBuild',
     'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::BeforeBuild',
+    'Dist::Zilla::Role::Git::Config',
     'Dist::Zilla::Role::Git::Repo';
 
 # -- attributes
@@ -94,6 +96,11 @@ around dump_config => sub
 
     return $config;
 };
+
+sub before_build {
+    my $self = shift;
+    $self->check_config;
+}
 
 sub after_build {
     my ( $self, $args) = @_;

@@ -24,7 +24,9 @@ use String::Formatter method_stringf => {
 };
 
 use MooseX::Types::Moose qw(Str Bool ArrayRef);
-with 'Dist::Zilla::Role::AfterMint';
+with 'Dist::Zilla::Role::AfterMint',
+    'Dist::Zilla::Role::BeforeMint',
+    'Dist::Zilla::Role::Git::Config';
 use namespace::autoclean;
 
 has commit_message => (
@@ -59,6 +61,11 @@ has config_entries => (
 
 sub mvp_multivalue_args { qw(config_entries remotes) }
 sub mvp_aliases { return { config => 'config_entries', remote => 'remotes' } }
+
+sub before_mint {
+    my $self = shift;
+    $self->check_config;
+}
 
 sub after_mint {
     my $self = shift;

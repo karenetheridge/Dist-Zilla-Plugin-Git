@@ -5,7 +5,8 @@ use Dist::Zilla  1.093250;
 use Dist::Zilla::Tester;
 use File::pushd qw(pushd);
 use Path::Tiny 0.012 qw( path ); # ->cwd
-use Test::More   tests => 1;
+use Test::Fatal qw( exception );
+use Test::More   tests => 3;
 
 use lib 't/lib';
 use Util qw(clean_environment init_repo);
@@ -31,6 +32,17 @@ my $zilla = Dist::Zilla::Tester->from_config({
   # check if dist.ini and changelog have been committed
   my ($log) = $git->log( 'HEAD' );
   like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message taken from changelog' );
+
+  for my $k (qw( user.email user.name )) {
+    $git->config('--unset', $k);
+    like(
+      exception{ $zilla->release },
+      qr/\Qgit $k is not set/,
+      'exception when ' . $k . ' is not set',
+    );
+    $git->config( 'user.email', 'dzip-git test');
+    $git->config( 'user.name',  'dzip-git@test');
+  }
 }
 
 sub append_to_file {

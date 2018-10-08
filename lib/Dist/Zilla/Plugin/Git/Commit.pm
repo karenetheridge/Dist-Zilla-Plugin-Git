@@ -17,6 +17,8 @@ use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
 
 with 'Dist::Zilla::Role::AfterRelease',
+    'Dist::Zilla::Role::BeforeRelease',
+    'Dist::Zilla::Role::Git::Config',
     'Dist::Zilla::Role::Git::Repo';
 with 'Dist::Zilla::Role::Git::DirtyFiles';
 with 'Dist::Zilla::Role::Git::StringFormatter';
@@ -51,6 +53,11 @@ around dump_config => sub
 
     return $config;
 };
+
+sub before_release {
+    my $self = shift;
+    $self->check_config;
+}
 
 sub after_release {
     my $self = shift;

@@ -5,7 +5,7 @@ use Dist::Zilla     1.093250;
 use Test::DZil qw{ Builder simple_ini };
 use File::pushd qw{ pushd };
 use Path::Tiny 0.012 qw(path); # cwd
-use Test::More 0.88 tests => 51; # done_testing
+use Test::More 0.88 tests => 50; # done_testing
 use Test::Fatal;
 use lib 't/lib';
 use Util qw( clean_environment init_repo );
@@ -106,22 +106,9 @@ like(
     qr/uncommitted files/,
     'dist_ini must not be modified',
 );
-our_messages_are(<<'EOF', 'lists uncommitted dist_ini');
+our_messages_are(<<'', 'lists uncommitted dist_ini');
 [Git::Check] branch master has some uncommitted files:
 [Git::Check] 	dist_ini
-EOF
-
-subtest 'missing git config option causes failure', sub {
-    for my $k (qw( user.email user.name )) {
-        new_tzil();
-        $git->config('--unset', $k);
-        like(
-            exception{ $zilla->release },
-            qr/\Qgit $k is not set/,
-            'exception when ' . $k . ' is not set',
-        );
-    }
-};
 
 #---------------------------------------------------------------------
 # Test with no dirty files allowed at all:
