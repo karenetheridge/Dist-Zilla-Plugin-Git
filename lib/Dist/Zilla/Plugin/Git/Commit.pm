@@ -120,7 +120,7 @@ __END__
 =pod
 
 =for Pod::Coverage
-    after_release mvp_multivalue_args
+    after_release before_release mvp_multivalue_args
 
 =head1 SYNOPSIS
 

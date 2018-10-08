@@ -12,6 +12,12 @@ with 'Dist::Zilla::Role::Git::Repo';
 
 my $Checked = 0;
 
+=method check_config
+
+Check the Git config has both a C<user.email> and C<user.name>
+
+=cut
+
 sub check_config {
     my $self = shift;
 

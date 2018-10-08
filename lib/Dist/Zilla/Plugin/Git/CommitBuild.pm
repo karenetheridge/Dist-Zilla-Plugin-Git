@@ -206,6 +206,7 @@ __END__
 =for Pod::Coverage
     after_build
     after_release
+    before_build
 
 =head1 SYNOPSIS
 

@@ -104,7 +104,7 @@ __END__
 =pod
 
 =for Pod::Coverage
-    after_mint mvp_aliases mvp_multivalue_args
+    after_mint before_mint mvp_aliases mvp_multivalue_args
 
 =head1 SYNOPSIS
 
