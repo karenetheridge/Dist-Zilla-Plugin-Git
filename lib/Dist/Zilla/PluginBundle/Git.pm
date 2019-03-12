@@ -64,9 +64,9 @@ In your F<dist.ini>:
     changelog   = Changes             ; this is the default
     allow_dirty = dist.ini            ; see Git::Check...
     allow_dirty = Changes             ; ... and Git::Commit
-    commit_msg  = v%v%n%n%c           ; see Git::Commit
-    tag_format  = %v                  ; see Git::Tag
-    tag_message = %v                  ; see Git::Tag
+    commit_msg  = v%V%n%n%c           ; see Git::Commit
+    tag_format  = v%V                 ; see Git::Tag
+    tag_message = v%V                 ; see Git::Tag
     push_to     = origin              ; see Git::Push
 
 

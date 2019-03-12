@@ -28,7 +28,7 @@ sub _git_config_mapping { +{
 
 # -- attributes
 
-has commit_msg => ( ro, isa=>Str, default => 'v%v%n%n%c' );
+has commit_msg => ( ro, isa=>Str, default => 'v%V%n%n%c' );
 has add_files_in  => ( ro, isa=> Paths, coerce => 1, default => sub { [] });
 
 
@@ -158,7 +158,7 @@ Note: The files have to be generated between the phases BeforeRelease
 E<lt>-E<gt> AfterRelease, and after Git::Check + before Git::Commit.
 
 =item * commit_msg - the commit message to use. Defaults to
-C<v%v%n%n%c>, meaning the version number and the list of changes.
+C<v%V%n%n%c>, meaning the version number and the list of changes.
 The L<formatting codes|Dist::Zilla::Role::Git::StringFormatter/DESCRIPTION>
 are documented under L<Dist::Zilla::Role::Git::StringFormatter>.
 
