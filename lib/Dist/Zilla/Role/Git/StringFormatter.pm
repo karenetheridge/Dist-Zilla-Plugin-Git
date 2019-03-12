@@ -28,6 +28,7 @@ use String::Formatter method_stringf => {
     t => sub { $_[0]->zilla->is_trial
                    ? (defined $_[1] ? $_[1] : '-TRIAL') : '' },
     v => sub { $_[0]->zilla->version },
+    V => sub { my $v = $_[0]->zilla->version; $v =~ s/\Av//; $v },
   },
 };
 
@@ -142,6 +143,10 @@ release, or the empty string if not.  A bare C<%t> means C<%{-TRIAL}t>.
 =item C<%v>
 
 the distribution version
+
+=item C<%V>
+
+The distribution version, but with a leading C<v> removed if it exists.
 
 =back
 

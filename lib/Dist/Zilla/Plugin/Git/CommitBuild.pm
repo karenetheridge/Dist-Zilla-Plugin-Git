@@ -252,6 +252,9 @@ This option supports five formatting codes:
 
 =item * C<%v> - The release version number
 
+=item * C<%V> - The release version number, but with a leading C<v> removed
+if it exists
+
 =item * C<%t> - The string "-TRIAL" if this is a trial release
 
 =back

@@ -18,8 +18,8 @@ sub _git_config_mapping { +{
 
 # -- attributes
 
-has tag_format  => ( ro, isa=>Str, default => 'v%v' );
-has tag_message => ( ro, isa=>Str, default => 'v%v' );
+has tag_format  => ( ro, isa=>Str, default => 'v%V' );
+has tag_message => ( ro, isa=>Str, default => 'v%V' );
 has changelog   => ( ro, isa=>Str, default => 'Changes' );
 has branch => ( ro, isa=>Str, predicate=>'has_branch' );
 has signed => ( ro, isa=>Bool, default=>0 );
@@ -107,8 +107,8 @@ __END__
 In your F<dist.ini>:
 
     [Git::Tag]
-    tag_format  = v%v       ; this is the default
-    tag_message = v%v       ; this is the default
+    tag_format  = v%V       ; this is the default
+    tag_message = v%V       ; this is the default
 
 =head1 DESCRIPTION
 
@@ -128,9 +128,9 @@ The plugin accepts the following options:
 
 =over 4
 
-=item * tag_format - format of the tag to apply. Defaults to C<v%v>.
+=item * tag_format - format of the tag to apply. Defaults to C<v%V>.
 
-=item * tag_message - format of the tag annotation. Defaults to C<v%v>.
+=item * tag_message - format of the tag annotation. Defaults to C<v%V>.
 Use S<C<tag_message =>> to create a lightweight tag.
 The L<formatting codes|Dist::Zilla::Role::Git::StringFormatter/DESCRIPTION>
 used in C<tag_format> and C<tag_message> are documented under
