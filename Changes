@@ -1,6 +1,10 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+  - added %V format code for the version number with the leading 'v'
+    stripped off, if it exists.
+  - changed the default format strings to use 'v%V' rather than 'v%v' for
+    better compatibility with v1.2.3 form version numbers.
 
 2.045     2018-06-03 19:28:19Z
   - fix possible failure in 2.044: zilla->root is not a Path::Tiny with older
