@@ -5,6 +5,7 @@ Revision history for Dist::Zilla::Plugin::Git
     stripped off, if it exists.
   - changed the default format strings to use 'v%V' rather than 'v%v' for
     better compatibility with v1.2.3 form version numbers.
+  - convert from MooseX::Types to Types::Standard
 
 2.045     2018-06-03 19:28:19Z
   - fix possible failure in 2.044: zilla->root is not a Path::Tiny with older

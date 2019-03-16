@@ -45,7 +45,7 @@ files into a subdir of your dist, you might write:
 =cut
 
 use List::Util 1.45 qw(uniq);
-use MooseX::Types::Moose qw(Bool);
+use Types::Standard 'Bool';
 
 use namespace::autoclean;
 

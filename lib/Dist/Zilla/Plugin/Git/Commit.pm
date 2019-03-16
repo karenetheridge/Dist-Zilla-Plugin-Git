@@ -11,8 +11,8 @@ use namespace::autoclean;
 use File::Temp           qw{ tempfile };
 use Moose;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ Str };
-use MooseX::Types::Path::Tiny 0.010 qw{ Paths };
+use Types::Standard qw(Str ArrayRef);
+use Types::Path::Tiny 'Path';
 use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
 
@@ -29,7 +29,7 @@ sub _git_config_mapping { +{
 # -- attributes
 
 has commit_msg => ( ro, isa=>Str, default => 'v%V%n%n%c' );
-has add_files_in  => ( ro, isa=> Paths, coerce => 1, default => sub { [] });
+has add_files_in  => ( ro, isa=> ArrayRef[Path], coerce => 1, default => sub { [] });
 
 
 # -- public methods

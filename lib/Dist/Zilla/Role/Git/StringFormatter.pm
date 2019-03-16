@@ -12,7 +12,7 @@ use List::Util qw{ first };
 
 use Moose::Role;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ Str };
+use Types::Standard qw{ Str };
 
 requires qw(changelog log zilla);
 

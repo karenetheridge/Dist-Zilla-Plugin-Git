@@ -23,7 +23,7 @@ use String::Formatter method_stringf => {
   },
 };
 
-use MooseX::Types::Moose qw(Str Bool ArrayRef);
+use Types::Standard qw(Str Bool ArrayRef);
 with 'Dist::Zilla::Role::AfterMint';
 use namespace::autoclean;
 

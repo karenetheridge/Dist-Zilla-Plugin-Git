@@ -13,8 +13,8 @@ use Moose;
 use namespace::autoclean 0.09;
 use Path::Tiny;
 use Try::Tiny;
-use Moose::Util::TypeConstraints;
-use MooseX::Types::Moose qw(Str RegexpRef Bool ArrayRef);
+use Types::Standard qw(Str RegexpRef Bool ArrayRef);
+use Type::Utils qw(coerce from as via subtype);
 
 use constant _cache_fn => '.gitnxtver_cache';
 

@@ -8,9 +8,9 @@ package Dist::Zilla::Role::Git::DirtyFiles;
 our $VERSION = '2.046';
 
 use Moose::Role;
-use MooseX::Types::Moose qw{ Any ArrayRef Str RegexpRef };
-use MooseX::Types::Path::Tiny 0.010 qw{ Paths to_Paths };
-use Moose::Util::TypeConstraints;
+use Types::Standard qw{ Any ArrayRef Str RegexpRef };
+use Type::Utils qw(coerce from as via subtype);
+use Types::Path::Tiny 'Path';
 
 use namespace::autoclean;
 use Path::Tiny 0.048 qw(); # subsumes
@@ -47,11 +47,10 @@ The name of the changelog. Defaults to C<Changes>.
 {
   # We specifically allow the empty string to represent the empty list.
   # Otherwise, there'd be no way to specify an empty list in an INI file.
-  my $type = subtype as Paths;
-  coerce($type,
-    from ArrayRef, via { to_Paths( [ grep { length } @$_ ] ) },
-    from Any, via { length($_) ? to_Paths($_) : [] },
-  );
+  my $type = subtype as ArrayRef[Path];
+  coerce $type,
+    from ArrayRef, via { (ArrayRef[Path])->coerce( [ grep { length } @$_ ] ) },
+    from Any, via { length($_) ? (ArrayRef[Path])->coerce($_) : [] };
 
   has allow_dirty => (
     is => 'ro', lazy => 1,

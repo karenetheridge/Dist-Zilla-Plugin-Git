@@ -16,9 +16,9 @@ use File::Temp;
 use Moose;
 use namespace::autoclean;
 use Path::Tiny qw();
-use MooseX::Types::Path::Tiny qw( Path );
+use Types::Path::Tiny 'Path';
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ Str Bool };
+use Types::Standard qw(Str Bool);
 use Cwd qw(abs_path);
 use Try::Tiny;
 

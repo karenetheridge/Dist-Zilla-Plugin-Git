@@ -9,7 +9,7 @@ our $VERSION = '2.046';
 
 use Moose;
 use MooseX::Has::Sugar;
-use MooseX::Types::Moose qw{ ArrayRef Str Bool };
+use Types::Standard qw{ ArrayRef Str Bool };
 
 use namespace::autoclean;
 

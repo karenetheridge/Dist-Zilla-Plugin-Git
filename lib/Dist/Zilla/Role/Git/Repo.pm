@@ -4,7 +4,7 @@ package Dist::Zilla::Role::Git::Repo;
 our $VERSION = '2.046';
 
 use Moose::Role;
-use MooseX::Types::Moose qw(Str Maybe);
+use Types::Standard qw(Str Maybe);
 use namespace::autoclean;
 
 has repo_root => (
