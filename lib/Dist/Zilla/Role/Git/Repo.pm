@@ -1,7 +1,7 @@
 package Dist::Zilla::Role::Git::Repo;
 # ABSTRACT: Provide repository information for Git plugins
 
-our $VERSION = '2.046';
+our $VERSION = '2.047';
 
 use Moose::Role;
 use Types::Standard qw(Str Maybe);

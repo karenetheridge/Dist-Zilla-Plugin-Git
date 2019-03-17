@@ -1,7 +1,7 @@
 package Dist::Zilla::Role::Git::StringFormatter;
 # ABSTRACT: Provide a String::Formatter for commit messages
 
-our $VERSION = '2.046';
+our $VERSION = '2.047';
 
 use 5.008;
 use strict;
