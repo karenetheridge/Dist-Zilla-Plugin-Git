@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.046     2019-03-17 01:16:52Z
   - added %V format code for the version number with the leading 'v'
     stripped off, if it exists.
   - changed the default format strings to use 'v%V' rather than 'v%v' for
