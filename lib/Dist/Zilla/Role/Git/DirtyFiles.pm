@@ -49,7 +49,7 @@ The name of the changelog. Defaults to C<Changes>.
   # Otherwise, there'd be no way to specify an empty list in an INI file.
   my $type = subtype as ArrayRef[Path];
   coerce $type,
-    from ArrayRef, via { (ArrayRef[Path])->coerce( [ grep { length } @$_ ] ) },
+    from ArrayRef, via { (ArrayRef[Path])->coerce( [ grep length, @$_ ] ) },
     from Any, via { length($_) ? (ArrayRef[Path])->coerce($_) : [] };
 
   has allow_dirty => (
@@ -64,7 +64,7 @@ has changelog => ( is => 'ro', isa=>Str, default => 'Changes' );
 
 {
   my $type = subtype as ArrayRef[RegexpRef];
-  coerce $type, from ArrayRef[Str], via { [map { qr/$_/ } @$_] };
+  coerce $type, from ArrayRef[Str], via { [map qr/$_/, @$_] };
   has allow_dirty_match => (
     is => 'ro',
     lazy => 1,
@@ -93,7 +93,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        (map { $_ => [ sort @{ $self->$_ } ] } qw(allow_dirty allow_dirty_match)),
+        (map +($_ => [ sort @{ $self->$_ } ]), qw(allow_dirty allow_dirty_match)),
         changelog => $self->changelog,
     };
 
@@ -139,11 +139,11 @@ sub list_dirty_files
     };
   }
 
-  my $allowed = join '|', @{ $self->allow_dirty_match }, map { qr{^\Q$_\E$} } @filenames;
+  my $allowed = join '|', @{ $self->allow_dirty_match }, map qr{^\Q$_\E$}, @filenames;
 
   $allowed = qr/(?!X)X/ if $allowed eq ''; # this cannot match anything
 
-  return grep { /$allowed/ ? $listAllowed : !$listAllowed }
+  return grep /$allowed/ ? $listAllowed : !$listAllowed,
       $git->ls_files( { modified=>1, deleted=>1 } );
 } # end list_dirty_files
 

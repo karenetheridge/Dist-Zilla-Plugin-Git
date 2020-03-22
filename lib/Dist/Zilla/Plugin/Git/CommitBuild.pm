@@ -86,7 +86,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        (map { $_ => $self->$_ }
+        (map +($_ => $self->$_),
             qw(branch release_branch message release_message build_root)),
         multiple_inheritance => $self->multiple_inheritance ? 1 : 0,
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
@@ -146,15 +146,15 @@ sub _commit_build {
 
     my @parents = (
         ( $self->_source_branch ) x $self->multiple_inheritance,
-        grep {
-            eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) }
-        } $target_branch
+        grep
+            eval { $src->rev_parse({ 'q' => 1, 'verify'=>1}, $_ ) },
+        $target_branch
     );
 
     ### @parents
 
     my $this_message = _format_message( $message, $self );
-    my @commit = $src->commit_tree( { -STDIN => $this_message }, $tree, map { ( '-p' => $_) } @parents );
+    my @commit = $src->commit_tree( { -STDIN => $this_message }, $tree, map +( '-p' => $_), @parents );
 
     ### @commit
     $src->update_ref( 'refs/heads/' . $target_branch, $commit[0] );

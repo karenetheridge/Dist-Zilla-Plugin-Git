@@ -58,7 +58,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        (map { $_ => $self->$_ } qw(tag_format tag_message changelog branch tag)),
+        (map +($_ => $self->$_), qw(tag_format tag_message changelog branch tag)),
         signed => $self->signed ? 1 : 0,
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };

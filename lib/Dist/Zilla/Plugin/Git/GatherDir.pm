@@ -160,7 +160,7 @@ override gather_files => sub {
   $exclude_regex = qr/$exclude_regex|$_/
     for (@{ $self->exclude_match });
 
-  my %is_excluded = map {; $_ => 1 } @{ $self->exclude_filename };
+  my %is_excluded = map +($_ => 1), @{ $self->exclude_filename };
 
   my $prefix = $self->prefix;
 
@@ -173,7 +173,7 @@ override gather_files => sub {
 
     # Exclusion tests
     unless ($self->include_dotfiles) {
-      next if grep { /^\./ } split q{/}, $file->stringify;
+      next if grep /^\./, split q{/}, $file->stringify;
     }
 
     next if $file =~ $exclude_regex;

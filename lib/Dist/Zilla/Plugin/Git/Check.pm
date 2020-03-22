@@ -52,7 +52,7 @@ sub _perform_checks {
 
     # fetch current branch
     my ($branch) =
-        map { /^\*\s+(.+)/ ? $1 : () }
+        map /^\*\s+(.+)/ ? $1 : (),
         $git->branch;
 
     # check if some changes are staged for commit
@@ -62,7 +62,7 @@ sub _perform_checks {
 
         my $errmsg =
             "branch $branch has some changes staged for commit:\n" .
-            join "\n", map { "\t$_" } @output;
+            join "\n", map "\t$_", @output;
         $self->$log_method($errmsg);
     }
 
@@ -74,7 +74,7 @@ sub _perform_checks {
 
         my $errmsg =
             "branch $branch has some uncommitted files:\n" .
-            join "\n", map { "\t$_" } @output;
+            join "\n", map "\t$_", @output;
         $self->$log_method($errmsg);
     }
 
@@ -92,7 +92,7 @@ sub _perform_checks {
 
         my $errmsg =
             "branch $branch has some untracked files:\n" .
-                join "\n", map { "\t$_" } @output;
+                join "\n", map "\t$_", @output;
         $self->$log_method($errmsg);
       }
     }

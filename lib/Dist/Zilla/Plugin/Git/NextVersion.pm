@@ -44,7 +44,7 @@ sub _versions_from_tags {
 
   # WARNING: The quotes in "$1" are necessary, because version doesn't
   # call get magic properly.
-  return [ sort map { /$regexp/ ? try { version->parse("$1") } : () } @$tags ];
+  return [ sort map /$regexp/ ? try { version->parse("$1") } : (), @$tags ];
 } # end _versions_from_tags
 
 has _all_versions => (
@@ -125,7 +125,7 @@ around dump_config => sub
     my $config = $self->$orig;
 
     $config->{+__PACKAGE__} = {
-        (map { $_ => $self->$_ } qw(version_regexp first_version)),
+        (map +($_ => $self->$_), qw(version_regexp first_version)),
         version_by_branch => $self->version_by_branch ? 1 : 0,
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
@@ -140,7 +140,7 @@ sub before_release {
   my $version = version->parse( $self->zilla->version );
 
   $self->log_fatal("version $version has already been tagged")
-      if grep { $_ == $version } @{ $self->_all_versions };
+      if grep +($_ == $version), @{ $self->_all_versions };
 }
 
 sub after_release {
