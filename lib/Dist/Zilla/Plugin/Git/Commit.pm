@@ -11,7 +11,7 @@ use namespace::autoclean;
 use File::Temp           qw{ tempfile };
 use Moose;
 use MooseX::Has::Sugar;
-use Types::Standard qw(Str ArrayRef);
+use Types::Standard qw(Str ArrayRef Bool);
 use Types::Path::Tiny 'Path';
 use Path::Tiny 0.048 qw(); # subsumes
 use Cwd;
@@ -30,6 +30,7 @@ sub _git_config_mapping { +{
 
 has commit_msg => ( ro, isa=>Str, default => 'v%V%n%n%c' );
 has add_files_in  => ( ro, isa=> ArrayRef[Path], coerce => 1, default => sub { [] });
+has signoff => ( ro, isa => Bool, default => 0 );
 
 
 # -- public methods
@@ -46,6 +47,7 @@ around dump_config => sub
     $config->{+__PACKAGE__} = {
         commit_msg => $self->commit_msg,
         add_files_in => [ sort @{ $self->add_files_in } ],
+        signoff => $self->signoff,
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
@@ -88,7 +90,8 @@ sub after_release {
 
     # commit the files in git
     $git->add( @output );
-    $self->log_debug($_) for $git->commit( { file=>$filename } );
+    $self->log_debug($_) for $git->commit( { signoff => $self->signoff,
+                                             file    => $filename } );
     $self->log("Committed @output");
 }
 

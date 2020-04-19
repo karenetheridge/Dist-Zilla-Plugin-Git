@@ -16,7 +16,7 @@ my $homedir = clean_environment;
 
 # build fake repository
 my $zilla = Dist::Zilla::Tester->from_config({
-  dist_root => path('corpus/commit')->absolute,
+  dist_root => path('corpus/commit-signoff')->absolute,
 });
 
 {
@@ -30,9 +30,9 @@ my $zilla = Dist::Zilla::Tester->from_config({
 
   # check if dist.ini and changelog have been committed
   my ($log) = $git->log( 'HEAD' );
-  unlike( $log->message, qr/^Signed-off-by: /,
-          'commit message not signed off by default' );
-  like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/, 'commit message taken from changelog' );
+  like( $log->message, qr/^Signed-off-by: /m, 'commit message signed off' );
+  like( $log->message, qr/v1.23\n[^a-z]*foo[^a-z]*bar[^a-z]*baz/,
+        'commit message taken from changelog' );
 }
 
 sub append_to_file {
