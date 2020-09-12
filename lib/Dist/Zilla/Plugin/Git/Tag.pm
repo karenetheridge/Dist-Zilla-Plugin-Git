@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Tag;
 # ABSTRACT: Tag the new version
 
-our $VERSION = '2.047';
+our $VERSION = '2.048';
 
 use Moose;
 use MooseX::Has::Sugar;
