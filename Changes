@@ -3,6 +3,7 @@ Revision history for Dist::Zilla::Plugin::Git
 {{$NEXT}}
   - added 'signoff' config option to cause Git::Commit to pass
     --signoff to git-commit (Sean Whitton, RT#57925, PR#3)
+  - explicitly set the 'master' branch name in tests (Michael McClimon, PR#4)
 
 2.046     2019-03-17 01:16:52Z
   - added %V format code for the version number with the leading 'v'
