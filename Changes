@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+  - added 'push_url' config option to cause Git::Init to configure a separate
+    url to push to with 'git remote set-url --push' (Curtis Jewell)
 
 2.047     2020-09-12 22:00:12Z
   - added 'signoff' config option to cause Git::Commit to pass
