@@ -156,7 +156,20 @@ specified multiple times to add multiple remotes.
 
 =item * push_url - the URL to use to push to a particular remote to add to
 the repository.  No URLs are added by default.  A remote is specified as C<NAME URL>.
-This may be specified multiple times to specify push URLs for multiple remotes.
+This may be specified multiple times to specify push URLs for multiple remotes, and
+is not required if the URL is the same as the one already set for that remote.
+
+Per the documentation for L<git-remote(1)>: Note that the push_url and the
+corresponding URL specified with C<remote>, even though they can be set
+differently, must still refer to the same place. What you pushed to the push URL
+should be what you would see if you immediately fetched from the fetch URL (the URL
+specified with C<remote>.) If you are trying to fetch from one place (e.g. your
+upstream) and push to another (e.g. your publishing repository), use two
+separate remotes.
+
+This, therefore, is best used in cases where pushing requires authentication, but
+pulling does not, or if pulling is via git or ssh, but pushing is via https, on the
+same repository.
 
 =back
 
