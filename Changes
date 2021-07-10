@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.048     2021-07-10 01:26:31Z
   - added 'push_url' config option to cause Git::Init to configure a separate
     url to push to with 'git remote set-url --push' (Curtis Jewell)
 
