@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git;
 # ABSTRACT: Update your git repository after release
 
-our $VERSION = '2.048';
+our $VERSION = '2.049';
 
 1;
 __END__
