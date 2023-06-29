@@ -63,7 +63,7 @@ has config_entries => (
   default => sub { [] },
 );
 
-sub mvp_multivalue_args { qw(config_entries remotes push_url) }
+sub mvp_multivalue_args { qw(config_entries remotes push_urls) }
 sub mvp_aliases { return { config => 'config_entries', remote => 'remotes', push_url => 'push_urls' } }
 
 sub after_mint {
