@@ -44,7 +44,7 @@ files into a subdir of your dist, you might write:
 
 =cut
 
-use List::Util 1.45 qw(uniq);
+use List::Util 1.45 qw(uniq any);
 use Types::Standard 'Bool';
 
 use namespace::autoclean;
@@ -113,13 +113,10 @@ around dump_config => sub
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
-    $self->log('WARNING: unused config variable "prune_directory"')
-      if exists $config->{'Dist::Zilla::Plugin::GatherDir'}{prune_directory};
-
     $self->log('WARNING: unused config variable "follow_symlinks"')
       if $config->{'Dist::Zilla::Plugin::GatherDir'}{follow_symlinks};
 
-    delete @{$config->{'Dist::Zilla::Plugin::GatherDir'}}{qw(prune_directory follow_symlinks)};
+    delete @{$config->{'Dist::Zilla::Plugin::GatherDir'}}{qw(follow_symlinks)};
 
     return $config;
 };
@@ -165,6 +162,14 @@ override gather_files => sub {
 
     next if $file =~ $exclude_regex;
     next if $is_excluded{ $file };
+
+    # skip if any directory in the path matches a 'prune_directory' regex.
+    my @dirs = split /\//, $file->dirname;
+    next if any {
+      my $pd = $_;
+      any { $_ =~ $pd } @dirs;
+    }
+    @{ $self->prune_directory };
 
     # DZil can't gather directory symlinks
     my $path = $root->child($file);
