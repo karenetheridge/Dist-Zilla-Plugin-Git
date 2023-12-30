@@ -49,26 +49,16 @@ use Types::Standard 'Bool';
 
 use namespace::autoclean;
 
+=head1 ATTRIBUTES
+
+This plugin inherits attributes from L<Dist::Zilla::Plugin::GatherDir>, with the following
+modifications:
+
 =attr root
 
-This is the directory in which to look for files.  If not given, it defaults to
-the dist root -- generally, the place where your F<dist.ini> or other
-configuration file is located.  It may begin with C<~> (or C<~user>)
-to mean your (or some other user's) home directory.  If a relative path,
-it's relative to the dist root.  It does not need to be the root of a
+See L<Dist::Zilla::Plugin::GatherDir/root>.
+It does not need to be the root of a
 Git repository, but it must be inside a repository.
-
-=attr prefix
-
-This parameter can be set to gather all the files found under a common
-directory.  See the L<description|DESCRIPTION> above for an example.
-
-=attr include_dotfiles
-
-By default, files will not be included if they begin with a dot.  This goes
-both for files and for directories relative to the C<root>.
-
-In almost all cases, the default value (false) is correct.
 
 =attr include_untracked
 
@@ -102,17 +92,6 @@ a second instance of GatherDir or Git::GatherDir with appropriate
 C<root> and C<prefix> options.
 
 Files which are symlinks are always gathered.
-
-=attr exclude_filename
-
-To exclude certain files from being gathered, use the C<exclude_filename>
-option. This may be used multiple times to specify multiple files to exclude.
-
-=attr exclude_match
-
-This is just like C<exclude_filename> but provides a regular expression
-pattern.  Files matching the pattern are not gathered.  This may be used
-multiple times to specify multiple patterns to exclude.
 
 =cut
 
