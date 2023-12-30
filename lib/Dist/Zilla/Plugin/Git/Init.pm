@@ -33,6 +33,12 @@ has commit_message => (
     default => 'initial commit',
 );
 
+has stage => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 1,
+);
+
 has commit => (
     is      => 'ro',
     isa     => Bool,
@@ -79,14 +85,17 @@ sub after_mint {
       $git->config($option, $value);
     }
 
-    $git->add("$opts->{mint_root}");
+    $git->add("$opts->{mint_root}") unless ! $self->stage;
     if ($self->commit) {
       my $message = 'Made initial commit';
       if (length $self->branch) {
         $git->checkout('-b', $self->branch);
         $message .= ' on branch ' . $self->branch;
       }
-      $git->commit({message => _format_string($self->commit_message, $self)});
+      $git->commit({
+              message => _format_string($self->commit_message, $self),
+              'allow-empty' => 1,
+          });
       $self->log($message);
     }
 
@@ -118,6 +127,7 @@ In your F<profile.ini>:
 
     [Git::Init]
     commit_message = initial commit  ; this is the default
+    stage = 1                        ; this is the default
     commit = 1                       ; this is the default
     branch =                         ; this is the default (means master)
     remote = origin https://github.com/USERNAME/%N.git ; no default
@@ -137,6 +147,12 @@ The plugin accepts the following options:
 
 =item * commit_message - the commit message to use when checking in
 the newly-minted dist. Defaults to C<initial commit>.
+
+=item * stage - if true (the default), stage (add to Git index)
+all files in the newly-minted dist directory. If commit option
+is true and stage is false, Git will create an empty commit.
+An empty commit is a valid commit and can be used
+as the first commit (root commit) in a repository.
 
 =item * commit - if true (the default), commit the newly-minted dist.
 If set to a false value, add the files to the Git index but don't
