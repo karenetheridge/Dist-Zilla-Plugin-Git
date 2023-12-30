@@ -7,6 +7,7 @@ Revision history for Dist::Zilla::Plugin::Git
   - amend [Git::GatherDir] docs to not duplicate documentation for attributes
     inherited from [GatherDir] (ether)
   - amend [Git::Init] docs to reference init.defaultBranch, not master (ether)
+  - fix warning about disregarded [Git::GatherDir] configs (ether)
 
 2.048     2021-07-10 01:26:31Z
   - added 'push_url' config option to cause Git::Init to configure a separate

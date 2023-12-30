@@ -113,10 +113,13 @@ around dump_config => sub
         blessed($self) ne __PACKAGE__ ? ( version => $VERSION ) : (),
     };
 
-    foreach my $opt (qw(prune_directory follow_symlinks)) {
-      $self->log('WARNING: unused config variable "'.$opt.'"') if exists $config->{+__PACKAGE__}{$opt};
-      delete $config->{+__PACKAGE__}{$opt};
-    }
+    $self->log('WARNING: unused config variable "prune_directory"')
+      if exists $config->{'Dist::Zilla::Plugin::GatherDir'}{prune_directory};
+
+    $self->log('WARNING: unused config variable "follow_symlinks"')
+      if $config->{'Dist::Zilla::Plugin::GatherDir'}{follow_symlinks};
+
+    delete @{$config->{'Dist::Zilla::Plugin::GatherDir'}}{qw(prune_directory follow_symlinks)};
 
     return $config;
 };
