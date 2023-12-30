@@ -129,7 +129,7 @@ In your F<profile.ini>:
     commit_message = initial commit  ; this is the default
     stage = 1                        ; this is the default
     commit = 1                       ; this is the default
-    branch =                         ; this is the default (means master)
+    branch =                         ; this is the default (uses init.defaultBranch config)
     remote = origin https://github.com/USERNAME/%N.git ; no default
     push_url = origin git@github.com:USERNAME/%{lc}N.git ; no default
     config = user.email USERID@cpan.org  ; there is no default
@@ -160,7 +160,7 @@ actually make a commit.
 
 =item * branch - the branch name under which the newly-minted dist is checked
 in (if C<commit> is true). Defaults to an empty string, which means that
-the Git default branch is used (master).
+the Git default branch is used (whatever you have configured in `git config init.defaultBranch`).
 
 =item * config - a config setting to make in the repository.  No
 config entries are made by default.  A setting is specified as
