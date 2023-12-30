@@ -81,6 +81,7 @@ sub after_mint {
 
     foreach my $configSpec (@{ $self->config_entries }) {
       my ($option, $value) = split ' ', _format_string($configSpec, $self), 2;
+      $self->log_fatal("invalid syntax for $configSpec!") if not defined $value;
       $self->log_debug("Configuring $option $value");
       $git->config($option, $value);
     }
@@ -101,12 +102,14 @@ sub after_mint {
 
     foreach my $remoteSpec (@{ $self->remotes }) {
       my ($remote, $url) = split ' ', _format_string($remoteSpec, $self), 2;
+      $self->log_fatal("invalid syntax for $remoteSpec!") if not defined $url;
       $self->log_debug("Adding remote $remote as $url");
       $git->remote(add => $remote, $url);
     }
 
     foreach my $remoteSpec (@{ $self->push_urls }) {
       my ($remote, $url) = split ' ', _format_string($remoteSpec, $self), 2;
+      $self->log_fatal("invalid syntax for $remoteSpec!") if not defined $url;
       $self->log_debug("Setting push URL for remote $remote to $url");
       $git->remote('set-url' => $remote, '--push' => $url);
     }
