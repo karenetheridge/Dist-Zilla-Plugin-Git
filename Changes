@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.049     2023-12-31 00:04:38Z
   - fixed implementation of 'push_url' in [Git::Init] (Mikko Koivunalho, PR#6)
   - new 'stage' option in [Git::Init], to control whether minted files are
     included in the initial commit (Mikko Koivunalho, PR#7)
