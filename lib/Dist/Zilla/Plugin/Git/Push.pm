@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Push;
 # ABSTRACT: Push current branch
 
-our $VERSION = '2.049';
+our $VERSION = '2.050';
 
 use Moose;
 use MooseX::Has::Sugar;
