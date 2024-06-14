@@ -1,6 +1,8 @@
 Revision history for Dist::Zilla::Plugin::Git
 
 {{$NEXT}}
+  - [Git::Push] now only pushes annotated and reachable tags (such as a
+    release tag just created by [Git::Tag]), rather than all tags
 
 2.049     2023-12-31 00:04:38Z
   - fixed implementation of 'push_url' in [Git::Init] (Mikko Koivunalho, PR#6)
