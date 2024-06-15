@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::Git - Update your git repository after release
 
 =head1 VERSION
 
-version 2.049
+version 2.050
 
 =head1 DESCRIPTION
 
