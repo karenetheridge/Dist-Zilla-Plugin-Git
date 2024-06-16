@@ -1,6 +1,6 @@
 Revision history for Dist::Zilla::Plugin::Git
 
-{{$NEXT}}
+2.051     2024-06-16 16:53:20Z
   - skip some tests if git version is not new enough
 
 2.050     2024-06-15 00:02:39Z
