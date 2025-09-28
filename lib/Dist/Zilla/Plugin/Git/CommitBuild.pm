@@ -17,7 +17,6 @@ use Moose;
 use namespace::autoclean;
 use Path::Tiny qw();
 use Types::Path::Tiny 'Path';
-use MooseX::Has::Sugar;
 use Types::Standard qw(Str Bool);
 use Cwd qw(abs_path);
 use Try::Tiny;
@@ -50,11 +49,11 @@ with 'Dist::Zilla::Role::AfterBuild',
 
 # -- attributes
 
-has branch  => ( ro, isa => Str, default => 'build/%b', required => 1 );
-has release_branch  => ( ro, isa => Str, required => 0 );
-has message => ( ro, isa => Str, default => 'Build results of %h (on %b)', required => 1 );
-has release_message => ( ro, isa => Str, lazy => 1, builder => '_build_release_message' );
-has build_root => ( rw, coerce => 1, isa => Path );
+has branch  => ( is => 'ro', isa => Str, default => 'build/%b', required => 1 );
+has release_branch  => ( is => 'ro', isa => Str, required => 0 );
+has message => ( is => 'ro', isa => Str, default => 'Build results of %h (on %b)', required => 1 );
+has release_message => ( is => 'ro', isa => Str, lazy => 1, builder => '_build_release_message' );
+has build_root => ( is => 'rw', coerce => 1, isa => Path );
 
 has _source_branch => (
     is      => 'ro',

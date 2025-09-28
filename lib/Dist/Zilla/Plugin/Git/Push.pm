@@ -8,7 +8,6 @@ package Dist::Zilla::Plugin::Git::Push;
 our $VERSION = '2.052';
 
 use Moose;
-use MooseX::Has::Sugar;
 use Types::Standard qw{ ArrayRef Str Bool };
 
 use namespace::autoclean;
@@ -26,7 +25,7 @@ sub _git_config_mapping { +{
 
 # -- attributes
 
-has remotes_must_exist => ( ro, isa=>Bool, default=>1 );
+has remotes_must_exist => ( is => 'ro', isa=>Bool, default=>1 );
 
 has push_to => (
   is   => 'ro',

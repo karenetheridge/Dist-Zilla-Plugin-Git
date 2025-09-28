@@ -11,7 +11,6 @@ use namespace::autoclean;
 use List::Util qw{ first };
 
 use Moose::Role;
-use MooseX::Has::Sugar;
 use Types::Standard qw{ Str };
 
 requires qw(changelog log zilla);
@@ -43,7 +42,7 @@ The time zone used with the C<%d> code.  The default is C<local>.
 
 =cut
 
-has time_zone => ( ro, isa=>Str, default => 'local' );
+has time_zone => ( is => 'ro', isa=>Str, default => 'local' );
 
 around dump_config => sub
 {
