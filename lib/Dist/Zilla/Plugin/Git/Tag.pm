@@ -5,7 +5,7 @@ use warnings;
 package Dist::Zilla::Plugin::Git::Tag;
 # ABSTRACT: Tag the new version
 
-our $VERSION = '2.052';
+our $VERSION = '2.053';
 
 use Moose;
 use Types::Standard qw{ Str Bool};
